@@ -1,0 +1,427 @@
+/* ApplicantDetails Styles */
+.details-container {
+    padding: 1.5rem;
+    height: 100%;
+    overflow-y: auto;
+    max-height: 600px;
+    background-color: var(--color-bg-primary);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Empty state */
+.empty-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    height: 100%;
+    min-height: 400px;
+    background-color: var(--color-bg-secondary);
+    border-radius: 0.75rem;
+    border: 2px dashed var(--color-border);
+    transition: all 0.3s ease;
+}
+
+.empty-details:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-bg-hover);
+}
+
+.empty-details-icon {
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.empty-details:hover .empty-details-icon {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
+.empty-details-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.empty-details-text {
+    color: var(--color-text-secondary);
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+/* Applicant header */
+.applicant-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.applicant-avatar-large {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.applicant-avatar-large:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.applicant-title {
+    flex: 1;
+}
+
+.applicant-name-large {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.applicant-email {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease;
+}
+
+.applicant-badges {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.availability-badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.availability-badge.full-time {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.availability-badge.part-time {
+    background-color: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.availability-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.date-badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+}
+
+.date-badge:hover {
+    background-color: var(--color-bg-hover);
+    transform: translateY(-1px);
+}
+
+/* Section styles */
+.section {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background-color: var(--color-bg-secondary);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1.25rem;
+}
+
+.section-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.section:hover .section-icon {
+    transform: scale(1.1);
+}
+
+/* Course selection */
+.courses-selection {
+    margin-bottom: 1.5rem;
+}
+
+.courses-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.course-card {
+    position: relative;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.1);
+    border-color: #4f46e5;
+}
+
+.course-card.selected {
+    background-color: rgba(79, 70, 229, 0.1);
+    border-color: #4f46e5;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+}
+
+.course-code {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+}
+
+.course-name {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.course-selected-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    color: #4f46e5;
+    transition: all 0.3s ease;
+}
+
+.course-card:hover .course-selected-icon {
+    transform: scale(1.1);
+}
+
+/* Previous roles */
+.roles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.role-item {
+    padding: 1rem;
+    background-color: var(--color-bg-primary);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+}
+
+.role-item:hover {
+    transform: translateX(4px);
+    border-color: var(--color-primary);
+    background-color: var(--color-bg-hover);
+}
+
+.empty-list {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Skills */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.skill-tag {
+    padding: 0.5rem 1rem;
+    background-color: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.skill-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+    background-color: rgba(79, 70, 229, 0.15);
+}
+
+/* Academic credentials */
+.academic-text {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    padding: 1rem;
+    background-color: var(--color-bg-primary);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+}
+
+.academic-text:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-bg-hover);
+}
+
+/* Comments */
+.comment-textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.3s ease;
+}
+
+.comment-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+/* Dark mode adjustments */
+.dark .details-container {
+    background-color: var(--color-bg-primary-dark);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dark .empty-details {
+    background-color: var(--color-bg-secondary-dark);
+    border-color: var(--color-border-dark);
+}
+
+.dark .empty-details:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-bg-hover-dark);
+}
+
+.dark .course-card {
+    background-color: var(--color-bg-primary-dark);
+    border-color: var(--color-border-dark);
+}
+
+.dark .course-card:hover {
+    background-color: rgba(79, 70, 229, 0.15);
+    border-color: #4f46e5;
+}
+
+.dark .course-card.selected {
+    background-color: rgba(79, 70, 229, 0.2);
+    border-color: #4f46e5;
+}
+
+.dark .role-item {
+    background-color: var(--color-bg-primary-dark);
+    border-color: var(--color-border-dark);
+}
+
+.dark .role-item:hover {
+    background-color: var(--color-bg-hover-dark);
+}
+
+.dark .skill-tag {
+    background-color: rgba(79, 70, 229, 0.15);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+.dark .skill-tag:hover {
+    background-color: rgba(79, 70, 229, 0.25);
+}
+
+.dark .academic-text {
+    background-color: var(--color-bg-primary-dark);
+    border-color: var(--color-border-dark);
+}
+
+.dark .academic-text:hover {
+    background-color: var(--color-bg-hover-dark);
+}
+
+.dark .comment-textarea {
+    background-color: var(--color-bg-primary-dark);
+    border-color: var(--color-border-dark);
+}
+
+.dark .comment-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .details-container {
+        padding: 1rem;
+    }
+
+    .courses-container {
+        grid-template-columns: 1fr;
+    }
+
+    .applicant-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .applicant-avatar-large {
+        margin: 0 0 1rem 0;
+    }
+
+    .applicant-badges {
+        justify-content: center;
+    }
+}

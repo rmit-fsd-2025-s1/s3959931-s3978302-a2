@@ -1,0 +1,45 @@
+/* Light Mode Colors for Apply Modal */
+:root {
+  /* Primary colors */
+  --apply-modal-primary: #10b981;    /* Green color */
+  --apply-modal-secondary: #34d399;  /* Lighter green */
+  --apply-modal-accent: #6ee7b7;     /* Even lighter green */
+  
+  /* Background colors */
+  --apply-modal-bg: #ffffff;
+  --apply-modal-bg-secondary: #f0fdf4; /* Light green tint */
+  
+  /* Text colors */
+  --apply-modal-text-primary: #064e3b;  /* Dark green */
+  --apply-modal-text-secondary: #047857;
+  
+  /* Border colors */
+  --apply-modal-border: #d1fae5;
+  
+  /* Button colors */
+  --apply-modal-button-bg: #10b981;
+  --apply-modal-button-hover: #059669;
+}
+
+/* Dark Mode Colors for Apply Modal */
+.dark {
+  /* Primary colors */
+  --apply-modal-primary: #10b981;
+  --apply-modal-secondary: #059669;
+  --apply-modal-accent: #047857;
+  
+  /* Background colors */
+  --apply-modal-bg: #1f2937;
+  --apply-modal-bg-secondary: #111827;
+  
+  /* Text colors */
+  --apply-modal-text-primary: #ecfdf5;
+  --apply-modal-text-secondary: #6ee7b7;
+  
+  /* Border colors */
+  --apply-modal-border: #047857;
+  
+  /* Button colors */
+  --apply-modal-button-bg: #059669;
+  --apply-modal-button-hover: #047857;
+}

@@ -1,0 +1,376 @@
+/* User Dropdown Styles */
+.user-dropdown-container {
+    position: relative;
+    z-index: 50;
+}
+
+/* Avatar Button */
+.avatar-button {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.avatar-button:hover {
+    transform: scale(1.05);
+}
+
+.avatar-wrapper {
+    position: relative;
+}
+
+.avatar-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-button:hover .avatar-image {
+    border-color: var(--color-secondary);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+/* Avatar connector */
+.avatar-connector {
+    position: absolute;
+    bottom: calc(35px / 2 * (-1));
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #fef5ef;
+    z-index: 52;
+    transition: opacity 0.3s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+.avatar-connector-2 {
+    position: absolute;
+    bottom: calc(35px / 2 * (-1));
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-bottom: 13px solid #e5e7eb;
+    border-radius: 8px;
+    z-index: 51;
+    transition: opacity 0.3s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Dark mode support for the connector */
+.dark .avatar-connector {
+    border-bottom-color: #403432;
+}
+
+.dark .avatar-connector-2 {
+    border-bottom-color: #374151;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Dropdown Menu */
+.user-dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: -10px;
+    width: 320px;
+    background-color: var(--color-bg-primary);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    z-index: 50;
+}
+
+/* Dropdown Header */
+.dropdown-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--color-border);
+    background: linear-gradient(
+        135deg,
+        rgba(249, 115, 22, 0.1) 0%,
+        rgba(249, 115, 22, 0.05) 100%
+    );
+}
+
+.dropdown-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 16px;
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.first-name {
+    color: var(--color-primary);
+}
+
+.last-name {
+    color: var(--color-text-primary);
+}
+
+.user-email {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 10px;
+    text-transform: capitalize;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-text-primary);
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    padding: 16px;
+}
+
+/* Actions Row - Dark Mode and Sign Out on same row */
+.actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 8px;
+    background-color: #efefef;
+    padding: 10px 10px;
+    border-radius: 12px;
+    flex: 1;
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.theme-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-secondary);
+}
+
+.theme-icon.light {
+    color: #fbbf24;
+    stroke: #fbbf24;
+}
+
+.theme-icon.dark {
+    display: none;
+    color: #6366f1;
+}
+
+.theme-toggle {
+    position: relative;
+    width: 44px;
+    height: 22px;
+    background-color: #d1d5db;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle.active {
+    background-color: #6366f1;
+}
+
+.toggle-handle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle.active .toggle-handle {
+    transform: translateX(22px);
+}
+
+/* Dark mode adjustments for toggle */
+.dark .theme-icon.light {
+    display: none;
+}
+
+.dark .theme-icon.dark {
+    display: block;
+}
+
+.dark .theme-toggle-container {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Sign Out Button */
+.sign-out-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.sign-out-button:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: translateY(-2px);
+}
+
+.action-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+/* Dark mode adjustments */
+.dark .user-dropdown-menu {
+    background-color: var(--color-bg-primary);
+    border-color: var(--color-border);
+}
+
+.dark .dropdown-header {
+    background: linear-gradient(
+        135deg,
+        rgba(249, 115, 22, 0.05) 0%,
+        rgba(249, 115, 22, 0.2) 100%
+    );
+    border-color: var(--color-border);
+}
+
+.dark .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .sign-out-button {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+.dark .sign-out-button:hover {
+    background-color: rgba(239, 68, 68, 0.25);
+}
+
+/* Animation for avatar */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+    }
+}
+
+.avatar-button:hover .avatar-image {
+    animation: pulse 1.5s infinite;
+}
+
+/* Base state for moon icon */
+.theme-icon.moon {
+    transform: rotate(30deg) scale(0);
+    opacity: 0;
+    color: #6366f1;
+}
+
+/* Show moon icon when in dark mode */
+.dark .theme-icon.moon:not(.hidden) {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+}
+
+/* Hide moon icon when hidden class is applied */
+.theme-icon.moon.hidden {
+    transform: rotate(90deg) scale(0);
+    opacity: 0;
+}
