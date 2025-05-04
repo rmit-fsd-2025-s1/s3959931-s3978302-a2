@@ -134,15 +134,16 @@ export const saveApplication = (application: TutorApplication) => {
         selectedDate: undefined,
         selectedForCourses: undefined,
         rank: undefined,
-        comment: undefined // Remove lecturer comments by default
+        comment: undefined
       };
       applications.push(newApplication);
     }
 
     localStorage.setItem('applications', JSON.stringify(applications));
 
-    // Move unassigned tutors to unselected status
-    moveUnassignedTutorsToUnselected();
+    // Trigger a custom event to notify other components
+    const event = new CustomEvent('applicationUpdated', { detail: application });
+    window.dispatchEvent(event);
 
     return application;
   }
@@ -187,169 +188,11 @@ export const getApplicationsByCourse = (courseCode: string): TutorApplication[] 
 // Initialize detailed applications with mock data for demo purposes
 export const initializeDetailedApplications = () => {
   if (typeof window !== 'undefined') {
-    // Only initialize if no applications exist
     const applications = getApplications();
     if (applications.length === 0) {
-      const mockApplications: TutorApplication[] = [
-        {
-          id: 'app1',
-          userId: 'tutor1',
-          email: 'john.doe@tutor.edu.au',
-          fullName: 'John Doe',
-          courses: ['COSC1111', 'COSC2410', 'COSC1112', 'COSC2413'],
-          previousRoles: ['COSC1112 Lab Assistant (2024)'],
-          availability: 'Part Time',
-          skills: ['Java', 'Python', 'Git'],
-          academicCredentials: 'Bachelor of Computer Science with High Distinction',
-          dateApplied: '2025-03-15',
-          selected: false
-        },
-        {
-          id: 'app2',
-          userId: 'tutor2',
-          email: 'jane.smith@tutor.edu.au',
-          fullName: 'Jane Smith',
-          courses: ['COSC2413', 'COSC2758'],
-          previousRoles: ['COSC2123 Lab Assistant (2024)', 'COSC2413 Tutor (2023)'],
-          availability: 'Full Time',
-          skills: ['React', 'JavaScript', 'TypeScript', 'Node.js'],
-          academicCredentials: 'Masters in Computer Science, specializing in Web Technologies',
-          dateApplied: '2025-03-12',
-          selected: false
-        },
-        {
-          id: 'app3',
-          userId: 'tutor3',
-          email: 'michael.brown@tutor.edu.au',
-          fullName: 'Michael Brown',
-          courses: ['COSC1114', 'COSC2123'],
-          previousRoles: [],
-          availability: 'Part Time',
-          skills: ['C/C++', 'Python', 'Docker'],
-          academicCredentials: 'Bachelor of Information Technology with First Class Honours',
-          dateApplied: '2025-03-10',
-          selected: false
-        },
-        {
-          id: 'app4',
-          userId: 'tutor4',
-          email: 'emily.johnson@tutor.edu.au',
-          fullName: 'Emily Johnson',
-          courses: ['COSC2410', 'COSC2408', 'COSC2758'],
-          previousRoles: ['COSC2410 Tutor (2024)', 'COSC1111 Lab Assistant (2023)'],
-          availability: 'Full Time',
-          skills: ['Java', 'React', 'SQL', 'Git'],
-          academicCredentials: 'Masters in Computer Engineering, Bachelor of Computer Science',
-          dateApplied: '2025-03-13',
-          selected: false
-        },
-        {
-          id: 'app5',
-          userId: 'tutor5',
-          email: 'david.wilson@tutor.edu.au',
-          fullName: 'David Wilson',
-          courses: ['COSC1112', 'COSC2676'],
-          previousRoles: ['COSC1112 Lab Assistant (2023)'],
-          availability: 'Part Time',
-          skills: ['JavaScript', 'Python', 'SQL'],
-          academicCredentials: 'Bachelor of Computer Science with Distinction',
-          dateApplied: '2025-03-09',
-          selected: false
-        },
-        {
-          id: 'app6',
-          userId: 'tutor6',
-          email: 'sarah.taylor@tutor.edu.au',
-          fullName: 'Sarah Taylor',
-          courses: ['COSC2663', 'COSC2299'],
-          previousRoles: ['COSC2663 Lab Assistant (2024)'],
-          availability: 'Part Time',
-          skills: ['Cybersecurity', 'Python', 'Docker', 'AWS'],
-          academicCredentials: 'Ph.D. Candidate in Cybersecurity, Masters in IT Security',
-          dateApplied: '2025-03-14',
-          selected: false
-        },
-        {
-          id: 'app7',
-          userId: 'tutor7',
-          email: 'alex.martinez@tutor.edu.au',
-          fullName: 'Alex Martinez',
-          courses: ['COSC1111', 'COSC2413'],
-          previousRoles: ['COSC1111 Lab Assistant (2024)'],
-          availability: 'Full Time',
-          skills: ['Java', 'Python', 'React', 'Node.js'],
-          academicCredentials: 'Masters in Software Engineering',
-          dateApplied: '2025-03-11',
-          selected: false
-        },
-        {
-          id: 'app8',
-          userId: 'tutor8',
-          email: 'olivia.anderson@tutor.edu.au',
-          fullName: 'Olivia Anderson',
-          courses: ['COSC2408', 'COSC2758'],
-          previousRoles: ['COSC2408 Tutor (2024)'],
-          availability: 'Part Time',
-          skills: ['JavaScript', 'TypeScript', 'React', 'Angular'],
-          academicCredentials: 'Bachelor of Science in Computer Science',
-          dateApplied: '2025-03-16',
-          selected: false
-        },
-        {
-          id: 'app9',
-          userId: 'tutor9',
-          email: 'james.thomas@tutor.edu.au',
-          fullName: 'James Thomas',
-          courses: ['COSC1112', 'COSC2410'],
-          previousRoles: ['COSC1112 Lab Assistant (2023)'],
-          availability: 'Full Time',
-          skills: ['Java', 'Python', 'SQL', 'Git'],
-          academicCredentials: 'Masters in Web Technologies',
-          dateApplied: '2025-03-17',
-          selected: false
-        },
-        {
-          id: 'app10',
-          userId: 'tutor10',
-          email: 'sophia.lee@tutor.edu.au',
-          fullName: 'Sophia Lee',
-          courses: ['COSC1111', 'COSC2413', 'COSC2758'],
-          previousRoles: ['COSC1111 Lab Assistant (2023)'],
-          availability: 'Part Time',
-          skills: ['Python', 'Machine Learning', 'TensorFlow', 'SQL'],
-          academicCredentials: 'Ph.D. in Artificial Intelligence',
-          dateApplied: '2025-03-18',
-          selected: false
-        },
-        {
-          id: 'app11',
-          userId: 'tutor11',
-          email: 'william.chen@tutor.edu.au',
-          fullName: 'William Chen',
-          courses: ['COSC1112', 'COSC2410', 'COSC2663'],
-          previousRoles: ['COSC1112 Tutor (2024)'],
-          availability: 'Full Time',
-          skills: ['Java', 'C/C++', 'Git', 'Docker'],
-          academicCredentials: 'Bachelor of Computer Science with First Class Honours',
-          dateApplied: '2025-03-19',
-          selected: false
-        },
-        {
-          id: 'app12',
-          userId: 'tutor12',
-          email: 'ava.patel@tutor.edu.au',
-          fullName: 'Ava Patel',
-          courses: ['COSC1114', 'COSC2123', 'COSC2299'],
-          previousRoles: ['COSC1114 Lab Assistant (2024)'],
-          availability: 'Part Time',
-          skills: ['Python', 'JavaScript', 'React', 'Node.js'],
-          academicCredentials: 'Masters in Computer Science, specializing in Software Engineering',
-          dateApplied: '2025-03-20',
-          selected: false
-        }
-      ];
-
-      // Save mock applications to localStorage
+      const mockApplications: TutorApplication[] = [];
+      
+      // Save empty applications to localStorage
       localStorage.setItem('applications', JSON.stringify(mockApplications));
     }
   }

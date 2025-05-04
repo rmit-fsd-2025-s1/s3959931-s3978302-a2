@@ -36,11 +36,87 @@
     letter-spacing: 0.05em;
 }
 
+.dark .course-code {
+    background-color: rgba(249, 115, 22, 0.2);
+}
+
 .course-status {
     padding: 0.4rem 0.8rem;
     border-radius: 0.5rem;
     font-weight: 500;
     font-size: 0.75rem;
+}
+
+.bg-green-100 {
+    background-color: #dcfce7;
+}
+
+.dark .bg-green-100 {
+    background-color: rgba(16, 185, 129, 0.2);
+}
+
+.bg-green-900\/30 {
+    background-color: rgba(20, 83, 45, 0.3);
+}
+
+.text-green-800 {
+    color: #166534;
+}
+
+.dark .text-green-800 {
+    color: #86efac;
+}
+
+.text-green-300 {
+    color: #86efac;
+}
+
+.bg-blue-100 {
+    background-color: #dbeafe;
+}
+
+.dark .bg-blue-100 {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+.bg-blue-900\/30 {
+    background-color: rgba(30, 58, 138, 0.3);
+}
+
+.text-blue-800 {
+    color: #1e40af;
+}
+
+.dark .text-blue-800 {
+    color: #93c5fd;
+}
+
+.text-blue-300 {
+    color: #93c5fd;
+}
+
+.bg-purple-100 {
+    background-color: #f3e8ff;
+}
+
+.dark .bg-purple-100 {
+    background-color: rgba(168, 85, 247, 0.2);
+}
+
+.bg-purple-900\/30 {
+    background-color: rgba(88, 28, 135, 0.3);
+}
+
+.text-purple-800 {
+    color: #6b21a8;
+}
+
+.dark .text-purple-800 {
+    color: #d8b4fe;
+}
+
+.text-purple-300 {
+    color: #d8b4fe;
 }
 
 /* Card Body */

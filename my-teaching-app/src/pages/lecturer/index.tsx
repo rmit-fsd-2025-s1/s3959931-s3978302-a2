@@ -63,6 +63,35 @@ export default function LecturerPage() {
         }
     }, [router]);
 
+    // Load applications and listen for updates
+    useEffect(() => {
+        loadApplications();
+
+        // Listen for storage events (when another tab makes changes)
+        const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === "applications") {
+                loadApplications();
+            }
+        };
+
+        // Listen for custom application updated events
+        const handleApplicationUpdate = () => {
+            loadApplications();
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        window.addEventListener("applicationUpdated", handleApplicationUpdate);
+
+        // Check for updates periodically (every 5 seconds)
+        const intervalId = setInterval(loadApplications, 5000);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener("applicationUpdated", handleApplicationUpdate);
+            clearInterval(intervalId);
+        };
+    }, []);
+
     // Show toast notification
     const showToast = (message: string, type: "success" | "error" | "info" = "success") => {
         setToast({

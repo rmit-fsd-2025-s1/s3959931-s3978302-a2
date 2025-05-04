@@ -1,45 +1,190 @@
 /* Light Mode Colors for Apply Modal */
 :root {
-  /* Primary colors */
-  --apply-modal-primary: #10b981;    /* Green color */
-  --apply-modal-secondary: #34d399;  /* Lighter green */
-  --apply-modal-accent: #6ee7b7;     /* Even lighter green */
-  
-  /* Background colors */
-  --apply-modal-bg: #ffffff;
-  --apply-modal-bg-secondary: #f0fdf4; /* Light green tint */
-  
-  /* Text colors */
-  --apply-modal-text-primary: #064e3b;  /* Dark green */
-  --apply-modal-text-secondary: #047857;
-  
-  /* Border colors */
-  --apply-modal-border: #d1fae5;
-  
-  /* Button colors */
-  --apply-modal-button-bg: #10b981;
-  --apply-modal-button-hover: #059669;
+    /* Primary colors */
+    --apply-modal-primary: #f97316; /* Orange color to match the theme */
+    --apply-modal-secondary: #fb923c; /* Lighter orange */
+    --apply-modal-accent: #fdba74; /* Even lighter orange */
+
+    /* Background colors */
+    --apply-modal-bg: #ffffff;
+    --apply-modal-bg-secondary: #f3f4f6;
+    --apply-modal-readonly: #f3f4f6;
+    --apply-modal-backdrop: rgba(255, 255, 255, 0.8);
+
+    /* Text colors */
+    --apply-modal-text-primary: #111827;
+    --apply-modal-text-secondary: #4b5563;
+
+    /* Border colors */
+    --apply-modal-border: #e5e7eb;
+    --apply-modal-border-header: #e5e7eb;
+
+    /* Button colors */
+    --apply-modal-button-bg: #f97316;
+    --apply-modal-button-hover: #ea580c;
 }
 
 /* Dark Mode Colors for Apply Modal */
 .dark {
-  /* Primary colors */
-  --apply-modal-primary: #10b981;
-  --apply-modal-secondary: #059669;
-  --apply-modal-accent: #047857;
-  
-  /* Background colors */
-  --apply-modal-bg: #1f2937;
-  --apply-modal-bg-secondary: #111827;
-  
-  /* Text colors */
-  --apply-modal-text-primary: #ecfdf5;
-  --apply-modal-text-secondary: #6ee7b7;
-  
-  /* Border colors */
-  --apply-modal-border: #047857;
-  
-  /* Button colors */
-  --apply-modal-button-bg: #059669;
-  --apply-modal-button-hover: #047857;
+    /* Primary colors */
+    --apply-modal-primary: #f97316;
+    --apply-modal-secondary: #ea580c;
+    --apply-modal-accent: #c2410c;
+
+    /* Background colors */
+    --apply-modal-bg: #1f2937;
+    --apply-modal-bg-secondary: #111827;
+    --apply-modal-readonly: #374151;
+    --apply-modal-backdrop: rgba(0, 0, 0, 0.8);
+
+    /* Text colors */
+    --apply-modal-text-primary: #f3f4f6;
+    --apply-modal-text-secondary: #9ca3af;
+
+    /* Border colors */
+    --apply-modal-border: #374151;
+    --apply-modal-border-header: #374151;
+
+    /* Button colors */
+    --apply-modal-button-bg: #f97316;
+    --apply-modal-button-hover: #ea580c;
+}
+
+.apply-modal {
+    background-color: var(--apply-modal-bg);
+    color: var(--apply-modal-text-primary);
+    border-color: var(--apply-modal-border);
+}
+
+.apply-modal-header {
+    border-bottom: 1px solid var(--apply-modal-border-header);
+}
+
+.apply-modal-title {
+    color: var(--apply-modal-text-primary);
+}
+
+.apply-modal-close {
+    color: var(--apply-modal-text-secondary);
+    transition: color 0.2s ease;
+}
+
+.apply-modal-close:hover {
+    color: var(--apply-modal-text-primary);
+}
+
+.apply-modal-input {
+    background-color: var(--apply-modal-bg);
+    border-color: var(--apply-modal-border);
+    color: var(--apply-modal-text-primary);
+}
+
+.apply-modal-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+.apply-modal-label {
+    color: var(--apply-modal-text-primary);
+}
+
+.apply-modal-secondary-text {
+    color: var(--apply-modal-text-secondary);
+}
+
+.apply-modal-text-primary {
+    color: var(--apply-modal-text-primary);
+}
+
+.apply-modal-readonly-field {
+    background-color: var(--apply-modal-readonly);
+    color: var(--apply-modal-text-primary);
+}
+
+/* Additional default styles for modal elements */
+.apply-modal input,
+.apply-modal textarea {
+    transition: all 0.3s ease;
+}
+
+.apply-modal button[type="submit"] {
+    background-color: var(--apply-modal-button-bg);
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.apply-modal button[type="submit"]:hover {
+    background-color: var(--apply-modal-button-hover);
+}
+
+.apply-modal button[type="button"] {
+    color: var(--apply-modal-text-primary);
+    border-color: var(--apply-modal-border);
+    transition: all 0.3s ease;
+}
+
+.apply-modal button[type="button"]:hover {
+    background-color: var(--apply-modal-bg-secondary);
+}
+
+.apply-modal-border {
+    border-color: var(--apply-modal-border);
+}
+
+.apply-modal-backdrop {
+    background-color: var(--apply-modal-backdrop);
+}
+
+.skill-tag {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+.dark .skill-tag {
+    background-color: #1e3a8a;
+    color: #dbeafe;
+    border: 1px solid #60a5fa;
+}
+
+.skill-tag-remove {
+    color: #1e40af;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.dark .skill-tag-remove {
+    color: #dbeafe;
+}
+
+.skill-tag-remove:hover {
+    color: #ef4444;
+}
+
+.dark .skill-tag-remove:hover {
+    color: #ef4444;
+}
+
+.popular-skill-button {
+    padding: 0.25rem 0.5rem;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.dark .popular-skill-button {
+    background-color: #374151;
+    color: #d1d5db;
+}
+
+.popular-skill-button:hover {
+    background-color: #e5e7eb;
+}
+
+.dark .popular-skill-button:hover {
+    background-color: #4b5563;
 }
