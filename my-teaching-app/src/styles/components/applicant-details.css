@@ -10,6 +10,27 @@
     transition: all 0.3s ease;
 }
 
+/* Applicant name with proper dark/light mode colors */
+.applicant-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000000 !important;
+}
+
+.dark .applicant-name {
+    color: #ffffff !important;
+}
+
+/* Applicant email with proper dark/light mode colors */
+.applicant-email {
+    color: #4b5563 !important; /* gray-600 equivalent */
+    font-size: 0.875rem;
+}
+
+.dark .applicant-email {
+    color: #9ca3af !important; /* gray-400 for better contrast in dark mode */
+}
+
 /* Empty state */
 .empty-details {
     display: flex;
@@ -96,13 +117,6 @@
     font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: 0.5rem;
-    transition: color 0.3s ease;
-}
-
-.applicant-email {
-    color: var(--color-text-secondary);
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
     transition: color 0.3s ease;
 }
 

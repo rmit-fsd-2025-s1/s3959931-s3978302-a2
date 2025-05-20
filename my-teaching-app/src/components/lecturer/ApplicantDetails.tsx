@@ -129,10 +129,12 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
             >
                 <div className="flex justify-between items-start mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="applicant-name">
                             {application.fullName}
                         </h2>
-                        <p className="text-gray-600">{application.email}</p>
+                        <p className="applicant-email mb-2">
+                            {application.email}
+                        </p>
                         <div className="applicant-badges mt-2">
                             <span
                                 className={`availability-badge ${
