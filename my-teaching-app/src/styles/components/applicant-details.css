@@ -206,14 +206,14 @@
 
 .course-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.1);
-    border-color: #4f46e5;
+    box-shadow: 0 4px 6px rgba(249, 115, 22, 0.15);
+    border-color: var(--color-primary);
 }
 
 .course-card.selected {
-    background-color: rgba(79, 70, 229, 0.1);
-    border-color: #4f46e5;
-    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+    background-color: rgba(249, 115, 22, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 4px rgba(249, 115, 22, 0.1);
 }
 
 .course-code {
