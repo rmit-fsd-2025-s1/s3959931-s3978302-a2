@@ -372,6 +372,9 @@ export default function LecturerPage() {
                                     </svg>
                                 </div>
                                 <div className="stat-details">
+                                    <span className="stat-label">
+                                        Total Applications
+                                    </span>
                                     <span className="stat-value">
                                         {totalApplications}
                                     </span>
@@ -395,6 +398,7 @@ export default function LecturerPage() {
                                     </svg>
                                 </div>
                                 <div className="stat-details">
+                                    <span className="stat-label">Selected</span>
                                     <span className="stat-value">
                                         {selectedApplications}
                                     </span>
@@ -418,6 +422,7 @@ export default function LecturerPage() {
                                     </svg>
                                 </div>
                                 <div className="stat-details">
+                                    <span className="stat-label">Pending</span>
                                     <span className="stat-value">
                                         {pendingApplications}
                                     </span>
@@ -441,6 +446,9 @@ export default function LecturerPage() {
                                     </svg>
                                 </div>
                                 <div className="stat-details">
+                                    <span className="stat-label">
+                                        Selection Rate
+                                    </span>
                                     <span className="stat-value">
                                         {selectionRate}%
                                     </span>
