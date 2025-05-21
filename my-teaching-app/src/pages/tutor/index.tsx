@@ -32,9 +32,6 @@ const TutorPage: React.FC = () => {
     );
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(
-        null
-    );
     const [activeFilter, setActiveFilter] = useState<
         "all" | "applied" | "available"
     >("all");
@@ -110,15 +107,6 @@ const TutorPage: React.FC = () => {
         setCourses(fetchedCourses);
     }, []);
 
-    // Get unique categories from courses
-    const categories = React.useMemo(() => {
-        const allCategories = courses.map((course) => {
-            // Extract category from course code (e.g., 'COSC' from 'COSC1111')
-            return course.code.match(/^[A-Z]+/)?.[0] || "";
-        });
-        return [...new Set(allCategories)].filter(Boolean);
-    }, [courses]);
-
     // Filter courses
     const filteredCourses = React.useMemo(() => {
         return courses.filter((course) => {
@@ -131,10 +119,6 @@ const TutorPage: React.FC = () => {
                     .toLowerCase()
                     .includes(searchQuery.toLowerCase());
 
-            // Apply category filter
-            const matchesCategory =
-                !selectedCategory || course.code.startsWith(selectedCategory);
-
             // Apply application status filter
             const isApplied = existingApplications.includes(course.code);
             let matchesApplicationFilter = true;
@@ -145,15 +129,9 @@ const TutorPage: React.FC = () => {
                 matchesApplicationFilter = !isApplied;
             }
 
-            return matchesSearch && matchesCategory && matchesApplicationFilter;
+            return matchesSearch && matchesApplicationFilter;
         });
-    }, [
-        courses,
-        searchQuery,
-        selectedCategory,
-        activeFilter,
-        existingApplications,
-    ]);
+    }, [courses, searchQuery, activeFilter, existingApplications]);
 
     const openApplyModal = (course: CourseWithDetails) => {
         // Check if user is logged in
@@ -570,31 +548,6 @@ const TutorPage: React.FC = () => {
                         >
                             Applied
                         </button>
-                    </div>
-
-                    {/* Category Filters */}
-                    <div className="category-filters">
-                        <button
-                            className={`category-pill ${
-                                !selectedCategory ? "active" : ""
-                            }`}
-                            onClick={() => setSelectedCategory(null)}
-                        >
-                            All
-                        </button>
-                        {categories.map((category) => (
-                            <button
-                                key={category}
-                                className={`category-pill ${
-                                    selectedCategory === category
-                                        ? "active"
-                                        : ""
-                                }`}
-                                onClick={() => setSelectedCategory(category)}
-                            >
-                                {category}
-                            </button>
-                        ))}
                     </div>
                 </motion.div>
 
