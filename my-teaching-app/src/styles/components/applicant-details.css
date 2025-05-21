@@ -386,7 +386,6 @@
 .comment-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
 /* Dark mode adjustments */
@@ -467,7 +466,8 @@
 }
 
 .dark .comment-textarea:focus {
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    background-color: var(--color-bg-primary) !important;
+    border-color: var(--color-primary);
 }
 
 /* Responsive adjustments */
