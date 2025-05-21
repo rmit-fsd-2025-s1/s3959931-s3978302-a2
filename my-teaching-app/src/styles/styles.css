@@ -739,6 +739,63 @@ body {
     border: 2px solid transparent;
     border-radius: 12px;
     padding: 1.5rem;
+    box-sizing: border-box;
+    justify-content: flex-start;
+}
+
+.lecturer-card::before {
+    content: "More Information";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease,
+        transform 0.3s ease;
+    z-index: 2;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.lecturer-card:hover::before {
+    opacity: 1;
+    background-color: var(--color-primary);
+    color: white;
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.lecturer-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.lecturer-card:hover::after {
+    opacity: 1;
+}
+
+.more-info-btn {
+    display: none;
+}
+
+.lecturer-card > * {
+    width: 100%;
 }
 
 .lecturer-card:hover {
@@ -750,11 +807,13 @@ body {
     position: relative;
     width: 200px;
     height: 200px;
+    min-height: 200px;
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 1.5rem;
     box-shadow: 0 10px 25px var(--color-shadow);
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .lecturer-card:hover .lecturer-image-container {
@@ -763,9 +822,10 @@ body {
 }
 
 .lecturer-image {
-    width: 110%;
+    width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: all 0.5s ease;
 }
 
@@ -812,39 +872,16 @@ body {
 .lecturer-specialization {
     margin-bottom: 1.5rem;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-height: 4.5em;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    flex-grow: 0;
 }
 
-.more-info-btn {
-    margin-top: auto;
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-    padding: 0.5rem 1.5rem;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
-}
-
-.lecturer-card:hover .more-info-btn {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-}
-
-.more-info-btn:hover {
-    background-color: var(--color-primary);
-    color: white;
-}
-
-/* Modal styles */
 .modal-overlay {
     position: fixed;
     top: 0;

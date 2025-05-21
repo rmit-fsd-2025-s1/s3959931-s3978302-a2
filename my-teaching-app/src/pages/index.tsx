@@ -453,8 +453,8 @@ export default function Home() {
                                                     index + 1
                                                 }.jpg`}
                                                 alt={lecturer.name}
-                                                width={400}
-                                                height={400}
+                                                width={200}
+                                                height={200}
                                                 className="lecturer-image"
                                             />
                                             <div className="lecturer-decoration"></div>
