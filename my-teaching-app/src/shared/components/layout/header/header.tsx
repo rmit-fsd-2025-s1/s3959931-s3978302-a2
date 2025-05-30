@@ -1,11 +1,12 @@
+"use client";
 // filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\shared\components\layout\header\header.tsx
 // src/components/layout/Header.tsx
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
-import UserDropdown from "@/shared/components/layout/UserDropdown";
-import styles from './header.module.css';
+import UserDropdown from "@/modules/core/components/layout/UserDropdown";
+import styles from "./header.module.css";
 
 // Define a proper type for user data
 interface UserData {
@@ -21,6 +22,7 @@ interface UserData {
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -116,7 +118,9 @@ const Header: React.FC = () => {
     !isLoggedIn || (isLoggedIn && userRole === "lecturer");
 
   return (
-    <header className={`${styles.mainHeader} ${isScrolled ? styles.scrolled : ""}`}>
+    <header
+      className={`${styles.mainHeader} ${isScrolled ? styles.scrolled : ""}`}
+    >
       <div className={`${styles.container} mx-auto ${styles.headerGrid}`}>
         {/* Logo with proper alignment */}
         <div className={styles.logoWrapper}>
@@ -143,7 +147,7 @@ const Header: React.FC = () => {
           <div className={styles.navLinks}>
             <Link
               href="/"
-              className={`${styles.navLink} ${router.pathname === "/" ? styles.active : ""}`}
+              className={`${styles.navLink} ${pathname === "/" ? styles.active : ""}`}
             >
               Home
             </Link>
@@ -152,7 +156,7 @@ const Header: React.FC = () => {
               <Link
                 href="/tutor"
                 className={`${styles.navLink} ${
-                  router.pathname.startsWith("/tutor") ? styles.active : ""
+                  pathname.startsWith("/tutor") ? styles.active : ""
                 }`}
               >
                 Tutor
@@ -163,7 +167,7 @@ const Header: React.FC = () => {
               <Link
                 href="/lecturer"
                 className={`${styles.navLink} ${
-                  router.pathname.startsWith("/lecturer") ? styles.active : ""
+                  pathname.startsWith("/lecturer") ? styles.active : ""
                 }`}
               >
                 Lecturer

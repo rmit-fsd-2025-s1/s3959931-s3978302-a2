@@ -1,7 +1,7 @@
 // filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\modules\core\components\layout\Layout.tsx
 import React, { ReactNode } from "react";
-import Header from "@/modules/core/components/layout/Header";
-import Footer from "@/modules/core/components/layout/Footer";
+import Header from "@/shared/components/layout/header/header";
+import Footer from "@/shared/components/layout/footer/footer";
 
 interface LayoutProps {
   children: ReactNode;
