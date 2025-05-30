@@ -1,13 +1,18 @@
+"use client";
 // filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\modules\home\pages\HomePage.tsx
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Head from "next/head";
-import { lecturers } from "@/modules/lecturer/utils/lecturerUtils"; // Updated import path
+import { lecturers } from "@/modules/lecturer/utils/lecturerDisplay.utils";
+import styles from "./HomePage.module.css";
+import TimelineSection from "../components/timeline-section/TimelineSection";
+import LecturerShowcase from "../components/lecturer-showcase/LecturerShowcase";
+import Modal from "@/shared/components/common/modal/Modal";
+import type { Lecturer } from "@/shared/types/lecturer";
+import HomeStats from "../components/home-stats/HomeStats";
 
 export default function HomePage() {
-  // Renamed component
-  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [activeLecturer, setActiveLecturer] = useState<Lecturer | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string | null>(null);
 
@@ -25,73 +30,60 @@ export default function HomePage() {
         }
       }
     };
-
     checkLoginStatus();
   }, []);
 
-  const openModal = (lecturerId: string): void => {
-    setActiveModal(lecturerId);
-    document.body.style.overflow = "hidden";
+  const handleOpenLecturerModal = (lecturerId: string): void => {
+    const lecturer = lecturers.find((l) => l.id === lecturerId);
+    if (lecturer) setActiveLecturer(lecturer);
   };
 
-  const closeModal = (): void => {
-    setActiveModal(null);
-    document.body.style.overflow = "";
+  const handleCloseModal = (): void => {
+    setActiveLecturer(null);
   };
 
-  // Close modal when clicking outside
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    if ((e.target as HTMLElement).classList.contains("modal-overlay")) {
-      closeModal();
-    }
-  };
-
-  // Handle escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent): void => {
-      if (e.key === "Escape") {
-        closeModal();
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
+  const currentLecturerDetails = activeLecturer
+    ? lecturers.find((l) => l.id === activeLecturer.id)
+    : null;
+  const activeLecturerImageIndex = activeLecturer
+    ? lecturers.findIndex((l) => l.id === activeLecturer.id)
+    : -1;
 
   return (
     <>
-      <Head>
-        <title>TeachTeam - Home | Find Tutor Positions</title>
-      </Head>
       <main className="flex-grow pt-24">
-        {/* Hero Section */}
-        <section className="hero-section" id="hero">
+        <section className={styles.heroSection} id="hero">
           <div className="container mx-auto relative z-10">
-            {/* Decorative elements */}
-            <div className="absolute top-20 left-10 animate-pulse">
-              <div className="decoration-circle bg-orange-200"></div>
+            <div
+              className={`absolute top-20 left-10 ${styles.animatePulse || "animate-pulse"}`}
+            >
+              <div className={`${styles.decorationCircle} bg-orange-200`}></div>
             </div>
-            <div className="absolute bottom-10 right-20 animate-float">
-              <div className="decoration-circle-outline"></div>
+            <div
+              className={`absolute bottom-10 right-20 ${styles.animateFloat}`}
+            >
+              <div className={styles.decorationCircleOutline}></div>
             </div>
-            <div className="absolute top-40 right-40">
-              <div className="decoration-gradient-circle animate-slow-spin"></div>
+            <div className={`absolute top-40 right-40`}>
+              <div
+                className={`${styles.decorationGradientCircle} ${styles.animateSlowSpin}`}
+              ></div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-[400px]">
               <div>
-                <h1 className="hero-title">
+                <h1 className={styles.heroTitle}>
                   Apply & Join <br />
                   The Best <br />
                   Tutor Team
                 </h1>
-                <p className="hero-subtitle">
+                <p className={styles.heroSubtitle}>
                   Connect with the School of Computer Science and apply for
                   tutor and lab-assistant positions
                 </p>
-                <Link href="#tutors-info" className="hero-btn scroll-link">
+                <Link
+                  href="#tutors-info"
+                  className={`${styles.heroBtn} scroll-link`}
+                >
                   Get Started
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,9 +99,9 @@ export default function HomePage() {
                   </svg>
                 </Link>
               </div>
-              <div className="hero-image-container relative">
-                <div className="pulse-background"></div>
-                <div className="image-wrapper relative z-10">
+              <div className={styles.heroImageContainer}>
+                <div className={styles.pulseBackground}></div>
+                <div className={styles.imageWrapper}>
                   <Image
                     src="/university-classroom.svg"
                     alt="University classroom"
@@ -118,11 +110,11 @@ export default function HomePage() {
                     sizes="(max-width: 768px) 100vw, 600px"
                   />
                 </div>
-
-                {/* Floating elements */}
-                <div className="absolute top-10 -right-5 z-20 animate-float">
-                  <div className="floating-card">
-                    <div className="floating-icon-green">
+                <div
+                  className={`absolute top-10 -right-5 z-20 ${styles.animateFloat}`}
+                >
+                  <div className={styles.floatingCard}>
+                    <div className={styles.floatingIconGreen}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-white"
@@ -141,9 +133,11 @@ export default function HomePage() {
                     </span>
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -left-20 z-20 animate-float-delayed">
-                  <div className="floating-card">
-                    <div className="floating-icon-blue">
+                <div
+                  className={`absolute -bottom-2 -left-20 z-20 ${styles.animateFloatDelayed}`}
+                >
+                  <div className={styles.floatingCard}>
+                    <div className={styles.floatingIconBlue}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-white"
@@ -162,215 +156,123 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Stats Section */}
-          <div className="stats-container">
-            <div className="container mx-auto">
-              <div className="stats-card">
-                <div className="stats-section">
-                  <div className="flex items-center">
-                    <div>
-                      <div className="stats-number">
-                        300<sup>+</sup>
-                      </div>
-                      <p
-                        className="text-gray-800 dark:text-gray-300 font-medium"
-                        style={{
-                          color: "var(--color-text-primary)",
-                        }}
-                      >
-                        Active Users
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="stats-content">
-                  <p className="stats-text">
-                    We have over 300 satisfied and happy tutor applicants around
-                    the university
-                  </p>
-
-                  {/* Avatar row */}
-                  <div className="avatar-group">
-                    {[...Array(6)].map((_, i) => (
-                      <div className="avatar" key={i}>
-                        <Image
-                          src={`/avatars/avatar-${i + 1}.jpg`}
-                          alt="User avatar"
-                          width={36}
-                          height={36}
-                        />
-                      </div>
-                    ))}
-                    <div className="avatar plus-avatar flex items-center justify-center bg-orange-100 text-orange-500">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-
-                    <Link href="#tutors-info" className="ml-[24px]">
-                      <div className="more-button flex items-center justify-center bg-orange-500 text-white px-6 py-1 rounded-full text-sm font-medium">
-                        <div className="flex items-center justify-center w-full">
-                          <span className="more-text pb-[4px]">
-                            Explore more
-                          </span>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 ml-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <HomeStats />
         </section>
 
-        {/* Tutor Section */}
+        <TimelineSection isLoggedIn={isLoggedIn} userRole={userRole} />
+
+        <LecturerShowcase
+          lecturers={lecturers}
+          onOpenLecturerModal={handleOpenLecturerModal}
+        />
+
+        {/* Tutor Section - Apply CSS module styles */}
         <section
-          className="section py-16"
+          className={`${styles.section} py-16`}
           id="tutors-info"
           style={{ backgroundColor: "var(--color-bg-secondary)" }}
         >
           <div className="container mx-auto">
             <div className="max-w-5xl mx-auto">
               <h2
-                className="text-4xl font-bold mb-4 text-center"
+                className={`text-4xl font-bold mb-4 text-center`}
                 style={{ color: "var(--color-primary)" }}
               >
                 For Tutor Applicants
               </h2>
               <p
-                className="text-center text-lg mb-12 max-w-3xl mx-auto"
+                className={`text-center text-lg mb-12 max-w-3xl mx-auto`}
                 style={{ color: "var(--color-text-primary)" }}
               >
                 Join our team of exceptional tutors and help shape the next
                 generation of computer science professionals. Follow these
                 simple steps to get started.
               </p>
-
-              {/* Timeline Design */}
-              <div className="timeline-container">
-                <div className="timeline-item">
-                  <div className="timeline-title">Create Your Profile</div>
-                  <div className="timeline-description">
+              <div className={styles.timelineContainer}>
+                <div className={styles.timelineItem}>
+                  <div className={styles.timelineTitle}>
+                    Create Your Profile
+                  </div>
+                  <div className={styles.timelineDescription}>
                     Showcase your skills, academic credentials, and previous
                     teaching experience to stand out from other applicants.
                   </div>
-                  <ul className="timeline-features">
+                  <ul className={styles.timelineFeatures}>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Academic qualifications visibility</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Skills showcase with verification</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Teaching experience highlights</span>
                     </li>
                   </ul>
                 </div>
-
-                <div className="timeline-item">
-                  <div className="timeline-title">Apply for Positions</div>
-                  <div className="timeline-description">
+                <div className={styles.timelineItem}>
+                  <div className={styles.timelineTitle}>
+                    Apply for Positions
+                  </div>
+                  <div className={styles.timelineDescription}>
                     Browse available courses and apply for tutor and
                     lab-assistant roles that match your expertise and
                     availability.
                   </div>
-                  <ul className="timeline-features">
+                  <ul className={styles.timelineFeatures}>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Course-specific applications</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Flexible scheduling options</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Tailored cover letters</span>
                     </li>
                   </ul>
                 </div>
-
-                <div className="timeline-item">
-                  <div className="timeline-title">Get Selected</div>
-                  <div className="timeline-description">
+                <div className={styles.timelineItem}>
+                  <div className={styles.timelineTitle}>Get Selected</div>
+                  <div className={styles.timelineDescription}>
                     Lecturers review your profile and select candidates that
                     best fit their course requirements.
                   </div>
-                  <ul className="timeline-features">
+                  <ul className={styles.timelineFeatures}>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Real-time application status</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Direct communication with lecturers</span>
                     </li>
                     <li>
-                      <span className="feature-icon">✓</span>
+                      <span className={styles.featureIcon}>✓</span>
                       <span>Personalized feedback on applications</span>
                     </li>
                   </ul>
                 </div>
               </div>
-
-              <div className="text-center mt-12">
-                {
-                  !isLoggedIn ? (
-                    <Link
-                      href="/signin"
-                      className="btn-primary px-8 py-3 rounded-lg text-lg font-medium inline-block transition-all hover:shadow-lg"
-                    >
-                      Apply as a Tutor
-                    </Link>
-                  ) : userRole === "tutor" ? (
-                    <Link
-                      href="/tutor"
-                      className="btn-primary px-8 py-3 rounded-lg text-lg font-medium inline-block transition-all hover:shadow-lg"
-                    >
-                      Go to Tutor Dashboard
-                    </Link>
-                  ) : null /* Lecturer sees nothing */
-                }
-              </div>
+              {/* ... (Apply button with Tailwind for now) ... */}
             </div>
           </div>
         </section>
 
-        {/* Lecturer Section */}
+        {/* Lecturer Section - Apply CSS module styles */}
         <section
-          className="section py-16"
+          className={`${styles.section} py-16`}
           style={{ backgroundColor: "var(--color-bg-primary)" }}
         >
           <div className="container mx-auto">
             <div className="max-w-6xl mx-auto">
-              {/* Section title with decorative bar */}
-              <div className="section-title-container">
-                <div className="section-title-bar"></div>
-                <div className="section-title-content">
+              <div className={styles.sectionTitleContainer}>
+                <div className={styles.sectionTitleBar}></div>
+                <div className={styles.sectionTitleContent}>
                   <h2>Meet Our Lecturers</h2>
                   <p>
                     Meet our exceptional team of computer science lecturers who
@@ -379,112 +281,115 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-
-              {/* Lecturer Grid */}
-              <div className="lecturer-grid">
+              <div className={styles.lecturerGrid}>
                 {lecturers.map((lecturer, index) => (
                   <div
                     key={lecturer.id}
-                    className={`lecturer-card lecturer${index + 1}`}
-                    onClick={() => openModal(lecturer.id)}
+                    className={styles.lecturerCard}
+                    onClick={() => handleOpenLecturerModal(lecturer.id)}
                   >
                     <div>
-                      <div className="lecturer-image-container">
+                      <div className={styles.lecturerImageContainer}>
                         <Image
                           src={`/lecturers/lecturer-${index + 1}.jpg`}
                           alt={lecturer.name}
-                          width={200}
-                          height={200}
-                          className="lecturer-image"
+                          width={150}
+                          height={150}
+                          className={
+                            styles.lecturerImage /* If defined in module */
+                          }
                         />
-                        <div className="lecturer-decoration"></div>
+                        {/* <div className={styles.lecturerDecoration}></div> Applied if exists */}
                       </div>
-                      <h3 className="lecturer-name">{lecturer.name}</h3>
-                      <p className="lecturer-title">{lecturer.title}</p>
-                      <p className="lecturer-specialization">
+                      <h3 className={styles.lecturerName}>{lecturer.name}</h3>
+                      <p className={styles.lecturerTitle}>{lecturer.title}</p>
+                      <p className={styles.lecturerSpecialization}>
                         {lecturer.specialization}
                       </p>
                     </div>
-                    <button className="more-info-btn">More Information</button>
+                    <button className={styles.moreInfoBtn}>
+                      More Information
+                    </button>
                   </div>
                 ))}
               </div>
-
-              {/* Modal for each lecturer */}
-              {lecturers.map((lecturer, index) => (
-                <div
-                  key={`${lecturer.id}-modal`}
-                  className={`modal-overlay ${
-                    activeModal === lecturer.id ? "active" : ""
-                  }`}
-                  onClick={handleOverlayClick}
-                >
-                  <div className="modal-container">
-                    <div className="modal-image-section">
-                      <div className="modal-image-container">
-                        <Image
-                          src={`/lecturers/lecturer-${index + 1}.jpg`}
-                          alt={lecturer.name}
-                          width={400}
-                          height={400}
-                          className="lecturer-image"
-                        />
-                      </div>
-                    </div>
-                    <div className="modal-content">
-                      <div className="modal-close" onClick={closeModal}>
-                        ✕
-                      </div>
-                      <h3 className="modal-title">{lecturer.name}</h3>
-                      <p className="modal-subtitle">
-                        {lecturer.title} in {lecturer.specialization}
-                      </p>
-                      <p className="modal-text">{lecturer.bio}</p>
-                      <ul className="modal-info-list">
-                        <li className="modal-info-item">
-                          <span className="modal-info-icon">📚</span>
-                          <span>Teaches: {lecturer.courses}</span>
-                        </li>
-                        {lecturer.awards && (
-                          <li className="modal-info-item">
-                            <span className="modal-info-icon">🏆</span>
-                            <span>Awards: {lecturer.awards}</span>
-                          </li>
-                        )}
-                        {lecturer.experience && (
-                          <li className="modal-info-item">
-                            <span className="modal-info-icon">🏢</span>
-                            <span>
-                              Industry Experience: {lecturer.experience}
-                            </span>
-                          </li>
-                        )}
-                        {lecturer.certifications && (
-                          <li className="modal-info-item">
-                            <span className="modal-info-icon">🔰</span>
-                            <span>
-                              Certifications: {lecturer.certifications}
-                            </span>
-                          </li>
-                        )}
-                        {lecturer.publications && (
-                          <li className="modal-info-item">
-                            <span className="modal-info-icon">📖</span>
-                            <span>Publications: {lecturer.publications}</span>
-                          </li>
-                        )}
-                        <li className="modal-info-item">
-                          <span className="modal-info-icon">📧</span>
-                          <span>Contact: {lecturer.contact}</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
+
+        {currentLecturerDetails && (
+          <Modal
+            isOpen={!!activeLecturer}
+            onClose={handleCloseModal}
+            maxWidth="800px"
+          >
+            <div className="flex flex-col md:flex-row">
+              <div className={styles.modalImageSection}>
+                <div className={styles.modalImageContainer}>
+                  <Image
+                    src={
+                      currentLecturerDetails.avatarPath ||
+                      `/lecturers/lecturer-${activeLecturerImageIndex + 1}.jpg`
+                    }
+                    alt={currentLecturerDetails.name}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              </div>
+              <div className={styles.modalContentSpecific}>
+                <h3 className={styles.modalTitle}>
+                  {currentLecturerDetails.name}
+                </h3>
+                <p className={styles.modalSubtitle}>
+                  {currentLecturerDetails.title} in{" "}
+                  {currentLecturerDetails.specialization}
+                </p>
+                <p className={styles.modalText}>{currentLecturerDetails.bio}</p>
+                <ul className={styles.modalInfoList}>
+                  <li className={styles.modalInfoItem}>
+                    <span className={styles.modalInfoIcon}>📚</span>
+                    <span>Teaches: {currentLecturerDetails.courses}</span>
+                  </li>
+                  {currentLecturerDetails.awards && (
+                    <li className={styles.modalInfoItem}>
+                      <span className={styles.modalInfoIcon}>🏆</span>
+                      <span>Awards: {currentLecturerDetails.awards}</span>
+                    </li>
+                  )}
+                  {currentLecturerDetails.experience && (
+                    <li className={styles.modalInfoItem}>
+                      <span className={styles.modalInfoIcon}>🏢</span>
+                      <span>
+                        Industry Experience: {currentLecturerDetails.experience}
+                      </span>
+                    </li>
+                  )}
+                  {currentLecturerDetails.certifications && (
+                    <li className={styles.modalInfoItem}>
+                      <span className={styles.modalInfoIcon}>🔰</span>
+                      <span>
+                        Certifications: {currentLecturerDetails.certifications}
+                      </span>
+                    </li>
+                  )}
+                  {currentLecturerDetails.publications && (
+                    <li className={styles.modalInfoItem}>
+                      <span className={styles.modalInfoIcon}>📖</span>
+                      <span>
+                        Publications: {currentLecturerDetails.publications}
+                      </span>
+                    </li>
+                  )}
+                  <li className={styles.modalInfoItem}>
+                    <span className={styles.modalInfoIcon}>📧</span>
+                    <span>Contact: {currentLecturerDetails.contact}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </Modal>
+        )}
       </main>
     </>
   );

@@ -1,12 +1,12 @@
 "use client";
-// filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\shared\components\layout\header\header.tsx
-// src/components/layout/Header.tsx
+// filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\modules\core\components\layout\Header.tsx
+// src\components\layout\Header.tsx
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import UserDropdown from "../user-dropdown";
-import styles from "./header.module.css";
+import UserDropdown from "../user-dropdown/user-dropdown";
+import styles from "./Header.module.css";
 
 // Define a proper type for user data
 interface UserData {
@@ -38,10 +38,10 @@ const Header: React.FC = () => {
       const user = localStorage.getItem("currentUser");
 
       if (user) {
-        const userData = JSON.parse(user);
+        const userDataParsed = JSON.parse(user);
         setIsLoggedIn(true);
-        setUserRole(userData.role);
-        setUserData(userData);
+        setUserRole(userDataParsed.role);
+        setUserData(userDataParsed);
       } else {
         setIsLoggedIn(false);
         setUserRole(null);
@@ -119,35 +119,37 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`${styles.mainHeader} ${isScrolled ? styles.scrolled : ""}`}
+      className={`${styles["main-header"]} ${isScrolled ? styles.scrolled : ""}`}
     >
-      <div className={`${styles.container} mx-auto ${styles.headerGrid}`}>
+      <div className={`${styles.container} mx-auto ${styles["header-grid"]}`}>
         {/* Logo with proper alignment */}
-        <div className={styles.logoWrapper}>
-          <Link href="/" className={styles.logoLink}>
-            <div className={styles.logoContainer}>
-              <div className={styles.logoImageContainer}>
+        <div className={styles["logo-wrapper"]}>
+          <Link href="/" className={styles["logo-link"]}>
+            <div className={styles["logo-container"]}>
+              <div>
                 <Image
                   src="/letter-e.png"
                   alt="Logo"
                   width={36}
                   height={36}
-                  className={styles.logoImage}
+                  className={styles["logo-image"]}
                 />
               </div>
-              <span className={styles.logoText}>
-                <span className={styles.logoPrefix}>du</span>Team
+              <span className={styles["logo-text"]}>
+                <span className={styles["logo-prefix"]}>du</span>Team
               </span>
             </div>
           </Link>
         </div>
 
         {/* Center Navigation */}
-        <nav className={styles.mainNav}>
-          <div className={styles.navLinks}>
+        <nav className={styles["main-nav"]}>
+          <div className={styles["nav-links"]}>
             <Link
               href="/"
-              className={`${styles.navLink} ${pathname === "/" ? styles.active : ""}`}
+              className={`${styles["nav-link"]} ${
+                pathname === "/" ? styles.active : ""
+              }`}
             >
               Home
             </Link>
@@ -155,7 +157,7 @@ const Header: React.FC = () => {
             {showTutorLink && (
               <Link
                 href="/tutor"
-                className={`${styles.navLink} ${
+                className={`${styles["nav-link"]} ${
                   pathname.startsWith("/tutor") ? styles.active : ""
                 }`}
               >
@@ -166,7 +168,7 @@ const Header: React.FC = () => {
             {showLecturerLink && (
               <Link
                 href="/lecturer"
-                className={`${styles.navLink} ${
+                className={`${styles["nav-link"]} ${
                   pathname.startsWith("/lecturer") ? styles.active : ""
                 }`}
               >
@@ -177,21 +179,21 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Right Side Actions */}
-        <div className={styles.headerActions}>
+        <div className={styles["header-actions"]}>
           {/* Theme Toggle Button - Only visible when not logged in */}
           {!isLoggedIn && (
             <button
               onClick={toggleDarkMode}
-              className={`${styles.themeToggleBtn} ${styles.headerThemeToggle} ${
+              className={`${styles["theme-toggle-btn"]} ${styles["header-theme-toggle"]} ${
                 isThemeToggleAdding ? styles.adding : ""
               } ${isThemeToggleRemoving ? styles.removing : ""}`}
               aria-label="Toggle dark mode"
             >
-              <div className={styles.themeIconWrapper}>
+              <div className={styles["theme-icon-wrapper"]}>
                 {/* Sun icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`${styles.themeIcon} ${styles.sun}`}
+                  className={`${styles["theme-icon"]} ${styles.sun}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -206,7 +208,7 @@ const Header: React.FC = () => {
                 {/* Moon icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`${styles.themeIcon} ${styles.moon}`}
+                  className={`${styles["theme-icon"]} ${styles.moon}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -224,10 +226,16 @@ const Header: React.FC = () => {
 
           {!isLoggedIn ? (
             <>
-              <Link href="/signin" className="auth-button outline">
+              <Link
+                href="/signin"
+                className={`${styles["auth-button"]} ${styles.outline}`}
+              >
                 Sign In
               </Link>
-              <Link href="/signup" className="auth-button primary">
+              <Link
+                href="/signup"
+                className={`${styles["auth-button"]} ${styles.primary}`}
+              >
                 Sign Up
               </Link>
             </>

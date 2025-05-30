@@ -1,27 +1,27 @@
 /* ======== CORE/GLOBAL STYLES ======== */
 /* This is the main entry point for all core/global styles */
 
-/* CSS Framework */
-@import "tailwindcss";
+@import "tailwindcss/preflight"; /* Corrected Tailwind base import */
+@tailwind utilities;
 
 /* Core Foundation */
 @import "./variables.css"; /* CSS custom properties */
-@import "./base.css"; /* Base element styles */
-@import "../../modules/core/styles/overrides.css"; /* Framework overrides */
+@import "./global/base.css";
+@import "./global/animations.css";
+@import "./global/utilities.css";
 
-/* Theme System */
-@import "../../modules/core/styles/themes/light.css";
-@import "../../modules/core/styles/themes/dark.css";
-@import "../../modules/core/styles/themes/lecturer-theme.css";
+/* Themes */
+@import "./themes/light.css";
+@import "./themes/dark.css";
+@import "./themes/lecturer-theme.css";
 
-/* Core Utilities */
-@import "../../modules/core/styles/utilities.css"; /* Utility classes */
-@import "../../modules/core/styles/responsive.css"; /* Global responsive utilities */
+/* Framework Overrides & Global Responsive */
+@import "./overrides.css"; /* Framework overrides */
+@import "./responsive.css"; /* Global responsive utilities */
 
-/* Global Components */
-@import "../../modules/core/styles/header.css"; /* Global header component */
-@import "../../modules/core/styles/user-dropdown.css"; /* Global user dropdown */
-@import "../../modules/core/styles/toast.css"; /* Global toast notifications */
-@import "../../modules/core/styles/timeline.css"; /* Global timeline component */
-
-/* Note: Module-specific styles should be imported in their respective modules */
+/* 
+  Removed imports for component-specific styles like toast.css, timeline.css 
+  as they should be handled by their respective CSS Modules or page-specific modules.
+  Removed import for old core/styles/utilities.css; Tailwind handles most utilities.
+  Module-specific styles should be imported within their respective modules/pages.
+*/

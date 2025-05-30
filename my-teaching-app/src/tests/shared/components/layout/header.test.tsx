@@ -1,7 +1,7 @@
 // filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\tests\shared\components\layout\header.test.tsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Header from "@/shared/components/layout/header/header";
+import Header from "@/shared/components/layout/header";
 
 // Mock next/navigation for App Router
 jest.mock("next/navigation", () => ({

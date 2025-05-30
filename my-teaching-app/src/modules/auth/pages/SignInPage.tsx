@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 import { initializeUserAccounts } from "@/modules/auth/utils/userAccounts";
-import { initializeDetailedApplications } from "@/modules/tutor/utils/tutorUtils";
+import { initializeDetailedApplicationsInStorage as initializeDetailedApplications } from "@/modules/tutor/utils/applicationDisplay.utils";
 
 /**
  * Validation Rules for Sign In Form:

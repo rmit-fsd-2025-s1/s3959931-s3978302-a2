@@ -50,9 +50,17 @@ describe("RootLayout", () => {
     expect(screen.getByText("Test Child")).toBeInTheDocument();
   });
 
-  // TODO: Add more tests:
-  // - Verify global styles are applied (this might be tricky to test directly, might need a visual regression test or a specific element with a global style)
-  // - Verify Header placeholder is present
-  // - Verify Footer placeholder is present
-  // - Verify ContextProvider placeholder is present (if applicable)
+  it("renders without crashing", () => {
+    const { container } = render(
+      <RootLayout>
+        <div>Test Child</div>
+      </RootLayout>
+    );
+    expect(container).toBeInTheDocument();
+  });
+
+  // TODO: Add more tests when RootLayout includes Header, Footer, or ContextProviders:
+  // - Example: Verify Header component is rendered.
+  // - Example: Verify Footer component is rendered.
+  // - Example: Test behavior of any ContextProviders wrapping children.
 });

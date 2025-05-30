@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Footer from "@/shared/components/layout/footer/footer"; // Updated import path
+import Footer from "@/shared/components/layout/Footer/Footer"; // Corrected Casing
 import styles from "@/shared/components/layout/footer/footer.module.css"; // Import CSS module
 
 describe("Footer Component", () => {

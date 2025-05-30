@@ -1,0 +1,1194 @@
+/* HomePage Specific Styles - adapted from hero.css and other home/styles */
+
+.heroSection {
+  background-color: var(--color-bg-secondary);
+  padding: 5rem 0 8rem 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.heroSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.05) 0%,
+    rgba(249, 115, 22, 0.1) 100%
+  );
+  border-radius: 0 0 0 100%;
+  z-index: 0;
+}
+
+.heroTitle {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  max-width: 90%;
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.heroBtn:hover {
+  background-color: #ea580c; /* Consider using a CSS var if this orange is standard hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.heroBtn svg {
+  margin-left: 0.5rem;
+}
+
+.heroImageContainer {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  aspect-ratio: 3/2;
+  transition: transform 0.3s ease;
+}
+
+.heroImageContainer .imageWrapper {
+  /* Nested class */
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  transition: 0.3s ease;
+}
+
+.heroImageContainer .imageWrapper:hover {
+  transform: scale(1.02);
+}
+
+/* Placeholder for other sections like stats, timeline, lecturer showcase */
+/* .statsContainerHomePage, .statsCardHomePage, .statsSectionHomePage, etc. were here */
+/* These have been moved to HomeStats.module.css */
+
+/* ... other styles from hero.css, timeline.css, lecturer.css (home specific parts), animations.css will be added here or to their own component modules ... */
+
+/* Styles for the lecturer modal that was part of HomePage - will be refactored */
+/* SHELL STYLES (.modalOverlay, .modalContainer, .modalClose) MOVED to shared/components/common/modal/Modal.module.css */
+
+.modalImageSection {
+  /* Content style - Retain */
+  flex-shrink: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.modalImageContainer {
+  /* Content style - Retain */
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.modalImageSection img {
+  /* Content style - Retain */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalContentSpecific {
+  /* Content style - Retain (was modalContent, renamed) */
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Responsive for modal content parts if needed - Retain */
+@media (min-width: 768px) {
+  .modalImageSection {
+    width: 40%;
+    max-height: none;
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+    border-top-right-radius: 0;
+  }
+  .modalContentSpecific {
+    width: 60%;
+    padding: 2rem;
+  }
+}
+
+.modalTitle {
+  /* Content style - Retain */
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.modalSubtitle {
+  /* Content style - Retain */
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.modalText {
+  /* Content style - Retain */
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.modalInfoList {
+  /* Content style - Retain */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modalInfoItem {
+  /* Content style - Retain */
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.modalInfoIcon {
+  /* Content style - Retain */
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+/* Timeline styles moved to TimelineSection.module.css */
+
+/* Lecturer Card Styles MOVED to LecturerCard.module.css */
+/* Lecturer Grid and Section Title Styles MOVED to LecturerShowcase.module.css */
+
+/* Section title styles (if used directly in HomePage or LecturerShowcase, otherwise componentize) */
+.sectionTitleContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.sectionTitleBar {
+  width: 6px;
+  height: 124px; /* Example height */
+  background-color: var(--color-primary);
+  margin-right: 20px;
+  border-radius: 3px;
+  margin-top: 12px; /* Align with text */
+}
+
+.sectionTitleContent h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.sectionTitleContent p {
+  font-size: 1.2rem;
+  color: var(--color-text-primary);
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+/* Ensure keyframes for animations used by utility classes are globally available or defined here */
+/* pulse-slow was already added */
+
+.decorationCircle {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.decorationCircleOutline {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-orange-300);
+  opacity: 0.4;
+}
+
+.decorationGradientCircle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: linear-gradient(
+    to right,
+    var(--color-orange-100),
+    var(--color-orange-200)
+  );
+  opacity: 0.2;
+}
+
+.pulseBackground {
+  position: absolute;
+  top: -2.5rem;
+  left: -2.5rem;
+  width: 100%; /* Should be relative to .heroImageContainer */
+  height: 100%; /* Should be relative to .heroImageContainer */
+  background-color: var(--color-orange-400);
+  border-radius: 50%;
+  opacity: 0.2;
+  animation: pulseSlow 6s ease-in-out infinite; /* Updated to pulseSlow keyframe */
+}
+
+.floatingCard {
+  background-color: white; /* Or var(--color-bg-primary) */
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.floatingIconGreen,
+.floatingIconBlue {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Icon color */
+}
+
+.floatingIconGreen {
+  background-color: #10b981; /* Tailwind green-500 */
+}
+.floatingIconBlue {
+  background-color: #3b82f6; /* Tailwind blue-500 */
+}
+
+.plusAvatar {
+  /* For the + avatar in stats section */
+  /* Tailwind: flex items-center justify-center bg-orange-100 text-orange-500 */
+  /* These are utility classes, but if a specific module style is needed: */
+  /* background-color: var(--color-orange-100); */
+  /* color: var(--color-orange-500); */
+}
+
+/* Keyframe animation for pulse-slow - THIS IS THE ONE TO REMOVE */
+/* @keyframes pulse-slow { ... } */
+
+.lecturerImage {
+  /* Placeholder for Next/Image */
+  display: block; /* Or as needed by Next/Image structure */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lecturerDecoration {
+  /* Placeholder for lecturer card decoration */
+  /* Styles would go here if this was a styled div, e.g. from original lecturer.css */
+  /* position: absolute; etc. */
+}
+
+/* Stats Section styles MOVED to HomeStats.module.css */
+/* Comment above indicates these were already handled, but the actual classes might still be present */
+/* Removing the actual classes if they exist, based on the earlier check of HomeStats.module.css */
+
+/* Hero Decoration Styles */
+.decorationCircle {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* ======== HOMEPAGE ANIMATIONS (from animations.css) ======== */
+
+/* Floating animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes floatDelayed {
+  /* Renamed to avoid conflict if float-delayed was global */
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Animation classes (adapted for module) */
+.animateFloat {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animateFloatDelayed {
+  animation: floatDelayed 3s ease-in-out infinite 1.5s;
+}
+
+/* .animate-pulse is a Tailwind class, if a specific module version is needed, define it here */
+/* Example: .animatePulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; } */
+
+.animateSlowSpin {
+  animation: slowSpin 10s linear infinite;
+}
+
+/* Pulse animation (if not already defined globally by Tailwind or other means) */
+/* Tailwind's animate-pulse is likely sufficient. If a custom 'pulse' is needed: */
+/* @keyframes pulse { 
+    0%, 100% { opacity: 1; } 
+    50% { opacity: 0.5; } 
+   }
+*/
+
+@keyframes pulseSlow {
+  /* Renamed to avoid conflict - THIS IS THE ONE TO KEEP */
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2; /* Match initial opacity */
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+}
+
+/* ======== HOMEPAGE STYLES - Adapted from original CSS ======== */
+
+/* ======== ANIMATIONS ======== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentle-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes float-delayed {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+/* ======== UTILITY CLASSES ======== */
+.animateFloat {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animateFloatDelayed {
+  animation: float-delayed 4.5s ease-in-out infinite;
+}
+
+.animateSlowSpin {
+  animation: slow-spin 12s linear infinite;
+}
+
+.animatePulse {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+/* ======== HERO SECTION STYLES ======== */
+.heroSection {
+  background-color: var(--color-bg-secondary);
+  padding: 5rem 0 8rem 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.heroSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.05) 0%,
+    rgba(249, 115, 22, 0.1) 100%
+  );
+  border-radius: 0 0 0 100%;
+  z-index: 0;
+}
+
+/* Decoration elements */
+.decorationCircle {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.decorationCircleOutline {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-orange-300);
+  opacity: 0.4;
+}
+
+.decorationGradientCircle {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: linear-gradient(
+    to right,
+    var(--color-orange-100),
+    var(--color-orange-200)
+  );
+  opacity: 0.2;
+}
+
+.heroTitle {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+}
+
+.heroSubtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  max-width: 90%;
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.heroBtn:hover {
+  background-color: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.heroBtn svg {
+  margin-left: 0.5rem;
+}
+
+/* Hero image container */
+.heroImageContainer {
+  position: relative;
+  z-index: 5;
+  transition: transform 0.3s ease;
+}
+
+.heroImageContainer .imageWrapper:hover {
+  transform: scale(1.02);
+}
+
+.heroImageContainer {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  aspect-ratio: 3/2;
+  transition: transform 0.3s ease;
+}
+
+.heroImageContainer .imageWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  transition: 0.3s ease;
+}
+
+.heroImageContainer .imageWrapper img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pulseBackground {
+  position: absolute;
+  top: -2.5rem;
+  left: -2.5rem;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-orange-400);
+  border-radius: 50%;
+  opacity: 0.2;
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+/* Floating cards */
+.floatingCard {
+  background-color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.floatingIconGreen,
+.floatingIconBlue {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floatingIconGreen {
+  background-color: #10b981;
+}
+
+.floatingIconBlue {
+  background-color: #3b82f6;
+}
+
+/* Stats section */
+.statsContainer {
+  position: relative;
+  z-index: 20;
+  margin-top: 1rem;
+}
+
+.statsCard {
+  display: flex;
+  background-color: var(--color-bg-primary);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  max-width: 39rem;
+  margin: 0 auto;
+  transform: translateY(0.5rem);
+  align-items: center;
+  gap: 2rem;
+  border-left: calc(7px / 2) solid var(--color-primary);
+}
+
+.statsSection {
+  border-right: 1px solid var(--color-border);
+  padding-right: 2rem;
+  flex-shrink: 0;
+}
+
+.statsContent {
+  flex: 1;
+}
+
+.statsText {
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.statsNumber {
+  font-size: 2.75rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  position: relative;
+  line-height: 1;
+}
+
+.statsNumber sup {
+  font-size: 1.25rem;
+  top: -0.75rem;
+  position: relative;
+}
+
+/* Avatar group styling */
+.avatarGroup {
+  display: flex;
+  gap: 0;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  position: relative;
+  user-select: none;
+  margin-left: -0.75rem;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+.avatar:hover {
+  transform: translateY(-3px);
+  z-index: 10;
+}
+
+.avatarMore {
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.avatarMore:hover {
+  transform: translateY(-3px);
+}
+
+.avatarMore:hover .moreButton {
+  background-color: var(--color-primary-dark, #ea580c);
+}
+
+.plusAvatar {
+  transition: transform 0.2s ease;
+}
+
+.plusAvatar:hover {
+  transform: translateY(-3px);
+  z-index: 10;
+}
+
+.moreButton {
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moreButton:hover {
+  background-color: var(--color-primary-dark, #ea580c);
+  transform: translateY(-3px);
+}
+
+.moreButton div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moreButton svg {
+  position: relative;
+  top: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.moreText {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Feature section */
+.featureIconBg {
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.featureIcon {
+  color: var(--color-primary);
+}
+
+/* Card component */
+.card {
+  background-color: var(--color-bg-secondary);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px var(--color-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Section Title */
+.sectionTitleContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.sectionTitleBar {
+  width: 6px;
+  height: 124px;
+  background-color: var(--color-primary);
+  margin-right: 20px;
+  border-radius: 3px;
+  margin-top: 12px;
+}
+
+.sectionTitleContent h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.sectionTitleContent p {
+  font-size: 1.2rem;
+  color: var(--color-text-primary);
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+/* Lecturer grid */
+.lecturerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2.5rem;
+  margin: 2rem 0;
+}
+
+/* Lecturer card */
+.lecturerCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 450px;
+}
+
+.lecturerImageContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 25px var(--color-shadow);
+  transition: all 0.3s ease;
+}
+
+.lecturerCard:hover .lecturerImageContainer {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px var(--color-shadow);
+}
+
+.lecturerImage {
+  width: 110%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s ease;
+}
+
+.lecturerCard:hover .lecturerImage {
+  transform: scale(1.1);
+}
+
+.lecturerDecoration {
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  opacity: 0.8;
+  top: -5px;
+  right: -45px;
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.lecturerCard:hover .lecturerDecoration {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.lecturerCard:nth-child(even) .lecturerDecoration {
+  right: auto;
+  left: -45px;
+}
+
+.lecturerName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: var(--color-text-primary);
+}
+
+.lecturerTitle {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.lecturerSpecialization {
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moreInfoBtn {
+  margin-top: auto;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: 0.5rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.lecturerCard:hover .moreInfoBtn {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.moreInfoBtn:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modalOverlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modalContainer {
+  background-color: var(--color-bg-primary);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.modalOverlay.active .modalContainer {
+  transform: scale(1);
+}
+
+.modalImageSection {
+  width: 40%;
+  position: relative;
+  overflow: hidden;
+}
+
+.modalImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.modalImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalDecoration {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  top: -30px;
+  right: -150px;
+  z-index: 0;
+}
+
+.modalContent {
+  width: 60%;
+  padding: 3rem;
+  position: relative;
+}
+
+.modalClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modalClose:hover {
+  transform: rotate(90deg);
+}
+
+.modalTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.modalSubtitle {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.modalText {
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.modalInfoList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.modalInfoItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.modalInfoIcon {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: var(--color-primary);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.modalContactBtn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.modalContactBtn:hover {
+  background-color: #e86207;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
+}
+
+/* Custom hover effects for each card */
+.lecturer1:hover .lecturerDecoration {
+  transform: scale(1.2) rotate(15deg);
+  background-color: var(--color-primary);
+}
+
+.lecturer2:hover .lecturerDecoration {
+  transform: scale(1.2) rotate(-15deg);
+  background-color: var(--color-primary);
+}
+
+.lecturer3:hover .lecturerDecoration {
+  transform: scale(1.2) rotate(15deg);
+  background-color: var(--color-primary);
+}
+
+.lecturer4:hover .lecturerDecoration {
+  transform: scale(1.2) rotate(-15deg);
+  background-color: var(--color-primary);
+}
+
+/* Timeline container and items */
+.timelineContainer {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timelineItem {
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.timelineItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.timelineTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.timelineDescription {
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.timelineFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timelineFeatures li {
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.timelineFeatures li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* Section styling */
+.section {
+  width: 100%;
+}

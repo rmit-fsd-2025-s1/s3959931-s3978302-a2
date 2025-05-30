@@ -1,0 +1,271 @@
+.user-avatar-btn {
+  cursor: pointer;
+  transition: transform 0.2s;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-avatar-btn:hover {
+  transform: scale(1.1);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 280px;
+  background-color: var(--color-bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.user-dropdown-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.user-dropdown-content {
+  padding: 8px;
+}
+
+.user-dropdown-item {
+  padding: 10px 16px;
+  display: block;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  border-radius: 8px;
+  margin: 4px 0;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.user-dropdown-item:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Dark mode specific styles */
+.dark .user-dropdown {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dark .user-dropdown-item:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Add this to your global CSS file */
+.user-dropdown-left {
+  position: absolute;
+  top: 45px;
+  right: auto;
+  left: 0;
+  width: 280px;
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.dark .user-dropdown-left {
+  background-color: var(--color-background-secondary, #1f2937);
+  border-color: var(--color-border-dark, #374151);
+}
+
+/* You may already have these styles, but including them for completeness */
+.user-dropdown-header {
+  display: flex;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.user-dropdown-content {
+  padding: 0.5rem 0;
+}
+
+.user-dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+/* User avatar and dropdown styles */
+.user-avatar-wrapper {
+  position: relative;
+  z-index: 50;
+}
+
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropdown menu - appears on the left side */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: auto;
+  left: 0; /* Position from the left */
+  transform: translateX(-80%); /* Shift it to the left */
+  margin-top: 0.5rem;
+  width: 280px;
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.dark .dropdown-menu {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.dark .dropdown-header {
+  border-color: var(--color-border);
+}
+
+.dropdown-content {
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.dark .dropdown-item:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px; /* khoảng cách dưới thanh header */
+  right: 10px;
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+/* Nút đóng X */
+.dropdown-menu .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.dropdown-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary, #f97316);
+  object-fit: cover;
+}
+
+.dropdown-header .info {
+  margin-left: 10px;
+}
+
+.dropdown-header .info p {
+  margin: 2px 0;
+}
+
+.dropdown-header .info .name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.dropdown-header .info .email {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Skills */
+.skills-section {
+  margin-bottom: 10px;
+}
+
+.skills-section h4 {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.skills-section .skill {
+  display: inline-block;
+  background-color: #f1f1f1;
+  padding: 4px 8px;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+/* Academic */
+.academic-section {
+  margin-bottom: 10px;
+}
+
+.academic-section h4 {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.academic-section p {
+  font-size: 13px;
+  color: #555;
+}
+
+/* Logout button */
+.logout-button {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #ffe5e5;
+  color: #d33;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #ffd6d6;
+}

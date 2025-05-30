@@ -1,0 +1,162 @@
+/* Apply Modal Styles - adapted from modal.css */
+
+.applyModalBackdrop {
+  /* Corresponds to .apply-modal-backdrop - used for the full screen overlay */
+  /* This is often a global style or handled by a dedicated Modal wrapper component */
+  /* For now, assuming it's part of this module for simplicity if not handled globally */
+  background-color: rgba(0, 0, 0, 0.5); /* Default backdrop */
+}
+
+.dark .applyModalBackdrop {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.applyModal {
+  background-color: var(--color-bg-primary); /* Using global CSS vars */
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  /* Tailwind classes like rounded-lg, shadow-xl, w-full, max-w-2xl are in JSX */
+}
+
+.applyModalHeader {
+  border-bottom: 1px solid var(--color-border);
+  /* Tailwind p-6 is in JSX */
+}
+
+.applyModalTitle {
+  color: var(--color-text-primary);
+  /* Tailwind text-xl, font-bold is in JSX */
+}
+
+.applyModalClose {
+  color: var(--color-text-secondary);
+  transition: color 0.2s ease;
+}
+
+.applyModalClose:hover {
+  color: var(--color-text-primary);
+}
+
+.applyModalInput {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+  resize: none; /* For textarea */
+  /* Tailwind w-full, p-3, rounded-lg, focus:ring-2, focus:ring-primary/20 are in JSX */
+}
+
+/* Light mode specific styles for better cursor visibility on inputs/textareas */
+:global(:root:not(.dark)) .applyModalInput {
+  background-color: #f9fafb; /* Slightly off-white for better cursor contrast */
+}
+
+.applyModalInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-primary); /* Reset to normal bg on focus */
+}
+
+.applyModalLabel {
+  color: var(--color-text-primary);
+  /* Tailwind block, font-bold, mb-2 is in JSX */
+}
+
+.applyModalSecondaryText {
+  color: var(--color-text-secondary);
+  /* Tailwind text-xs, mt-1 is in JSX */
+}
+
+.applyModalTextPrimary {
+  color: var(--color-text-primary);
+}
+
+.applyModalReadonlyField {
+  background-color: var(
+    --color-bg-secondary
+  ); /* Updated from --apply-modal-readonly to global var */
+  color: var(--color-text-primary);
+  /* Tailwind p-3, rounded-lg is in JSX */
+}
+
+.applyModalButtonSubmit {
+  /* For the main submit button */
+  background-color: var(--color-primary);
+  color: white;
+  transition: background-color 0.3s ease;
+  /* Tailwind px-4, py-2, rounded-lg is in JSX */
+}
+
+.applyModalButtonSubmit:hover {
+  background-color: var(--color-secondary);
+}
+
+.applyModalButtonCancel {
+  /* For the cancel button */
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  /* Tailwind mr-2, px-4, py-2, rounded-lg is in JSX */
+}
+
+.applyModalButtonCancel:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.applyModalBorder {
+  border-color: var(--color-border); /* For the top border on the footer */
+}
+
+/* Popular skill button styling */
+.popularSkillButton {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  border-radius: 9999px; /* pill shape */
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.dark .popularSkillButton {
+  background-color: #374151; /* Tailwind gray-700 */
+  color: #d1d5db; /* Tailwind gray-300 */
+}
+
+.popularSkillButton:hover {
+  background-color: #e5e7eb; /* Tailwind gray-200 */
+  border-color: var(--color-border);
+}
+
+.dark .popularSkillButton:hover {
+  background-color: #4b5563; /* Tailwind gray-600 */
+}
+
+.popularSkillButton[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Add Skill button specific style (the one next to input) */
+.addSkillButton {
+  background-color: var(--color-primary);
+  color: white;
+  /* Tailwind px-4 py-2 rounded-r-lg hover:bg-secondary is in JSX */
+}
+.addSkillButton:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Skill input field specific styling if needed beyond applyModalInput */
+.skillInputField {
+  /* Tailwind flex-1, p-2, border, rounded-l-lg focus:ring-2 focus:ring-primary/20 is in JSX */
+  /* Inherits from .applyModalInput but can be overridden */
+}
+
+.errorText {
+  color: #ef4444; /* Tailwind red-500 */
+  font-size: 0.875rem; /* text-sm */
+  margin-top: 0.25rem; /* mt-1 */
+}

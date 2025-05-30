@@ -1,5 +1,8 @@
 // filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\modules\auth\utils\userAccounts.ts
-// Types for user accounts
+import type { UserAccount } from "@/shared/types/user"; // Import from shared types
+
+// Types for user accounts - REMOVED as it's imported
+/*
 export interface UserAccount {
   id: string;
   email: string;
@@ -11,13 +14,14 @@ export interface UserAccount {
   academicCredentials?: string;
   avatarPath?: string;
 }
+*/
 
 // 12 tutor accounts with minimal information
 const tutorAccounts: UserAccount[] = [
   {
     id: "tutor1",
     email: "john.doe@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!", // Password removed from mock data
     role: "tutor",
     fullName: "John Doe",
     academicCredentials: "Bachelor of Computer Science",
@@ -26,7 +30,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor2",
     email: "jane.smith@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Jane Smith",
     academicCredentials: "Masters in Computer Science",
@@ -35,7 +39,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor3",
     email: "michael.brown@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Michael Brown",
     academicCredentials: "Bachelor of Information Technology",
@@ -44,7 +48,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor4",
     email: "emily.johnson@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Emily Johnson",
     academicCredentials: "Masters in Computer Engineering",
@@ -53,7 +57,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor5",
     email: "david.wilson@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "David Wilson",
     academicCredentials: "Bachelor of Computer Science",
@@ -62,7 +66,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor6",
     email: "sarah.taylor@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Sarah Taylor",
     academicCredentials: "Ph.D. Candidate in Cybersecurity",
@@ -71,7 +75,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor7",
     email: "alex.martinez@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Alex Martinez",
     academicCredentials: "Masters in Software Engineering",
@@ -80,7 +84,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor8",
     email: "olivia.anderson@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Olivia Anderson",
     academicCredentials: "Bachelor of Science in Computer Science",
@@ -89,7 +93,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor9",
     email: "james.thomas@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "James Thomas",
     academicCredentials: "Masters in Web Technologies",
@@ -98,7 +102,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor10",
     email: "sophia.garcia@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Sophia Garcia",
     academicCredentials: "Bachelor of Information Technology",
@@ -107,7 +111,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor11",
     email: "daniel.lee@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Daniel Lee",
     academicCredentials: "Ph.D. Student in Computer Science",
@@ -116,7 +120,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor12",
     email: "emma.clark@tutor.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "tutor",
     fullName: "Emma Clark",
     academicCredentials: "Masters in IT Security",
@@ -129,7 +133,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer1",
     email: "sophie.chen@lecturer.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "lecturer",
     fullName: "Dr. Sophie Chen",
     bio: "Specializes in AI research and education",
@@ -138,7 +142,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer2",
     email: "m.rodriguez@lecturer.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "lecturer",
     fullName: "Prof. Michael Rodriguez",
     bio: "15+ years of industry experience in software architecture",
@@ -147,7 +151,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer3",
     email: "a.patel@lecturer.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "lecturer",
     fullName: "Dr. Aisha Patel",
     bio: "Specializes in network security and ethical hacking",
@@ -156,7 +160,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer4",
     email: "j.wilson@lecturer.edu.au",
-    password: "Password123!",
+    // password: "Password123!",
     role: "lecturer",
     fullName: "Dr. James Wilson",
     bio: "Expert in algorithm optimization and data science",
@@ -183,13 +187,18 @@ export const initializeUserAccounts = () => {
 // Get user by email and password
 export const getUserByCredentials = (
   email: string,
-  password: string
+  passwordAttempt: string // Renamed for clarity, actual password check is mock
 ): UserAccount | undefined => {
   if (typeof window !== "undefined") {
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    return users.find(
-      (user: UserAccount) => user.email === email && user.password === password
-    );
+    const users = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    ) as UserAccount[];
+    // This is mock authentication. In a real app, never store/compare plaintext passwords.
+    return users.find((user: UserAccount) => {
+      // Mock authentication: for demo purposes, accept any password that equals "Password123!"
+      // This part would be replaced by an API call.
+      return user.email === email && passwordAttempt === "Password123!";
+    });
   }
   return undefined;
 };
@@ -229,10 +238,9 @@ export const updateUserProfile = (
       // Make a copy of the profileData to avoid modifying the original
       const profileDataCopy = { ...profileData };
 
-      // Remove role, email, and password properties if they exist
+      // Remove role and email properties if they exist (these should not be modifiable)
       delete profileDataCopy.role;
       delete profileDataCopy.email;
-      delete profileDataCopy.password;
 
       // Update user data
       users[userIndex] = {
@@ -247,16 +255,4 @@ export const updateUserProfile = (
   return undefined;
 };
 
-// Check if the email follows the pattern for specific roles
-export const validateRoleSpecificEmail = (
-  email: string,
-  role: "tutor" | "lecturer"
-): boolean => {
-  const emailLowercase = email.toLowerCase();
-  if (role === "tutor") {
-    return emailLowercase.endsWith("@tutor.edu.au");
-  } else if (role === "lecturer") {
-    return emailLowercase.endsWith("@lecturer.edu.au");
-  }
-  return false;
-};
+/* Function validateRoleSpecificEmail moved to authValidation.utils.ts */

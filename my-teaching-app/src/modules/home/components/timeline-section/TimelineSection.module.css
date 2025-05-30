@@ -1,0 +1,113 @@
+.timelineSectionWrapper {
+  padding-top: 4rem; /* py-16 */
+  padding-bottom: 4rem; /* py-16 */
+  background-color: var(--color-bg-secondary);
+}
+
+.timelineContentContainer {
+  /* Corresponds to max-w-5xl mx-auto */
+  max-width: 64rem; /* 1024px, approx 5xl */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionHeading {
+  font-size: 2.25rem; /* text-4xl */
+  line-height: 2.5rem;
+  font-weight: 700; /* font-bold */
+  margin-bottom: 1rem; /* mb-4 */
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.sectionSubheading {
+  text-align: center;
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75rem;
+  margin-bottom: 3rem; /* mb-12 */
+  max-width: 48rem; /* max-w-3xl */
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--color-text-primary);
+}
+
+.timelineContainer {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem 0;
+}
+
+.timelineItem {
+  padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+  position: relative;
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.timelineItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-primary-light);
+}
+
+.timelineTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.timelineDescription {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.timelineFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timelineFeatures li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.featureIcon {
+  color: var(--color-primary);
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.actionsContainer {
+  /* For the button area */
+  text-align: center;
+  margin-top: 3rem; /* mt-12 */
+}
+
+/* Styles for the button will come from the Button component, but we can add layout specifics */
+.applyButton {
+  /* display: inline-block; // from Button component base */
+  /* transition: all 0.2s ease; // from Button component base */
+  /* hover:shadow-lg can be part of Button component's hover state if desired */
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 500; /* font-medium */
+  /* padding-left: 2rem; /* px-8 */
+  /* padding-right: 2rem; /* px-8 */
+  /* padding-top: 0.75rem; /* py-3 */
+  /* padding-bottom: 0.75rem; /* py-3 */
+  /* border-radius: 0.5rem; /* rounded-lg */
+  /* These are handled by Button component variants (primary/outline) */
+}
+
+/* Add any other timeline-specific styles here */
