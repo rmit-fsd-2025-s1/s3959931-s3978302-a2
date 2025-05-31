@@ -1,162 +1,400 @@
-/* Apply Modal Styles - adapted from modal.css */
+/* Apply Modal CSS Modules - Using direct color values to match old design */
 
 .applyModalBackdrop {
-  /* Corresponds to .apply-modal-backdrop - used for the full screen overlay */
-  /* This is often a global style or handled by a dedicated Modal wrapper component */
-  /* For now, assuming it's part of this module for simplicity if not handled globally */
-  background-color: rgba(0, 0, 0, 0.5); /* Default backdrop */
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  z-index: 50 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
 }
 
-.dark .applyModalBackdrop {
-  background-color: rgba(0, 0, 0, 0.8);
+:global(.dark) .applyModalBackdrop {
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
 .applyModal {
-  background-color: var(--color-bg-primary); /* Using global CSS vars */
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  /* Tailwind classes like rounded-lg, shadow-xl, w-full, max-w-2xl are in JSX */
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  width: 100% !important;
+  max-width: 42rem !important; /* 672px */
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+:global(.dark) .applyModal {
+  background-color: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border: 1px solid #374151 !important;
 }
 
 .applyModalHeader {
-  border-bottom: 1px solid var(--color-border);
-  /* Tailwind p-6 is in JSX */
+  border-bottom: 1px solid #e5e7eb !important;
+  padding: 1.5rem !important;
+}
+
+:global(.dark) .applyModalHeader {
+  border-bottom: 1px solid #374151 !important;
+}
+
+.applyModalHeaderContent {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 
 .applyModalTitle {
-  color: var(--color-text-primary);
-  /* Tailwind text-xl, font-bold is in JSX */
+  color: #111827 !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+:global(.dark) .applyModalTitle {
+  color: #f3f4f6 !important;
 }
 
 .applyModalClose {
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
+  color: #4b5563 !important;
+  transition: color 0.2s ease !important;
+  background: none !important;
+  border: none !important;
+  padding: 0.5rem !important;
+  border-radius: 0.375rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:global(.dark) .applyModalClose {
+  color: #9ca3af !important;
 }
 
 .applyModalClose:hover {
-  color: var(--color-text-primary);
+  color: #111827 !important;
+  background-color: #f3f4f6 !important;
+}
+
+:global(.dark) .applyModalClose:hover {
+  color: #f3f4f6 !important;
+  background-color: #374151 !important;
+}
+
+.applyModalForm {
+  padding: 1.5rem !important;
+}
+
+.applyModalFieldGroup {
+  margin-bottom: 1.5rem !important;
+}
+
+.applyModalGrid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+@media (min-width: 768px) {
+  .applyModalGrid {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }
 
 .applyModalInput {
-  background-color: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  transition: all 0.3s ease;
-  resize: none; /* For textarea */
-  /* Tailwind w-full, p-3, rounded-lg, focus:ring-2, focus:ring-primary/20 are in JSX */
+  background-color: #f9fafb !important;
+  border: 1px solid #d1d5db !important;
+  color: #111827 !important;
+  transition: all 0.3s ease !important;
+  resize: none !important;
+  width: 100% !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
 }
 
-/* Light mode specific styles for better cursor visibility on inputs/textareas */
-:global(:root:not(.dark)) .applyModalInput {
-  background-color: #f9fafb; /* Slightly off-white for better cursor contrast */
+:global(.dark) .applyModalInput {
+  background-color: #1f2937 !important;
+  border: 1px solid #374151 !important;
+  color: #f3f4f6 !important;
 }
 
 .applyModalInput:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  background-color: var(--color-bg-primary); /* Reset to normal bg on focus */
+  outline: none !important;
+  border-color: #f97316 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
+}
+
+:global(.dark) .applyModalInput:focus {
+  background-color: #1f2937 !important;
+  border-color: #f97316 !important;
+}
+
+.applyModalInput::placeholder {
+  color: #9ca3af !important;
+}
+
+:global(.dark) .applyModalInput::placeholder {
+  color: #6b7280 !important;
 }
 
 .applyModalLabel {
-  color: var(--color-text-primary);
-  /* Tailwind block, font-bold, mb-2 is in JSX */
+  color: #111827 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  display: block !important;
+  margin-bottom: 0.5rem !important;
+}
+
+:global(.dark) .applyModalLabel {
+  color: #f3f4f6 !important;
 }
 
 .applyModalSecondaryText {
-  color: var(--color-text-secondary);
-  /* Tailwind text-xs, mt-1 is in JSX */
+  color: #4b5563 !important;
+  font-size: 0.75rem !important;
+  margin-top: 0.25rem !important;
+}
+
+:global(.dark) .applyModalSecondaryText {
+  color: #9ca3af !important;
 }
 
 .applyModalTextPrimary {
-  color: var(--color-text-primary);
+  color: #111827 !important;
+  font-weight: 500 !important;
+}
+
+:global(.dark) .applyModalTextPrimary {
+  color: #f3f4f6 !important;
 }
 
 .applyModalReadonlyField {
-  background-color: var(
-    --color-bg-secondary
-  ); /* Updated from --apply-modal-readonly to global var */
-  color: var(--color-text-primary);
-  /* Tailwind p-3, rounded-lg is in JSX */
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
 }
 
-.applyModalButtonSubmit {
-  /* For the main submit button */
-  background-color: var(--color-primary);
-  color: white;
-  transition: background-color 0.3s ease;
-  /* Tailwind px-4, py-2, rounded-lg is in JSX */
+:global(.dark) .applyModalReadonlyField {
+  background-color: #374151 !important;
+  color: #f3f4f6 !important;
+  border: 1px solid #4b5563 !important;
 }
 
-.applyModalButtonSubmit:hover {
-  background-color: var(--color-secondary);
+.applyModalSkillsContainer {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.applyModalButtonCancel {
-  /* For the cancel button */
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
-  /* Tailwind mr-2, px-4, py-2, rounded-lg is in JSX */
+.applyModalSkillInput {
+  display: flex !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.applyModalButtonCancel:hover {
-  background-color: var(--color-bg-secondary);
+.applyModalSkillInputField {
+  flex: 1 !important;
+  padding: 0.5rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem 0 0 0.5rem !important;
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+  transition: all 0.3s ease !important;
 }
 
-.applyModalBorder {
-  border-color: var(--color-border); /* For the top border on the footer */
+:global(.dark) .applyModalSkillInputField {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #f3f4f6 !important;
 }
 
-/* Popular skill button styling */
+.applyModalSkillInputField:focus {
+  outline: none !important;
+  border-color: #f97316 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
+}
+
+:global(.dark) .applyModalSkillInputField:focus {
+  background-color: #1f2937 !important;
+  border-color: #f97316 !important;
+}
+
+.applyModalAddButton {
+  background-color: #f97316 !important;
+  color: white !important;
+  transition: background-color 0.3s ease !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.applyModalAddButton:hover {
+  background-color: #ea580c !important;
+}
+
+.applyModalAddButton:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3) !important;
+}
+
+.applyModalAddSkillsButton {
+  display: flex !important;
+  align-items: center !important;
+  color: #f97316 !important;
+  transition: color 0.2s ease !important;
+  background: none !important;
+  border: none !important;
+  padding: 0.5rem 0 !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+}
+
+.applyModalAddSkillsButton:hover {
+  color: #ea580c !important;
+}
+
+:global(.dark) .applyModalAddSkillsButton {
+  color: #f97316 !important;
+}
+
+:global(.dark) .applyModalAddSkillsButton:hover {
+  color: #fb923c !important;
+}
+
+.applyModalPopularSkills {
+  margin-top: 1rem !important;
+}
+
+.applyModalPopularSkillsLabel {
+  color: #4b5563 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 0.5rem !important;
+  display: block !important;
+}
+
+:global(.dark) .applyModalPopularSkillsLabel {
+  color: #9ca3af !important;
+}
+
+.applyModalPopularSkillsContainer {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
 .popularSkillButton {
-  padding: 0.25rem 0.5rem;
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-  border-radius: 9999px; /* pill shape */
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  padding: 0.25rem 0.5rem !important;
+  background-color: #f3f4f6 !important;
+  color: #4b5563 !important;
+  font-size: 0.875rem !important;
+  border-radius: 9999px !important;
+  margin-right: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
 }
 
-.dark .popularSkillButton {
-  background-color: #374151; /* Tailwind gray-700 */
-  color: #d1d5db; /* Tailwind gray-300 */
+:global(.dark) .popularSkillButton {
+  background-color: #374151 !important;
+  color: #d1d5db !important;
 }
 
 .popularSkillButton:hover {
-  background-color: #e5e7eb; /* Tailwind gray-200 */
-  border-color: var(--color-border);
+  background-color: #e5e7eb !important;
 }
 
-.dark .popularSkillButton:hover {
-  background-color: #4b5563; /* Tailwind gray-600 */
+:global(.dark) .popularSkillButton:hover {
+  background-color: #4b5563 !important;
 }
 
-.popularSkillButton[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
+.popularSkillButton:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
 }
 
-/* Add Skill button specific style (the one next to input) */
-.addSkillButton {
-  background-color: var(--color-primary);
-  color: white;
-  /* Tailwind px-4 py-2 rounded-r-lg hover:bg-secondary is in JSX */
-}
-.addSkillButton:hover {
-  background-color: var(--color-secondary);
+.applyModalActions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid #e5e7eb !important;
+  gap: 0.5rem !important;
 }
 
-/* Skill input field specific styling if needed beyond applyModalInput */
-.skillInputField {
-  /* Tailwind flex-1, p-2, border, rounded-l-lg focus:ring-2 focus:ring-primary/20 is in JSX */
-  /* Inherits from .applyModalInput but can be overridden */
+:global(.dark) .applyModalActions {
+  border-top: 1px solid #374151 !important;
 }
 
-.errorText {
-  color: #ef4444; /* Tailwind red-500 */
-  font-size: 0.875rem; /* text-sm */
-  margin-top: 0.25rem; /* mt-1 */
+.applyModalButtonCancel {
+  color: #111827 !important;
+  border: 1px solid #d1d5db !important;
+  background-color: #ffffff !important;
+  transition: all 0.3s ease !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  cursor: pointer !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.5rem !important;
+  margin-right: 0.5rem !important;
+}
+
+:global(.dark) .applyModalButtonCancel {
+  color: #f3f4f6 !important;
+  border: 1px solid #374151 !important;
+  background-color: #1f2937 !important;
+}
+
+.applyModalButtonCancel:hover {
+  background-color: #f3f4f6 !important;
+  border-color: #9ca3af !important;
+}
+
+:global(.dark) .applyModalButtonCancel:hover {
+  background-color: #374151 !important;
+  border-color: #6b7280 !important;
+}
+
+.applyModalButtonSubmit {
+  background-color: #f97316 !important;
+  color: white !important;
+  transition: background-color 0.3s ease !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.5rem !important;
+}
+
+.applyModalButtonSubmit:hover {
+  background-color: #ea580c !important;
+}
+
+.applyModalButtonSubmit:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3) !important;
+}
+
+.applyModalErrorText {
+  color: #ef4444 !important;
+  font-size: 0.75rem !important;
+  margin-top: 0.25rem !important;
+  font-weight: 500 !important;
 }

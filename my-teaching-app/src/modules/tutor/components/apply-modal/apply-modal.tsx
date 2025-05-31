@@ -1,9 +1,34 @@
 import React, { useState, useEffect } from "react";
-import type { CourseDetails } from "@/shared/types/course"; // Updated
-import type { Application as TutorApplication } from "@/shared/types/application"; // Updated
-import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils"; // Updated
+import type { CourseDetails } from "@/shared/types/course";
+import type { Application as TutorApplication } from "@/shared/types/application";
+import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";
 import styles from "./apply-modal.module.css";
+
+/**
+ * Validation Rules for Tutor Application Form:
+ *
+ * 1. Previous Roles:
+ *    - Optional field
+ *    - Each role should be on a separate line
+ *    - Format: [Course Code] [Role Type] (Year)
+ *    - Example: COSC1111 Lab Assistant (2024)
+ *    - Maximum 10 roles allowed
+ *    - Each role should be at least 5 characters long
+ *
+ * 2. Academic Credentials:
+ *    - Required field
+ *    - Minimum 10 characters
+ *
+ * 3. Skills:
+ *    - At least 2 skills required
+ *    - Maximum 5 skills allowed
+ *    - Skills should be relevant to the course
+ *    - Duplicate skills are not allowed
+ *    - Custom skills should be at least 2 characters long
+ *    - Custom skills should not contain special characters
+ *    - Skills should be alphanumeric with optional spaces
+ */
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -20,34 +45,47 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
   onSubmit,
   currentUserId,
 }) => {
+  // State for form fields
   const [previousRoles, setPreviousRoles] = useState("");
   const [academicCredentials, setAcademicCredentials] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [showSkillInput, setShowSkillInput] = useState(false);
   const [skillInput, setSkillInput] = useState("");
+
+  // Validation error states
   const [errors, setErrors] = useState<{
     previousRoles?: string;
     academicCredentials?: string;
     skills?: string;
   }>({});
 
+  // When modal opens, initialize with random skills
   useEffect(() => {
     if (isOpen && course) {
+      // Select 2-3 random skills when modal opens
       const shuffled = [...availableSkills].sort(() => 0.5 - Math.random());
       setSelectedSkills(shuffled.slice(0, 2 + Math.floor(Math.random() * 2)));
+      // Reset errors when modal opens
       setErrors({});
-      setPreviousRoles("");
-      setAcademicCredentials("");
-      setSkillInput("");
-      setShowSkillInput(false);
     }
   }, [isOpen, course]);
 
+  /**
+   * Validates and handles skill input when Enter key is pressed
+   * Validation rules:
+   * - Skill must be at least 2 characters long
+   * - Maximum 5 skills allowed
+   * - No duplicate skills
+   * - Skills should be alphanumeric with optional spaces
+   *
+   * @param e - The keyboard event
+   */
   const handleSkillInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter" && skillInput.trim() !== "") {
       e.preventDefault();
+      // Validate custom skill input
       if (skillInput.trim().length < 2) {
         setErrors((prev) => ({
           ...prev,
@@ -56,9 +94,13 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
         return;
       }
       if (selectedSkills.length >= 5) {
-        setErrors((prev) => ({ ...prev, skills: "Maximum 5 skills allowed" }));
+        setErrors((prev) => ({
+          ...prev,
+          skills: "Maximum 5 skills allowed",
+        }));
         return;
       }
+      // Check for special characters
       if (!/^[a-zA-Z0-9\s]+$/.test(skillInput.trim())) {
         setErrors((prev) => ({
           ...prev,
@@ -74,57 +116,91 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
     }
   };
 
+  /**
+   * Removes a skill from the selected skills list
+   *
+   * @param skillToRemove - The skill to remove
+   */
   const handleRemoveSkill = (skillToRemove: string) => {
     setSelectedSkills(
       selectedSkills.filter((skill) => skill !== skillToRemove)
     );
   };
 
+  /**
+   * Validates all form fields according to the validation rules
+   * Returns true if all validations pass, false otherwise
+   *
+   * @returns {boolean} - Whether the form is valid
+   */
   const validateForm = (): boolean => {
     const newErrors: {
       previousRoles?: string;
       academicCredentials?: string;
       skills?: string;
     } = {};
+
+    // Validate previous roles (optional field)
     const roles = previousRoles
       .split("\n")
       .filter((role) => role.trim() !== "");
     if (roles.length > 10) {
       newErrors.previousRoles = "Maximum 10 previous roles allowed";
     }
+    // Check each role format
     for (const role of roles) {
       if (role.trim().length < 5) {
         newErrors.previousRoles =
           "Each role must be at least 5 characters long";
         break;
       }
+      // Basic format validation: should contain course code and year
       if (!/^[A-Z]+\d+.*\(\d{4}\)$/.test(role.trim())) {
         newErrors.previousRoles =
           "Roles should follow format: COSC1111 Lab Assistant (2024)";
         break;
       }
     }
+
+    // Validate academic credentials - only minimum length required
     if (!academicCredentials.trim()) {
       newErrors.academicCredentials = "Academic credentials are required";
     } else if (academicCredentials.trim().length < 10) {
       newErrors.academicCredentials =
         "Academic credentials must be at least 10 characters long";
     }
+
+    // Validate skills
     if (selectedSkills.length < 2) {
       newErrors.skills = "At least 2 skills are required";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission
+   * Validates the form before creating and submitting the application
+   *
+   * @param e - The form event
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!course || !validateForm()) return;
+
+    if (!course) return;
+
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+
+    // Create application object
     const application: TutorApplication = {
-      id: Date.now().toString(),
+      id: Date.now().toString(), // Generate unique ID for new application
       userId: currentUserId,
-      email: "",
-      fullName: "",
+      email: "", // Will be populated from user data in saveApplication
+      fullName: "", // Will be populated from user data in saveApplication
       courses: [course.code],
       previousRoles: previousRoles
         .split("\n")
@@ -134,26 +210,27 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
       academicCredentials: academicCredentials,
       dateApplied: new Date().toISOString().split("T")[0],
     };
+
     onSubmit(application);
   };
 
+  // Don't render if modal is not open or no course is selected
   if (!isOpen || !course) return null;
 
   return (
-    <div
-      className={`fixed inset-0 flex items-center justify-center z-50 p-4 ${styles.applyModalBackdrop}`}
-    >
-      <div
-        className={`${styles.applyModal} rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto`}
-      >
-        <div className={`${styles.applyModalHeader} p-6`}>
-          <div className="flex justify-between items-center">
-            <h3 className={`text-xl font-bold ${styles.applyModalTitle}`}>
-              Apply for Course
-            </h3>
-            <button onClick={onClose} className={styles.applyModalClose}>
+    <div className={styles.applyModalBackdrop}>
+      <div className={styles.applyModal}>
+        {/* Header */}
+        <div className={styles.applyModalHeader}>
+          <div className={styles.applyModalHeaderContent}>
+            <h2 className={styles.applyModalTitle}>Apply for Tutor Position</h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className={styles.applyModalClose}
+            >
+              <span className="sr-only">Close</span>
               <svg
-                xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -169,200 +246,131 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
             </button>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="mb-6">
-            <label className={`block font-bold mb-2 ${styles.applyModalLabel}`}>
-              Course
-            </label>
-            <div className={`${styles.applyModalReadonlyField} p-3 rounded-lg`}>
-              <p className={`font-semibold ${styles.applyModalTextPrimary}`}>
-                {course.code} - {course.name}
-              </p>
+
+        {/* Form */}
+        <div className={styles.applyModalForm}>
+          <form onSubmit={handleSubmit}>
+            {/* Course Details */}
+            <div className={styles.applyModalGrid}>
+              <div className={styles.applyModalFieldGroup}>
+                <label className={styles.applyModalLabel}>Course Code</label>
+                <div className={styles.applyModalReadonlyField}>
+                  {course.code}
+                </div>
+              </div>
+              <div className={styles.applyModalFieldGroup}>
+                <label className={styles.applyModalLabel}>Course Name</label>
+                <div className={styles.applyModalReadonlyField}>
+                  {course.name}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
+
+            {/* Application Details */}
+            <div className={styles.applyModalFieldGroup}>
               <label
-                className={`block font-bold mb-2 ${styles.applyModalLabel}`}
+                htmlFor="previous_roles"
+                className={styles.applyModalLabel}
               >
-                Role
+                Previous Teaching Roles (Optional)
               </label>
-              <div
-                className={`${styles.applyModalReadonlyField} p-3 rounded-lg`}
-              >
-                <p className={`font-medium ${styles.applyModalTextPrimary}`}>
-                  {course.role}
-                </p>
+              <textarea
+                id="previous_roles"
+                name="previous_roles"
+                rows={4}
+                value={previousRoles}
+                onChange={(e) => setPreviousRoles(e.target.value)}
+                className={styles.applyModalInput}
+                placeholder="List any previous teaching or tutoring experience (one per line)&#10;Format: [Course Code] [Role Type] (Year)&#10;Example: COSC1111 Lab Assistant (2024)"
+              />
+              <div className={styles.applyModalSecondaryText}>
+                Each role should be on a separate line. Format: [Course Code]
+                [Role Type] (Year)
               </div>
             </div>
-            <div>
+
+            <div className={styles.applyModalFieldGroup}>
+              <label htmlFor="motivation" className={styles.applyModalLabel}>
+                Why do you want to tutor this course? *
+              </label>
+              <textarea
+                id="motivation"
+                name="motivation"
+                rows={4}
+                required
+                value={academicCredentials}
+                onChange={(e) => setAcademicCredentials(e.target.value)}
+                className={styles.applyModalInput}
+                placeholder="Explain your motivation for tutoring this course..."
+              />
+            </div>
+
+            <div className={styles.applyModalFieldGroup}>
               <label
-                className={`block font-bold mb-2 ${styles.applyModalLabel}`}
+                htmlFor="qualifications"
+                className={styles.applyModalLabel}
               >
-                Availability
+                Relevant Qualifications *
               </label>
-              <div
-                className={`${styles.applyModalReadonlyField} p-3 rounded-lg`}
-              >
-                <p className={`font-medium ${styles.applyModalTextPrimary}`}>
-                  {course.availability}
-                </p>
-              </div>
+              <textarea
+                id="qualifications"
+                name="qualifications"
+                rows={4}
+                required
+                value={academicCredentials}
+                onChange={(e) => setAcademicCredentials(e.target.value)}
+                className={styles.applyModalInput}
+                placeholder="Describe your academic background, relevant experience, and qualifications..."
+              />
             </div>
-          </div>
-          <div className="mb-6">
-            <label
-              className={`block font-bold mb-2 ${styles.applyModalLabel}`}
-              htmlFor="previousRoles"
-            >
-              Previous Teaching Roles
-            </label>
-            <textarea
-              id="previousRoles"
-              value={previousRoles}
-              onChange={(e) => setPreviousRoles(e.target.value)}
-              placeholder="List your previous roles (one per line), e.g., COSC1111 Lab Assistant (2024)"
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/20 ${styles.applyModalInput} ${errors.previousRoles ? styles.errorText : ""}`}
-              rows={3}
-            />
-            {errors.previousRoles && (
-              <p className={styles.errorText}>{errors.previousRoles}</p>
-            )}
-            <p className={`text-xs mt-1 ${styles.applyModalSecondaryText}`}>
-              Format: [Course Code] [Role Type] (Year) - One per line, maximum
-              10 roles
-            </p>
-          </div>
-          <div className="mb-6">
-            <label
-              className={`block font-bold mb-2 ${styles.applyModalLabel}`}
-              htmlFor="academicCredentials"
-            >
-              Academic Credentials
-            </label>
-            <textarea
-              id="academicCredentials"
-              value={academicCredentials}
-              onChange={(e) => setAcademicCredentials(e.target.value)}
-              placeholder="Describe your academic background, degrees, certifications, etc."
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary/20 ${styles.applyModalInput} ${errors.academicCredentials ? styles.errorText : ""}`}
-              rows={4}
-              required
-            />
-            {errors.academicCredentials && (
-              <p className={styles.errorText}>{errors.academicCredentials}</p>
-            )}
-            <p className={`text-xs mt-1 ${styles.applyModalSecondaryText}`}>
-              Minimum 10 characters required.
-            </p>
-          </div>
-          <div className="mb-6">
-            <label className={`block font-bold mb-2 ${styles.applyModalLabel}`}>
-              Skills
-            </label>
-            <div className="flex flex-wrap gap-3 mb-2">
-              {selectedSkills.map((skill, index) => (
-                <SkillTag
-                  key={index}
-                  skill={skill}
-                  onRemove={handleRemoveSkill}
-                />
-              ))}
-            </div>
-            {showSkillInput ? (
-              <div className="flex mb-2">
-                <input
-                  type="text"
-                  value={skillInput}
-                  onChange={(e) => setSkillInput(e.target.value)}
-                  onKeyDown={handleSkillInputKeyDown}
-                  placeholder="Type skill and press Enter"
-                  className={`flex-1 p-2 border rounded-l-lg focus:ring-2 focus:ring-primary/20 ${styles.applyModalInput} ${styles.skillInputField} ${errors.skills ? styles.errorText : ""}`}
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (skillInput.trim() !== "") {
-                      if (skillInput.trim().length < 2) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          skills:
-                            "Custom skills must be at least 2 characters long",
-                        }));
-                        return;
+
+            {/* Skills */}
+            <div className={styles.applyModalFieldGroup}>
+              <label className={styles.applyModalLabel}>Skills</label>
+
+              {/* Display current skills */}
+              {selectedSkills.length > 0 && (
+                <div className={styles.applyModalSkillsContainer}>
+                  {selectedSkills.map((skill, index) => (
+                    <SkillTag
+                      key={index}
+                      skill={skill}
+                      onRemove={handleRemoveSkill}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Add skills input */}
+              {showSkillInput ? (
+                <div className={styles.applyModalSkillInput}>
+                  <input
+                    type="text"
+                    value={skillInput}
+                    onChange={(e) => setSkillInput(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleSkillInputKeyDown(e);
                       }
-                      if (selectedSkills.length >= 5) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          skills: "Maximum 5 skills allowed",
-                        }));
-                        return;
-                      }
-                      if (!/^[a-zA-Z0-9\s]+$/.test(skillInput.trim())) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          skills:
-                            "Skills should only contain letters, numbers, and spaces",
-                        }));
-                        return;
-                      }
-                      if (!selectedSkills.includes(skillInput.trim())) {
-                        setSelectedSkills([
-                          ...selectedSkills,
-                          skillInput.trim(),
-                        ]);
-                        setErrors((prev) => ({ ...prev, skills: undefined }));
-                      }
-                      setSkillInput("");
-                    } else {
-                      setShowSkillInput(false);
-                    }
-                  }}
-                  className={`px-4 py-2 rounded-r-lg ${styles.addSkillButton}`}
-                >
-                  Add
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowSkillInput(true)}
-                className="flex items-center text-primary hover:text-secondary"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clipRule="evenodd"
+                    }}
+                    placeholder="Enter a skill..."
+                    className={styles.applyModalSkillInputField}
+                    autoFocus
                   />
-                </svg>
-                Add Skills
-              </button>
-            )}
-            {errors.skills && (
-              <p className={styles.errorText}>{errors.skills}</p>
-            )}
-            <p className={`text-xs mt-1 ${styles.applyModalSecondaryText}`}>
-              At least 2 skills required, maximum 5 skills allowed. Skills
-              should be relevant to the course.
-            </p>
-            <div className="mt-4">
-              <p className={`text-sm mb-2 ${styles.applyModalSecondaryText}`}>
-                Popular skills:
-              </p>
-              <div className="flex flex-wrap">
-                {availableSkills.slice(0, 6).map((skill, index) => (
                   <button
-                    key={index}
                     type="button"
                     onClick={() => {
-                      if (!selectedSkills.includes(skill)) {
+                      if (skillInput.trim() !== "") {
+                        // Validate custom skill input
+                        if (skillInput.trim().length < 2) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            skills:
+                              "Custom skills must be at least 2 characters long",
+                          }));
+                          return;
+                        }
                         if (selectedSkills.length >= 5) {
                           setErrors((prev) => ({
                             ...prev,
@@ -370,37 +378,102 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
                           }));
                           return;
                         }
-                        setSelectedSkills([...selectedSkills, skill]);
-                        setErrors((prev) => ({ ...prev, skills: undefined }));
+                        // Check for special characters
+                        if (!/^[a-zA-Z0-9\s]+$/.test(skillInput.trim())) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            skills:
+                              "Skills should only contain letters, numbers, and spaces",
+                          }));
+                          return;
+                        }
+                        if (!selectedSkills.includes(skillInput.trim())) {
+                          setSelectedSkills([
+                            ...selectedSkills,
+                            skillInput.trim(),
+                          ]);
+                          setErrors((prev) => ({ ...prev, skills: undefined }));
+                        }
+                        setSkillInput("");
+                      } else {
+                        setShowSkillInput(false);
                       }
                     }}
-                    className={`${styles.popularSkillButton} ${selectedSkills.includes(skill) ? "opacity-50" : ""}`}
-                    disabled={selectedSkills.includes(skill)}
+                    className={styles.applyModalAddButton}
                   >
-                    {skill}
+                    Add
                   </button>
-                ))}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowSkillInput(true)}
+                  className={styles.applyModalAddSkillsButton}
+                >
+                  <svg
+                    className="h-4 w-4 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Add Skills
+                </button>
+              )}
+
+              {/* Popular skills */}
+              <div className={styles.applyModalPopularSkills}>
+                <span className={styles.applyModalPopularSkillsLabel}>
+                  Popular skills:
+                </span>
+                <div className={styles.applyModalPopularSkillsContainer}>
+                  {availableSkills
+                    .filter((skill) => !selectedSkills.includes(skill))
+                    .slice(0, 10)
+                    .map((skill) => (
+                      <button
+                        key={skill}
+                        type="button"
+                        onClick={() => {
+                          if (!selectedSkills.includes(skill)) {
+                            setSelectedSkills([...selectedSkills, skill]);
+                          }
+                        }}
+                        className={styles.popularSkillButton}
+                      >
+                        {skill}
+                      </button>
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            className={`flex justify-end pt-4 border-t ${styles.applyModalBorder}`}
-          >
-            <button
-              type="button"
-              onClick={onClose}
-              className={`mr-2 px-4 py-2 rounded-lg ${styles.applyModalButtonCancel}`}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={`px-4 py-2 rounded-lg ${styles.applyModalButtonSubmit}`}
-            >
-              Submit Application
-            </button>
-          </div>
-        </form>
+
+            {/* Error display */}
+            {errors.skills && (
+              <div className={styles.applyModalErrorText}>{errors.skills}</div>
+            )}
+
+            {/* Form Actions */}
+            <div className={styles.applyModalActions}>
+              <button
+                type="button"
+                onClick={onClose}
+                className={styles.applyModalButtonCancel}
+              >
+                Cancel
+              </button>
+              <button type="submit" className={styles.applyModalButtonSubmit}>
+                Submit Application
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

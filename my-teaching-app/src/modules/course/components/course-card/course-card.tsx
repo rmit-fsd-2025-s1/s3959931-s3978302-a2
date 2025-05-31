@@ -1,12 +1,12 @@
 import React from "react";
-import type { CourseDetails } from "@/shared/types/course"; // Updated import
-import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils"; // Updated path
+import type { CourseDetails } from "@/shared/types/course";
+import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import { motion } from "framer-motion";
-import styles from "./course-card.module.css";
+import styles from "@/modules/tutor/styles/tutor-dashboard-layout.module.css";
 
 interface CourseCardProps {
-  course: CourseDetails; // Updated type
-  openApplyModal: (course: CourseDetails) => void; // Updated type
+  course: CourseDetails;
+  openApplyModal: (course: CourseDetails) => void;
   hasApplied?: boolean;
 }
 
@@ -15,36 +15,48 @@ const CourseCard: React.FC<CourseCardProps> = ({
   openApplyModal,
   hasApplied = false,
 }) => {
+  // Status indicators based on availability and whether user has applied
   const getStatusInfo = () => {
     if (hasApplied) {
       return {
         label: "Applied",
-        // Using CSS module classes directly instead of constructing them with template literals
-        // These specific bg/text color classes from the original CSS are simplified here.
-        // Ideally, these would be variants in the CSS module or handled with a utility.
-        statusClass: `${styles.courseStatus} ${styles.bgGreen100} ${styles.textGreen800}`,
+        bgClass: styles.bgGreen100,
+        textClass: styles.textGreen800,
       };
     }
-    let statusClass = styles.courseStatus;
-    if (course.availability === "Full Time") {
-      statusClass = `${styles.courseStatus} ${styles.bgBlue100} ${styles.textBlue800}`;
-    } else {
-      statusClass = `${styles.courseStatus} ${styles.bgPurple100} ${styles.textPurple800}`;
-    }
-    return { label: course.availability, statusClass };
+
+    return {
+      label: course.availability,
+      bgClass:
+        course.availability === "Full Time"
+          ? styles.bgBlue100
+          : styles.bgPurple100,
+      textClass:
+        course.availability === "Full Time"
+          ? styles.textBlue800
+          : styles.textPurple800,
+    };
   };
 
   const statusInfo = getStatusInfo();
 
   return (
     <div className={styles.enhancedCourseCard}>
+      {/* Card top section with code and status */}
       <div className={styles.cardTop}>
         <span className={styles.courseCode}>{course.code}</span>
-        <span className={statusInfo.statusClass}>{statusInfo.label}</span>
+        <span
+          className={`${styles.courseStatus} ${statusInfo.bgClass} ${statusInfo.textClass}`}
+        >
+          {statusInfo.label}
+        </span>
       </div>
 
+      {/* Card body */}
       <div className={styles.cardBody}>
         <h3 className={styles.courseTitle}>{course.name}</h3>
+
+        {/* Skills tags */}
         <div className={styles.skillsContainer}>
           {course.skills?.map((skill, index) => (
             <span key={index} className={styles.skillTag}>
@@ -58,14 +70,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
               </span>
             ))}
         </div>
+
+        {/* Role tag */}
         <div className={styles.roleTag}>
           <div
-            className={`${styles.roleIcon} ${course.role === "Tutor" ? styles.tutorRole : styles.assistantRole}`}
+            className={`${styles.roleIcon} ${
+              course.role === "Tutor"
+                ? styles.roleIconTutor
+                : styles.roleIconAssistant
+            }`}
           >
             {course.role === "Tutor" ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-3 w-3"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -74,7 +92,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-3 w-3"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -90,6 +108,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </div>
       </div>
 
+      {/* Card footer */}
       <div className={styles.cardFooter}>
         {!hasApplied ? (
           <motion.button
@@ -118,9 +137,6 @@ const CourseCard: React.FC<CourseCardProps> = ({
           </div>
         )}
       </div>
-
-      <div className={`${styles.cardDecoration} ${styles.topDot}`}></div>
-      <div className={`${styles.cardDecoration} ${styles.bottomDot}`}></div>
     </div>
   );
 };

@@ -1,261 +1,282 @@
-.tutorDashboardContainer {
-  /* Corresponds to .tutor-container from tutor.css */
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem; /* Standard padding for the dashboard area */
-}
+/* Enhanced Tutor Page Styles - CSS Modules Version */
 
-/* Hero Section Styles */
+/* Hero Section */
 .tutorHeroSection {
-  padding: 4rem 0;
-  background-color: var(--color-bg-subtle); /* Example */
-  text-align: center;
   position: relative;
+  padding: 8rem 2rem 6rem;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-primary) 100%
+  );
   overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tutorHeroContent {
-  max-width: 800px;
+  max-width: 1140px;
   margin: 0 auto;
+  text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .tutorHeroTitle {
-  font-size: 2.5rem; /* Example */
-  font-weight: bold;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
   color: var(--color-text-primary);
-  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
 .heroHighlight {
   color: var(--color-primary);
+  position: relative;
+  display: inline-block;
+}
+
+.heroHighlight::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.25rem;
+  width: 100%;
+  height: 0.5rem;
+  background-color: rgba(249, 115, 22, 0.2);
+  z-index: -1;
+  transform: skew(-12deg);
 }
 
 .tutorHeroSubtitle {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: var(--color-text-secondary);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* Hero Statistics */
 .tutorStats {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  align-items: center;
   background-color: var(--color-bg-primary);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 1rem;
   max-width: 600px;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto;
+  border: 1px solid var(--color-border);
 }
 
 .statItem {
   text-align: center;
+  padding: 0 1.5rem;
 }
 
 .statValue {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 700;
   color: var(--color-primary);
+  line-height: 1.2;
 }
 
 .statLabel {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
+  margin-top: 0.25rem;
 }
 
 .statDivider {
   width: 1px;
+  height: 40px;
   background-color: var(--color-border);
 }
 
+/* Hero Decorations */
 .heroDecoration {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   pointer-events: none;
 }
 
 .circleDecoration {
   position: absolute;
   border-radius: 50%;
-  background-color: var(--color-primary-light);
-  opacity: 0.1;
+  opacity: 0.2;
 }
 
 .circle1 {
-  width: 150px;
-  height: 150px;
-  top: 10%;
-  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    var(--color-primary) 0%,
+    rgba(249, 115, 22, 0) 70%
+  );
+  top: -100px;
+  right: 10%;
+  animation: float 8s infinite ease-in-out;
 }
 
 .circle2 {
   width: 200px;
   height: 200px;
-  bottom: 5%;
-  right: 10%;
-  animation-delay: 1s;
+  background: radial-gradient(
+    circle,
+    var(--color-secondary) 0%,
+    rgba(251, 146, 60, 0) 70%
+  );
+  bottom: -50px;
+  left: 15%;
+  animation: float 6s infinite ease-in-out 1s;
 }
 
 .circle3 {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle,
+    var(--color-orange-300) 0%,
+    rgba(253, 186, 116, 0) 70%
+  );
   top: 20%;
-  right: 25%;
-  animation-delay: 2s;
+  left: 10%;
+  animation: float 10s infinite ease-in-out 2s;
 }
 
-/* Message Styles */
-.message {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-  /* Motion properties will be handled by framer-motion component */
+/* Main Container */
+.tutorContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
 }
 
-.successMessage {
-  background-color: #ecfdf5; /* Tailwind green-50 */
-  border: 1px solid #10b981; /* Tailwind green-500 */
-}
-
-.errorMessage {
-  background-color: #fef2f2; /* Tailwind red-50 */
-  border: 1px solid #ef4444; /* Tailwind red-500 */
-}
-
-.messageIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 1rem;
-}
-
-.messageIconSuccess {
-  background-color: #d1fae5; /* Tailwind green-100 */
-  color: #10b981; /* Tailwind green-500 */
-}
-
-.messageIconError {
-  background-color: #fee2e2; /* Tailwind red-100 */
-  color: #ef4444; /* Tailwind red-500 */
-}
-
-.messageContent {
-  flex: 1;
-  color: var(--color-text-primary); /* Or #111827 */
-  margin-right: 1rem;
-}
-
-.messageClose {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary); /* Or #6b7280 */
-  cursor: pointer;
-}
-
-/* Search and Filters Styles */
+/* Search and Filters */
 .searchFiltersContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   margin-bottom: 2rem;
-  background-color: var(--color-bg-primary);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .searchBar {
-  display: flex;
-  align-items: center;
-  background-color: var(--color-bg-input); /* Example */
-  border-radius: 0.375rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-border);
+  position: relative;
+  margin-bottom: 1.25rem;
 }
 
 .searchIcon {
-  width: 1.25rem; /* 20px */
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  width: 1.25rem;
   height: 1.25rem;
-  color: var(--color-text-placeholder);
-  margin-right: 0.5rem;
 }
 
 .searchInput {
-  flex-grow: 1;
-  background: transparent;
-  border: none;
-  outline: none;
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 3rem;
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  transition: all 0.3s ease;
 }
 
-.searchInput::placeholder {
-  color: var(--color-text-placeholder);
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
 }
 
 .searchClear {
-  background: none;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
   border: none;
   color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.searchClear:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .filterPills {
   display: flex;
-  gap: 0.75rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .filterPill {
+  display: inline-block;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  background-color: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  background-color: var(--color-bg-primary);
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.filterPill:hover {
+  background-color: rgba(249, 115, 22, 0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .filterPillActive {
   background-color: var(--color-primary);
-  color: white;
   border-color: var(--color-primary);
+  color: white;
 }
 
-/* Loading, Grid, and No Results Styles */
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.courseCardWrapper {
+  transition: transform 0.3s ease;
+}
+
 .loadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 1rem;
+  padding: 3rem 0;
   text-align: center;
-  color: var(--color-text-secondary);
 }
 
 .loadingSpinner {
-  border: 4px solid var(--color-bg-subtle); /* Light grey */
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(249, 115, 22, 0.2);
   border-top: 4px solid var(--color-primary);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  margin-bottom: 1.5rem;
   animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
 }
 
 @keyframes spin {
@@ -267,51 +288,545 @@
   }
 }
 
-.coursesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding-top: 1rem; /* Add some space above the grid */
-}
-
-.courseCardWrapper {
-  /* For motion.div if needed, or apply animation directly to CourseCard if it's a motion component */
-}
-
 .noCourses {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1rem;
+  padding: 3rem 0;
   text-align: center;
-  color: var(--color-text-secondary);
-  background-color: var(--color-bg-primary);
-  border-radius: 0.5rem;
-  margin-top: 1rem;
 }
 
 .noCourses h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-text-primary);
-  margin-top: 1rem;
   margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
 }
 
 .noCourses p {
-  font-size: 1rem;
-  max-width: 350px;
+  color: var(--color-text-secondary);
+  max-width: 400px;
 }
 
-/* Styles for the main content area within the tutor dashboard if needed */
-.dashboardContentWrapper {
-  /* e.g., if content below hero/filters needed specific layout */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
-/* Dark mode adjustments for the overall layout if needed */
-.dark .tutorDashboardContainer {
-  /* background-color: var(--color-bg-dark-mode-deeper); */ /* Example */
+/* Messages */
+.message {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  min-width: 320px;
+  max-width: 600px;
+  width: auto;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }
 
-/* Other shared layout styles for the tutor section can go here */
+.successMessage {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+}
+
+.errorMessage {
+  background-color: #fef2f2;
+  border: 1px solid #ef4444;
+}
+
+.messageIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.messageIconSuccess {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.messageIconError {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.messageContent {
+  flex: 1;
+  color: #111827;
+  margin-right: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.messageClose {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+/* Dark Mode Adjustments */
+.dark .tutorHeroSection {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-primary) 100%
+  );
+}
+
+.dark .heroHighlight::after {
+  background-color: rgba(249, 115, 22, 0.3);
+}
+
+.dark .searchClear:hover,
+.dark .filterPill:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced Course Card Styles */
+.enhancedCourseCard {
+  background-color: var(--color-bg-primary);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.enhancedCourseCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+}
+
+/* Card Top Section */
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.25rem 0.5rem;
+}
+
+.courseCode {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--color-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.dark .courseCode {
+  background-color: rgba(249, 115, 22, 0.2);
+}
+
+.courseStatus {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.bgGreen100 {
+  background-color: #dcfce7;
+}
+
+.dark .bgGreen100 {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+.bgGreen900_30 {
+  background-color: transparent;
+}
+
+.textGreen800 {
+  color: #166534;
+}
+
+.dark .textGreen800 {
+  color: #86efac;
+}
+
+.textGreen300 {
+  color: #166534;
+}
+
+.dark .textGreen300 {
+  color: #86efac;
+}
+
+.bgBlue100 {
+  background-color: #dbeafe;
+}
+
+.dark .bgBlue100 {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.bgBlue900_30 {
+  background-color: transparent;
+}
+
+.textBlue800 {
+  color: #1e40af;
+}
+
+.dark .textBlue800 {
+  color: #93c5fd;
+}
+
+.textBlue300 {
+  color: #1e40af;
+}
+
+.dark .textBlue300 {
+  color: #93c5fd;
+}
+
+.bgPurple100 {
+  background-color: #f3e8ff;
+}
+
+.dark .bgPurple100 {
+  background-color: rgba(168, 85, 247, 0.2);
+}
+
+.bgPurple900_30 {
+  background-color: transparent;
+}
+
+.textPurple800 {
+  color: #6b21a8;
+}
+
+.dark .textPurple800 {
+  color: #d8b4fe;
+}
+
+.textPurple300 {
+  color: #6b21a8;
+}
+
+.dark .textPurple300 {
+  color: #d8b4fe;
+}
+
+/* Card Body */
+.cardBody {
+  padding: 1rem 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.courseTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8rem;
+}
+
+/* Skills Container */
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.skillTag {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.enhancedCourseCard:hover .skillTag {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--color-primary);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+/* Role Tag */
+.roleTag {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 0.75rem;
+}
+
+.roleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.roleIcon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.roleIconTutor {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.roleIconAssistant {
+  background-color: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+.roleName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Card Footer */
+.cardFooter {
+  padding: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+}
+
+.applyButton {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+.applyButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.applyButton:hover::before {
+  left: 100%;
+}
+
+.applyButton:hover {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, #ea580c 100%);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  transform: translateY(-2px);
+}
+
+.applyButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+}
+
+.appliedStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.875rem 1rem;
+  background-color: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 0.75rem;
+  letter-spacing: 0.025em;
+}
+
+.appliedStatus svg {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Card Decorations */
+.cardDecoration {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  opacity: 0.3;
+}
+
+.topDot {
+  top: 1.25rem;
+  right: 1.25rem;
+}
+
+.bottomDot {
+  bottom: 1.25rem;
+  left: 1.25rem;
+}
+
+/* Dark Mode Adjustments */
+.dark .enhancedCourseCard {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dark .enhancedCourseCard:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark .courseCode {
+  background-color: rgba(249, 115, 22, 0.2);
+}
+
+.dark .skillTag {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-border);
+}
+
+.dark .enhancedCourseCard:hover .skillTag {
+  background-color: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+.dark .roleIconTutor {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+.dark .roleIconAssistant {
+  background-color: rgba(79, 70, 229, 0.2);
+}
+
+/* Dark mode card footer adjustments */
+.dark .cardFooter {
+  background-color: var(--color-bg-primary);
+  border-top-color: var(--color-border);
+}
+
+.dark .applyButton {
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
+}
+
+.dark .applyButton:hover {
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.dark .appliedStatus {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .tutorHeroTitle {
+    font-size: 3rem;
+  }
+
+  .tutorHeroSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .tutorStats {
+    flex-direction: column;
+  }
+
+  .statDivider {
+    width: 80px;
+    height: 1px;
+    margin: 0.75rem 0;
+  }
+
+  .statValue {
+    font-size: 2rem;
+  }
+
+  .coursesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .tutorHeroSection {
+    padding: 6rem 1.5rem 4rem;
+  }
+
+  .tutorHeroTitle {
+    font-size: 2.5rem;
+  }
+
+  .tutorContainer {
+    padding: 1.5rem 1rem;
+  }
+
+  .searchInput {
+    padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  }
+
+  .cardTop,
+  .cardBody,
+  .cardFooter {
+    padding: 1rem;
+  }
+
+  .courseTitle {
+    font-size: 1.1rem;
+  }
+}
