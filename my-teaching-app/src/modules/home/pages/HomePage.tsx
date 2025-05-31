@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { lecturers } from "@/modules/lecturer/utils/lecturerDisplay.utils";
-import styles from "./HomePage.module.css";
+import modalStyles from "@/shared/components/common/modal/Modal.module.css";
 import TimelineSection from "../components/timeline-section/TimelineSection";
 import LecturerShowcase from "../components/lecturer-showcase/LecturerShowcase";
 import Modal from "@/shared/components/common/modal/Modal";
@@ -60,124 +60,68 @@ export default function HomePage() {
           onOpenLecturerModal={handleOpenLecturerModal}
         />
 
-        {/* Lecturer Section */}
-        <section
-          className={`${styles.section} py-16`}
-          style={{ backgroundColor: "var(--color-bg-primary)" }}
-        >
-          <div className="container mx-auto">
-            <div className="max-w-6xl mx-auto">
-              {/* Section title with decorative bar */}
-              <div className={styles.sectionTitleContainer}>
-                <div className={styles.sectionTitleBar}></div>
-                <div className={styles.sectionTitleContent}>
-                  <h2>Meet Our Lecturers</h2>
-                  <p>
-                    Meet our exceptional team of computer science lecturers who
-                    bring real-world experience and academic excellence to our
-                    programs.
-                  </p>
-                </div>
-              </div>
-
-              {/* Lecturer Grid */}
-              <div className={styles.lecturerGrid}>
-                {lecturers.map((lecturer, index) => (
-                  <div
-                    key={lecturer.id}
-                    className={`${styles.lecturerCard} lecturer${index + 1}`}
-                    onClick={() => handleOpenLecturerModal(lecturer.id)}
-                  >
-                    <div>
-                      <div className={styles.lecturerImageContainer}>
-                        <Image
-                          src={`/lecturers/lecturer-${index + 1}.jpg`}
-                          alt={lecturer.name}
-                          width={200}
-                          height={200}
-                          className={styles.lecturerImage}
-                        />
-                        <div className={styles.lecturerDecoration}></div>
-                      </div>
-                      <h3 className={styles.lecturerName}>{lecturer.name}</h3>
-                      <p className={styles.lecturerTitle}>{lecturer.title}</p>
-                      <p className={styles.lecturerSpecialization}>
-                        {lecturer.specialization}
-                      </p>
-                    </div>
-                    <button className={styles.moreInfoBtn}>
-                      More Information
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {currentLecturerDetails && (
           <Modal
             isOpen={!!activeLecturer}
             onClose={handleCloseModal}
             maxWidth="800px"
           >
-            <div className="flex flex-col md:flex-row">
-              <div className={styles.modalImageSection}>
-                <div className={styles.modalImageContainer}>
-                  <Image
-                    src={
-                      currentLecturerDetails.avatarPath ||
-                      `/lecturers/lecturer-${activeLecturerImageIndex + 1}.jpg`
-                    }
-                    alt={currentLecturerDetails.name}
-                    width={300}
-                    height={300}
-                    className={styles.modalImage}
-                  />
-                  <div className={styles.modalDecoration}></div>
-                </div>
+            <div className={modalStyles.modalImageSection}>
+              <div className={modalStyles.modalImageContainer}>
+                <Image
+                  src={
+                    currentLecturerDetails.avatarPath ||
+                    `/lecturers/lecturer-${activeLecturerImageIndex + 1}.jpg`
+                  }
+                  alt={currentLecturerDetails.name}
+                  width={300}
+                  height={300}
+                  className={modalStyles.lecturerImage}
+                />
               </div>
-              <div className={styles.modalContentSpecific}>
-                <h3 className={styles.modalTitle}>
-                  {currentLecturerDetails.name}
-                </h3>
-                <p className={styles.modalSubtitle}>
-                  {currentLecturerDetails.title}
-                </p>
-                <p className={styles.modalText}>{currentLecturerDetails.bio}</p>
-                <ul className={styles.modalInfoList}>
-                  <li className={styles.modalInfoItem}>
-                    <span className={styles.modalInfoIcon}>🎯</span>
+            </div>
+            <div className={modalStyles.modalContent}>
+              <h3 className={modalStyles.modalTitle}>
+                {currentLecturerDetails.name}
+              </h3>
+              <p className={modalStyles.modalSubtitle}>
+                {currentLecturerDetails.title} in{" "}
+                {currentLecturerDetails.specialization}
+              </p>
+              <p className={modalStyles.modalText}>
+                {currentLecturerDetails.bio}
+              </p>
+              <ul className={modalStyles.modalInfoList}>
+                <li className={modalStyles.modalInfoItem}>
+                  <span className={modalStyles.modalInfoIcon}>📚</span>
+                  <span>
+                    <strong>Teaches:</strong> {currentLecturerDetails.courses}
+                  </span>
+                </li>
+                {currentLecturerDetails.certifications && (
+                  <li className={modalStyles.modalInfoItem}>
+                    <span className={modalStyles.modalInfoIcon}>🎓</span>
                     <span>
-                      <strong>Specialization:</strong>{" "}
-                      {currentLecturerDetails.specialization}
+                      <strong>Certifications:</strong>{" "}
+                      {currentLecturerDetails.certifications}
                     </span>
                   </li>
-                  <li className={styles.modalInfoItem}>
-                    <span className={styles.modalInfoIcon}>📚</span>
+                )}
+                {currentLecturerDetails.awards && (
+                  <li className={modalStyles.modalInfoItem}>
+                    <span className={modalStyles.modalInfoIcon}>🏆</span>
                     <span>
-                      <strong>Experience:</strong>{" "}
-                      {currentLecturerDetails.experience}
+                      <strong>Awards:</strong> {currentLecturerDetails.awards}
                     </span>
                   </li>
-                  <li className={styles.modalInfoItem}>
-                    <span className={styles.modalInfoIcon}>🏆</span>
-                    <span>
-                      <strong>Awards:</strong>{" "}
-                      {currentLecturerDetails.awards || "N/A"}
-                    </span>
-                  </li>
-                  <li className={styles.modalInfoItem}>
-                    <span className={styles.modalInfoIcon}>📧</span>
-                    <span>
-                      <strong>Contact:</strong> {currentLecturerDetails.contact}
-                    </span>
-                  </li>
-                </ul>
-                <button className={styles.modalContactBtn}>
-                  Contact Lecturer
-                </button>
-              </div>
+                )}
+                <li className={modalStyles.modalInfoItem}>
+                  <span className={modalStyles.modalInfoIcon}>📧</span>
+                  <span>
+                    <strong>Contact:</strong> {currentLecturerDetails.contact}
+                  </span>
+                </li>
+              </ul>
             </div>
           </Modal>
         )}

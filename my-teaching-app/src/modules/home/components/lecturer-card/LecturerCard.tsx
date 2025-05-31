@@ -17,7 +17,7 @@ const LecturerCard: React.FC<LecturerCardProps> = ({
 }) => {
   return (
     <div
-      className={styles.lecturerCard}
+      className={`${styles.lecturerCard} lecturer${imageIndex + 1}`}
       onClick={() => onOpenModal(lecturer.id)}
     >
       <div>
@@ -25,11 +25,11 @@ const LecturerCard: React.FC<LecturerCardProps> = ({
           <Image
             src={`/lecturers/lecturer-${imageIndex + 1}.jpg`}
             alt={lecturer.name}
-            width={150}
-            height={150}
-            // className={styles.lecturerImage} // Next/Image doesn't use className like this for styling the img tag itself, parent styling handles size
+            width={200}
+            height={200}
+            className={styles.lecturerImage}
           />
-          {/* <div className={styles.lecturerDecoration}></div> */}
+          <div className={styles.lecturerDecoration}></div>
         </div>
         <h3 className={styles.lecturerName}>{lecturer.name}</h3>
         <p className={styles.lecturerTitle}>{lecturer.title}</p>

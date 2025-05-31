@@ -56,21 +56,14 @@ const Modal: React.FC<ModalProps> = ({
       aria-labelledby={title ? "modal-title" : undefined}
     >
       <div className={styles.modalContainer} style={{ maxWidth }}>
-        <div className={styles.modalHeader}>
-          {title && (
-            <h2 id="modal-title" className={styles.modalTitle}>
-              {title}
-            </h2>
-          )}
-          <button
-            onClick={onClose}
-            className={styles.modalCloseButton}
-            aria-label="Close modal"
-          >
-            ✕
-          </button>
-        </div>
-        <div className={styles.modalContent}>{children}</div>
+        <button
+          onClick={onClose}
+          className={styles.modalClose}
+          aria-label="Close modal"
+        >
+          ✕
+        </button>
+        {children}
       </div>
     </div>
   );

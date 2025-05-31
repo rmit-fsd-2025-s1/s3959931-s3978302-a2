@@ -1,3 +1,6 @@
+/* ======== LECTURER CARD STYLES (Restored Old Design) ======== */
+
+/* Lecturer card */
 .lecturerCard {
   position: relative;
   display: flex;
@@ -5,74 +8,144 @@
   align-items: center;
   text-align: center;
   transition: all 0.3s ease;
-  border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  cursor: pointer;
+  height: 450px;
+  border: 2px solid transparent;
+  border-radius: 12px;
   padding: 1.5rem;
-  background-color: var(--color-bg-primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  cursor: pointer; /* Added for onClick */
+  padding-bottom: 4rem;
+  box-sizing: border-box;
 }
 
-.lecturerCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
-  border-color: var(--color-primary-light);
+/* Add a pseudo-element to extend the card's hover detection area */
+.lecturerCard::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3rem; /* Extend 3rem below card to fully cover button */
+  height: 3rem;
+  background: transparent; /* Make it invisible */
+  z-index: 9; /* Below the button but still interactive */
 }
 
 .lecturerImageContainer {
-  width: 150px;
-  height: 150px;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  min-height: 200px;
   border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 1rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  position: relative;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: 0 10px 25px var(--color-shadow);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.lecturerImageContainer img {
-  /* For Next/Image */
+.lecturerCard:hover .lecturerImageContainer {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px var(--color-shadow);
+}
+
+.lecturerImage {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+  transition: all 0.5s ease;
+}
+
+.lecturerCard:hover .lecturerImage {
+  transform: scale(1.1);
+}
+
+.lecturerDecoration {
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  opacity: 0.8;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.lecturerCard:hover .lecturerDecoration {
+  transform: translateX(-50%) scale(1.1) rotate(10deg);
+}
+
+.lecturerCard:nth-child(even) .lecturerDecoration {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .lecturerName {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
   color: var(--color-text-primary);
-  margin-bottom: 0.25rem;
 }
 
 .lecturerTitle {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--color-primary);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   font-weight: 500;
 }
 
 .lecturerSpecialization {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 1rem;
-  line-height: 1.5;
-  height: 5.1em; /* Approx 3 lines */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 1.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 4.5em;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  flex-grow: 0;
 }
 
+/* More info button - positioned style for cards with extended hover area */
 .moreInfoBtn {
-  display: inline-block;
-  padding: 0.5rem 1.5rem;
+  margin-top: auto;
   background-color: transparent;
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
+  padding: 0.5rem 1.5rem;
   border-radius: 30px;
   font-weight: 600;
-  text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: auto;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+
+  /* Positioned style */
+  display: block;
+  position: absolute;
+  bottom: -2rem;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-decoration: none;
+  width: fit-content;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.moreInfoBtn::before {
+  display: none;
+}
+
+.lecturerCard:hover .moreInfoBtn {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
 }
 
 .moreInfoBtn:hover {
@@ -80,7 +153,23 @@
   color: white;
 }
 
-/* .lecturerDecoration if needed - from original lecturer.css if distinct from card hover */
-.lecturerDecoration {
-  /* position: absolute; ... */
+/* Custom hover effects for each card - using global selectors for numbered classes */
+:global(.lecturer1):hover .lecturerDecoration {
+  transform: scale(1.2) rotate(15deg) !important;
+  background-color: var(--color-primary);
+}
+
+:global(.lecturer2):hover .lecturerDecoration {
+  transform: scale(1.2) rotate(-15deg) !important;
+  background-color: var(--color-primary);
+}
+
+:global(.lecturer3):hover .lecturerDecoration {
+  transform: scale(1.2) rotate(15deg) !important;
+  background-color: var(--color-primary);
+}
+
+:global(.lecturer4):hover .lecturerDecoration {
+  transform: scale(1.2) rotate(-15deg) !important;
+  background-color: var(--color-primary);
 }

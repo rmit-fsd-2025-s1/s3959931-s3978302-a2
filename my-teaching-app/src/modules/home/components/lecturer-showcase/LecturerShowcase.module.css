@@ -1,10 +1,6 @@
-.lecturerGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
+/* ======== LECTURER SECTION STYLES (Combined & Cleaned) ======== */
 
+/* Section Title */
 .sectionTitleContainer {
   display: flex;
   align-items: center;
@@ -32,4 +28,12 @@
   color: var(--color-text-primary);
   opacity: 0.8;
   max-width: 600px;
+}
+
+/* Lecturer grid */
+.lecturerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2.5rem;
+  margin: 2rem 0;
 }
