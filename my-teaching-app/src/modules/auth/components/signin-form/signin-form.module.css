@@ -8,34 +8,6 @@
   z-index: 1;
 }
 
-.formContainer::before {
-  content: "";
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 200px;
-  height: 200px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.15;
-  animation: pulse-slow 4s infinite ease-in-out;
-}
-
-.formContainer::after {
-  content: "";
-  position: absolute;
-  bottom: -30px;
-  left: -30px;
-  width: 150px;
-  height: 150px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.15;
-  animation: pulse-slow 4s infinite ease-in-out 1s;
-}
-
 .form {
   /* Corresponds to .circle-form form */
   background-color: var(--color-bg-primary);
