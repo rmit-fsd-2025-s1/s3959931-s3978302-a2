@@ -234,31 +234,50 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
             </div>
           </div>
 
-          <div className={styles.experienceSkillsGrid}>
-            <div className={styles.previousRolesSection}>
-              <h5 className={styles.subsectionTitle}>Previous Roles</h5>
-              {application.previousRoles &&
-              application.previousRoles.length > 0 ? (
-                <ul className={styles.rolesList}>
-                  {application.previousRoles.map((role, index) => (
-                    <li key={index} className={styles.roleItem}>
-                      {role}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className={styles.emptyList}>No previous roles listed</p>
-              )}
-            </div>
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={styles.sectionIcon}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              Experience & Skills
+            </h4>
+            <div className={styles.experienceSkillsGrid}>
+              <div className={styles.previousRolesSection}>
+                <h5 className={styles.subsectionTitle}>Previous Roles</h5>
+                {application.previousRoles &&
+                application.previousRoles.length > 0 ? (
+                  <ul className={styles.rolesList}>
+                    {application.previousRoles.map((role, index) => (
+                      <li key={index} className={styles.roleItem}>
+                        {role}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className={styles.emptyList}>No previous roles listed</p>
+                )}
+              </div>
 
-            <div className={styles.skillsSection}>
-              <h5 className={styles.subsectionTitle}>Skills</h5>
-              <div className={styles.skillsContainer}>
-                {application.skills.map((skill, index) => (
-                  <span key={index} className={styles.skillTag}>
-                    {skill}
-                  </span>
-                ))}
+              <div className={styles.skillsSection}>
+                <h5 className={styles.subsectionTitle}>Skills</h5>
+                <div className={styles.skillsContainer}>
+                  {application.skills.map((skill, index) => (
+                    <span key={index} className={styles.skillTag}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -282,7 +301,7 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                  d="m12 14 6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
                 />
               </svg>
               Academic Background

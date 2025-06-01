@@ -245,7 +245,7 @@
 }
 
 :global(.dark) .theme-icon.moon {
-  transform: translateY(0);
+  transform: translate(-50%, -50%) translateY(0) rotate(0) scale(1);
   opacity: 1;
 }
 

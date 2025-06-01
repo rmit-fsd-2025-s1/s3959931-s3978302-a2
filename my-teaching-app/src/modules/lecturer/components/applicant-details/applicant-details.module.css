@@ -295,10 +295,23 @@
 }
 
 .courseCode {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background-color: rgba(249, 115, 22, 0.1);
+  color: rgb(249, 115, 22);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 0.5rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  font-size: 1rem;
   margin-bottom: 0.5rem;
-  font-size: 1.125rem;
+  transition: all 0.3s ease;
+}
+
+.courseCode:hover {
+  background-color: rgba(249, 115, 22, 0.15);
+  border-color: rgba(249, 115, 22, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
 }
 
 .courseName {
@@ -460,14 +473,14 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.dark .emptyDetails {
+:global(.dark) .emptyDetails {
   background-color: var(--color-bg-secondary-dark);
   border-color: var(--color-border-dark);
 }
 
-.dark .emptyDetails:hover {
+:global(.dark) .emptyDetails:hover {
   border-color: var(--color-primary);
-  background-color: var(--color-bg-hover-dark);
+  background-color: #1f2937 !important;
 }
 
 .dark .courseCard {
@@ -483,6 +496,18 @@
 .dark .courseCard.selected {
   background-color: rgba(79, 70, 229, 0.2);
   border-color: #4f46e5;
+}
+
+.dark .courseCode {
+  background-color: rgba(249, 115, 22, 0.15);
+  border-color: rgba(249, 115, 22, 0.3);
+  color: rgb(251, 146, 60);
+}
+
+.dark .courseCode:hover {
+  background-color: rgba(249, 115, 22, 0.2);
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
 }
 
 .dark .roleItem {
@@ -579,7 +604,6 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1.5rem;
-  margin-top: 1rem;
 }
 
 .subsectionTitle {
