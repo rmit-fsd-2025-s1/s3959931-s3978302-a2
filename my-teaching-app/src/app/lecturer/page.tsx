@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { availableCourses } from "@/modules/course/utils/courseDisplay.utils";
+import { availableCourses } from "@/shared/data/courses";
 import ApplicantList from "@/modules/lecturer/components/applicant-list/applicant-list";
 import ApplicantDetails from "@/modules/lecturer/components/applicant-details/applicant-details";
 import RankedCandidates from "@/modules/lecturer/components/ranked-candidates/ranked-candidates";

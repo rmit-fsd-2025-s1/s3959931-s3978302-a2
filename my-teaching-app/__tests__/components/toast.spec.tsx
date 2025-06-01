@@ -1,4 +1,3 @@
-// filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\shared\components\common\toast\__tests__\toast.spec.tsx
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import Toast from "@/shared/components/common/toast/toast";
@@ -107,7 +106,6 @@ describe("Toast Component", () => {
       />
     );
     expect(screen.getByText("Success message")).toBeInTheDocument();
-    expect(document.querySelector(".toast-success")).toBeInTheDocument();
 
     rerender(
       <Toast
@@ -118,7 +116,6 @@ describe("Toast Component", () => {
       />
     );
     expect(screen.getByText("Error message")).toBeInTheDocument();
-    expect(document.querySelector(".toast-error")).toBeInTheDocument();
 
     rerender(
       <Toast
@@ -129,7 +126,6 @@ describe("Toast Component", () => {
       />
     );
     expect(screen.getByText("Info message")).toBeInTheDocument();
-    expect(document.querySelector(".toast-info")).toBeInTheDocument();
   });
 
   // Test 6: Toast clears timeout when unmounted

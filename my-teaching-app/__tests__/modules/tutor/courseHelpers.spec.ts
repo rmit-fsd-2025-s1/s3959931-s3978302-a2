@@ -1,13 +1,12 @@
+import { availableCourses } from "@/shared/data/courses";
+import { getCourseByCode, searchCourses } from "@/shared/utils/courseUtils";
 import {
-  availableCourses,
   getRandomRole,
   getRandomAvailability,
   getCoursesWithDetails,
-  getCourseByCode,
-  searchCourses,
-} from "@/modules/course/utils/courseDisplay.utils";
+} from "@/modules/tutor/utils/courseHelpers";
 
-describe("Course Utilities", () => {
+describe("Tutor Course Helpers", () => {
   // Test 1: Confirm availableCourses contains the expected data
   test("availableCourses contains expected course data", () => {
     // Check array length
@@ -59,7 +58,7 @@ describe("Course Utilities", () => {
   });
 
   // Test 4: getCoursesWithDetails returns courses with role and availability
-  test("getCoursesWithDetails returns courses with role and availability", () => {
+  test("getCoursesWithDetails returns courses with role and availability for tutor context", () => {
     const coursesWithDetails = getCoursesWithDetails();
 
     // Should have same length as availableCourses

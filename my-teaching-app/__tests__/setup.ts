@@ -47,4 +47,4 @@ global.console = {
   warn: jest.fn(),
 };
 */
-console.log("Jest setup file loaded: src/tests/setup.ts");
+console.log("Jest setup file loaded: __tests__/setup.ts");

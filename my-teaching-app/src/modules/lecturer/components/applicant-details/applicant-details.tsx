@@ -1,6 +1,6 @@
 import React from "react";
 import type { Application as TutorApplication } from "@/shared/types/application"; // Updated
-import { availableCourses } from "@/modules/course/utils/courseDisplay.utils"; // Updated
+import { availableCourses } from "@/shared/data/courses";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./applicant-details.module.css";
 

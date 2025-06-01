@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import CourseCard from "@/modules/tutor/components/CourseCard";
-import { CourseWithDetails } from "@/utils/coursesUtils";
+import CourseCard from "@/modules/tutor/components/course-card/course-card";
+import { CourseDetails } from "@/shared/types/course";
 
 // Mock framer-motion to avoid issues in tests
 jest.mock("framer-motion", () => ({
@@ -22,7 +22,7 @@ jest.mock("framer-motion", () => ({
 
 describe("CourseCard Component", () => {
   // Sample course data
-  const mockCourse: CourseWithDetails = {
+  const mockCourse: CourseDetails = {
     code: "COMP1234",
     name: "Introduction to Programming",
     availability: "Full Time",

@@ -4,10 +4,10 @@ import {
   getUserByCredentials,
   getUserById,
   updateUserProfile,
-  validateRoleSpecificEmail,
   userAccounts,
   UserAccount,
 } from "@/modules/auth/utils/userAccounts";
+import { validateRoleSpecificEmail } from "@/modules/auth/utils/authValidation.utils";
 
 describe("User Accounts Utilities", () => {
   // Setup mock localStorage

@@ -1,30 +1,30 @@
 // @ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const nextJest = require('next/jest.js');
+const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './',
+  dir: "./",
 });
 
 // Add any custom config to be passed to Jest
 /** @type {import('jest').Config} */
 const customJestConfig = {
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
-  testEnvironment: 'jsdom',
-  coverageProvider: 'v8',
-  testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+  setupFilesAfterEnv: ["<rootDir>/__tests__/setup.ts"],
+  testEnvironment: "jsdom",
+  coverageProvider: "v8",
+  testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you if you have a tsconfig.json or jsconfig.json)
     // Example: '^@/components/(.*)$': '<rootDir>/components/$1',
   },
   collectCoverage: true,
-  coverageDirectory: 'coverage',
-  testMatch: ['**/src/tests/**/*.test.[jt]s?(x)'],
+  coverageDirectory: "coverage",
+  testMatch: ["**/__tests__/**/*.(test|spec).[jt]s?(x)"],
   // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  moduleDirectories: ["node_modules", "<rootDir>/"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

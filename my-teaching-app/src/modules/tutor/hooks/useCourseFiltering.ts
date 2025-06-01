@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import type { CourseDetails } from "@/shared/types/course";
-import { getCoursesWithDetails } from "@/modules/course/utils/courseDisplay.utils";
+import { getCoursesWithDetails } from "@/modules/tutor/utils/courseHelpers";
 
 export const useCourseFiltering = (existingApplications: string[]) => {
   const [courses, setCourses] = useState<CourseDetails[]>([]);

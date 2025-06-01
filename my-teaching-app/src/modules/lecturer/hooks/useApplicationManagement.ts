@@ -5,7 +5,7 @@ import {
   saveApplicationToStorage as saveApplication,
   initializeDetailedApplicationsInStorage,
 } from "@/modules/tutor/utils/applicationDisplay.utils";
-import { availableCourses } from "@/modules/course/utils/courseDisplay.utils";
+import { availableCourses } from "@/shared/data/courses";
 
 export const useApplicationManagement = () => {
   const [applications, setApplications] = useState<TutorApplication[]>([]);

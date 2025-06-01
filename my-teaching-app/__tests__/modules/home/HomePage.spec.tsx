@@ -1,7 +1,6 @@
-// filepath: c:\s3978302\Full Stack Development\s3959931-s3978302-a2\my-teaching-app\src\modules\home\__tests__\pages\HomePage.spec.tsx
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import HomePage from "@/modules/home/pages/HomePage"; // Updated import path
+import HomePage from "@/modules/home/pages/HomePage";
 
 // Mock next/image
 jest.mock("next/image", () => ({
@@ -22,9 +21,9 @@ jest.mock("next/head", () => {
   };
 });
 
-// Mock lecturer utils
-jest.mock("@/modules/lecturer/utils/lecturerUtils", () => ({
-  // Updated import path
+// Mock any lecturer utilities that might be imported
+jest.mock("@/modules/lecturer/utils/lecturerDisplay.utils", () => ({
+  __esModule: true,
   lecturers: [
     {
       id: "lecturer1",
@@ -39,10 +38,17 @@ jest.mock("@/modules/lecturer/utils/lecturerUtils", () => ({
       image: "/lecturers/lecturer2.jpg",
     },
   ],
+  getLecturerByIdForDisplay: jest.fn(),
+  formatLecturerExpertise: jest.fn(),
 }));
 
+describe.skip("HomePage (TEMPORARILY DISABLED)", () => {
+  test("placeholder test", () => {
+    expect(true).toBe(true);
+  });
+});
+
 describe("HomePage", () => {
-  // Updated describe block
   // Mock localStorage
   const mockLocalStorage = (() => {
     let store: Record<string, string> = {};
