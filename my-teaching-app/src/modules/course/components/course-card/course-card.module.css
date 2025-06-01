@@ -34,10 +34,6 @@
   letter-spacing: 0.05em;
 }
 
-.dark .courseCode {
-  background-color: rgba(249, 115, 22, 0.2);
-}
-
 .courseStatus {
   padding: 0.4rem 0.8rem;
   border-radius: 0.5rem;
@@ -45,44 +41,29 @@
   font-size: 0.75rem;
 }
 
-/* Utility classes for status - these might be better handled by conditional styling in JS or Tailwind if used */
+/* Status color utility classes */
 .bgGreen100 {
   background-color: #dcfce7;
 }
-.dark .bgGreen100 {
-  background-color: rgba(16, 185, 129, 0.2);
-}
+
 .textGreen800 {
   color: #166534;
-}
-.dark .textGreen800 {
-  color: #86efac;
 }
 
 .bgBlue100 {
   background-color: #dbeafe;
 }
-.dark .bgBlue100 {
-  background-color: rgba(59, 130, 246, 0.2);
-}
+
 .textBlue800 {
   color: #1e40af;
-}
-.dark .textBlue800 {
-  color: #93c5fd;
 }
 
 .bgPurple100 {
   background-color: #f3e8ff;
 }
-.dark .bgPurple100 {
-  background-color: rgba(168, 85, 247, 0.2);
-}
+
 .textPurple800 {
   color: #6b21a8;
-}
-.dark .textPurple800 {
-  color: #d8b4fe;
 }
 
 .cardBody {
@@ -112,22 +93,6 @@
   margin-bottom: 1.25rem;
 }
 
-.skillTag {
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-secondary);
-  padding: 0.4rem 0.7rem;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
-}
-
-.enhancedCourseCard:hover .skillTag {
-  background-color: rgba(249, 115, 22, 0.1);
-  color: var(--color-primary);
-  border-color: rgba(249, 115, 22, 0.2);
-}
-
 .roleTag {
   display: flex;
   align-items: center;
@@ -145,12 +110,12 @@
   margin-right: 0.5rem;
 }
 
-.roleIcon.tutorRole {
+.roleIconTutor {
   background-color: rgba(16, 185, 129, 0.1);
   color: #10b981;
 }
 
-.roleIcon.assistantRole {
+.roleIconAssistant {
   background-color: rgba(79, 70, 229, 0.1);
   color: #4f46e5;
 }
@@ -164,23 +129,60 @@
 .cardFooter {
   padding: 1.25rem;
   border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
 }
 
 .applyButton {
   width: 100%;
-  padding: 0.75rem;
-  background-color: var(--color-primary);
+  padding: 0.875rem 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
   color: white;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+.applyButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.applyButton:hover::before {
+  left: 100%;
 }
 
 .applyButton:hover {
-  background-color: var(--color-secondary);
+  background: linear-gradient(135deg, var(--color-secondary) 0%, #ea580c 100%);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  transform: translateY(-2px);
+}
+
+.applyButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
 }
 
 .appliedStatus {
@@ -188,12 +190,19 @@
   align-items: center;
   justify-content: center;
   color: #10b981;
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.875rem 1rem;
+  background-color: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 0.75rem;
+  letter-spacing: 0.025em;
 }
 
 .appliedStatus svg {
   margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .cardDecoration {
@@ -215,30 +224,69 @@
   left: 1.25rem;
 }
 
-.dark .enhancedCourseCard {
+/* Dark mode styles */
+:global(.dark) .enhancedCourseCard {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.dark .enhancedCourseCard:hover {
+:global(.dark) .enhancedCourseCard:hover {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.dark .skillTag {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: var(--color-border);
-}
-
-.dark .enhancedCourseCard:hover .skillTag {
+:global(.dark) .courseCode {
   background-color: rgba(249, 115, 22, 0.2);
-  border-color: rgba(249, 115, 22, 0.3);
 }
 
-.dark .roleIcon.tutorRole {
+:global(.dark) .bgGreen100 {
+  background-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+:global(.dark) .textGreen800 {
+  color: #6ee7b7 !important;
+}
+
+:global(.dark) .bgBlue100 {
+  background-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+:global(.dark) .textBlue800 {
+  color: #93c5fd !important;
+}
+
+:global(.dark) .bgPurple100 {
+  background-color: rgba(168, 85, 247, 0.25) !important;
+}
+
+:global(.dark) .textPurple800 {
+  color: #c4b5fd !important;
+}
+
+:global(.dark) .roleIconTutor {
   background-color: rgba(16, 185, 129, 0.2);
 }
 
-.dark .roleIcon.assistantRole {
+:global(.dark) .roleIconAssistant {
   background-color: rgba(79, 70, 229, 0.2);
+}
+
+/* Dark mode card footer adjustments */
+:global(.dark) .cardFooter {
+  background-color: var(--color-bg-primary);
+  border-top-color: var(--color-border);
+}
+
+:global(.dark) .applyButton {
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
+}
+
+:global(.dark) .applyButton:hover {
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+:global(.dark) .appliedStatus {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
 }
 
 @media (max-width: 640px) {

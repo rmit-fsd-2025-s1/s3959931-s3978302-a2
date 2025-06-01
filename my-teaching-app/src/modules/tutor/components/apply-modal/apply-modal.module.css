@@ -149,6 +149,14 @@
   color: #6b7280 !important;
 }
 
+.applyModalInputError {
+  border-color: #ef4444 !important;
+}
+
+:global(.dark) .applyModalInputError {
+  border-color: #ef4444 !important;
+}
+
 .applyModalLabel {
   color: #111827 !important;
   font-weight: 600 !important;

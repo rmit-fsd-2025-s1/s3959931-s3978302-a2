@@ -21,7 +21,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor1",
     email: "john.doe@tutor.edu.au",
-    // password: "Password123!", // Password removed from mock data
+    password: "Password123!",
     role: "tutor",
     fullName: "John Doe",
     academicCredentials: "Bachelor of Computer Science",
@@ -30,7 +30,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor2",
     email: "jane.smith@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Jane Smith",
     academicCredentials: "Masters in Computer Science",
@@ -39,7 +39,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor3",
     email: "michael.brown@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Michael Brown",
     academicCredentials: "Bachelor of Information Technology",
@@ -48,7 +48,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor4",
     email: "emily.johnson@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Emily Johnson",
     academicCredentials: "Masters in Computer Engineering",
@@ -57,7 +57,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor5",
     email: "david.wilson@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "David Wilson",
     academicCredentials: "Bachelor of Computer Science",
@@ -66,7 +66,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor6",
     email: "sarah.taylor@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Sarah Taylor",
     academicCredentials: "Ph.D. Candidate in Cybersecurity",
@@ -75,7 +75,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor7",
     email: "alex.martinez@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Alex Martinez",
     academicCredentials: "Masters in Software Engineering",
@@ -84,7 +84,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor8",
     email: "olivia.anderson@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Olivia Anderson",
     academicCredentials: "Bachelor of Science in Computer Science",
@@ -93,7 +93,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor9",
     email: "james.thomas@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "James Thomas",
     academicCredentials: "Masters in Web Technologies",
@@ -102,7 +102,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor10",
     email: "sophia.garcia@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Sophia Garcia",
     academicCredentials: "Bachelor of Information Technology",
@@ -111,7 +111,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor11",
     email: "daniel.lee@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Daniel Lee",
     academicCredentials: "Ph.D. Student in Computer Science",
@@ -120,7 +120,7 @@ const tutorAccounts: UserAccount[] = [
   {
     id: "tutor12",
     email: "emma.clark@tutor.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "tutor",
     fullName: "Emma Clark",
     academicCredentials: "Masters in IT Security",
@@ -133,7 +133,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer1",
     email: "sophie.chen@lecturer.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "lecturer",
     fullName: "Dr. Sophie Chen",
     bio: "Specializes in AI research and education",
@@ -142,7 +142,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer2",
     email: "m.rodriguez@lecturer.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "lecturer",
     fullName: "Prof. Michael Rodriguez",
     bio: "15+ years of industry experience in software architecture",
@@ -151,7 +151,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer3",
     email: "a.patel@lecturer.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "lecturer",
     fullName: "Dr. Aisha Patel",
     bio: "Specializes in network security and ethical hacking",
@@ -160,7 +160,7 @@ const lecturerAccounts: UserAccount[] = [
   {
     id: "lecturer4",
     email: "j.wilson@lecturer.edu.au",
-    // password: "Password123!",
+    password: "Password123!",
     role: "lecturer",
     fullName: "Dr. James Wilson",
     bio: "Expert in algorithm optimization and data science",
@@ -176,10 +176,47 @@ export const userAccounts: UserAccount[] = [
 
 // Initialize user accounts in localStorage
 export const initializeUserAccounts = () => {
+  console.log("initializeUserAccounts called");
   if (typeof window !== "undefined") {
+    console.log("Window is defined, checking localStorage");
     // Check if accounts already exist
-    if (!localStorage.getItem("users")) {
+    const existingUsers = localStorage.getItem("users");
+    console.log("Existing users in localStorage:", existingUsers);
+
+    // Check if we need to reinitialize (no users or users missing password fields)
+    let needsUpdate = false;
+
+    if (!existingUsers) {
+      needsUpdate = true;
+      console.log("No existing users found, initializing with mock data");
+    } else {
+      // Check if existing users have password fields
+      try {
+        const parsedUsers = JSON.parse(existingUsers);
+        const hasPasswordFields = parsedUsers.every((user: UserAccount) =>
+          user.hasOwnProperty("password")
+        );
+        if (!hasPasswordFields) {
+          needsUpdate = true;
+          console.log(
+            "Existing users missing password fields, updating with new data"
+          );
+        }
+      } catch (error) {
+        console.log("Error parsing existing users:", error);
+        needsUpdate = true;
+        console.log("Error parsing existing users, reinitializing");
+      }
+    }
+
+    if (needsUpdate) {
+      console.log("userAccounts to be stored:", userAccounts);
       localStorage.setItem("users", JSON.stringify(userAccounts));
+      console.log("Users stored in localStorage successfully");
+    } else {
+      console.log(
+        "Users already exist in localStorage, skipping initialization"
+      );
     }
   }
 };
@@ -197,7 +234,7 @@ export const getUserByCredentials = (
     return users.find((user: UserAccount) => {
       // Mock authentication: for demo purposes, accept any password that equals "Password123!"
       // This part would be replaced by an API call.
-      return user.email === email && passwordAttempt === "Password123!";
+      return user.email === email && user.password === passwordAttempt;
     });
   }
   return undefined;

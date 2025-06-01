@@ -1,47 +1,40 @@
 .skillTag {
-  /* Tailwind: inline-flex items-center px-2 py-1 rounded-full text-sm mr-3 mb-3 */
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.5rem; /* px-2 py-1 */
-  border-radius: 9999px; /* rounded-full */
-  font-size: 0.875rem; /* text-sm */
-  margin-right: 0.75rem; /* mr-3 */
-  margin-bottom: 0.75rem; /* mb-3 */
-
-  /* Original .skill-tag styles from modal.css */
-  background-color: #dbeafe; /* Tailwind blue-200 */
-  color: #1e40af; /* Tailwind blue-800 */
-  border: 1px solid #93c5fd; /* Tailwind blue-300 */
-  transition: all 0.2s ease;
+  all: unset;
+  padding: 0.5rem 1rem;
+  background-color: rgba(249, 115, 22, 0.1) !important;
+  color: rgb(249, 115, 22) !important;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(249, 115, 22, 0.2) !important;
+  margin: 1px;
+  display: inline-block;
+  cursor: default;
 }
 
 .dark .skillTag {
-  background-color: #1e3a8a; /* Darker blue */
-  color: #dbeafe; /* Lighter blue text */
-  border: 1px solid #60a5fa; /* Mid blue border */
+  background-color: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
+  border: 1px solid rgba(249, 115, 22, 0.25) !important;
 }
 
 .skillTagRemove {
-  /* Tailwind: ml-2.5 */
-  margin-left: 0.625rem;
+  margin-left: 0.5rem;
   font-weight: bold;
   transition: color 0.2s ease;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0; /* Remove default button padding */
-  line-height: 1; /* Ensure 'x' aligns well */
-
-  /* Original .skill-tag-remove styles */
-  color: #1e40af; /* Tailwind blue-800 */
+  padding: 0;
+  line-height: 1;
+  color: rgb(249, 115, 22);
 }
 
 .dark .skillTagRemove {
-  color: #dbeafe; /* Lighter blue text */
+  color: rgb(249, 115, 22);
 }
 
 .skillTagRemove:hover {
-  color: #ef4444; /* Tailwind red-500 */
+  color: #ef4444; /* Red-500 for remove action */
 }
-
-/* .dark .skillTagRemove:hover is already covered by the above hover */

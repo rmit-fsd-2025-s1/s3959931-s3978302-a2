@@ -324,29 +324,6 @@
   padding: 1px;
 }
 
-.skillTag {
-  all: unset;
-  padding: 0.5rem 1rem;
-  background-color: rgba(249, 115, 22, 0.1) !important;
-  color: rgb(249, 115, 22) !important;
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(249, 115, 22, 0.2) !important;
-  margin: 1px;
-  display: inline-block;
-  cursor: default;
-}
-
-.skillTag:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2) !important;
-  background-color: rgba(249, 115, 22, 0.15) !important;
-  border-color: rgba(249, 115, 22, 0.3) !important;
-  margin: 1px;
-}
-
 .academicText {
   font-size: 0.875rem;
   color: var(--color-text-primary);
@@ -428,18 +405,6 @@
   border-color: rgba(249, 115, 22, 0.4);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
-}
-
-.dark .skillTag {
-  background-color: rgba(249, 115, 22, 0.15) !important;
-  border-color: rgba(249, 115, 22, 0.3) !important;
-  color: rgb(251, 146, 60) !important;
-}
-
-.dark .skillTag:hover {
-  background-color: rgba(249, 115, 22, 0.2) !important;
-  border-color: rgba(249, 115, 22, 0.4) !important;
-  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3) !important;
 }
 
 .dark .academicText {

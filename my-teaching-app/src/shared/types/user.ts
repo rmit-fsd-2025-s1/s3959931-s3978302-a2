@@ -1,7 +1,7 @@
 export interface UserAccount {
   id: string;
   email: string;
-  // password?: string; // Password should generally not be part of a client-side model
+  password?: string;
   role: "tutor" | "lecturer" | "admin"; // Added admin as a potential future role
   fullName: string;
   bio?: string;

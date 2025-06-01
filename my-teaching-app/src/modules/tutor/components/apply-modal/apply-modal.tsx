@@ -223,7 +223,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
         {/* Header */}
         <div className={styles.applyModalHeader}>
           <div className={styles.applyModalHeaderContent}>
-            <h2 className={styles.applyModalTitle}>Apply for Tutor Position</h2>
+            <h3 className={styles.applyModalTitle}>Apply for Course</h3>
             <button
               type="button"
               onClick={onClose}
@@ -250,112 +250,114 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
         {/* Form */}
         <div className={styles.applyModalForm}>
           <form onSubmit={handleSubmit}>
-            {/* Course Details */}
+            {/* Course Info (Read-only) */}
+            <div className={styles.applyModalFieldGroup}>
+              <label className={styles.applyModalLabel}>Course</label>
+              <div className={styles.applyModalReadonlyField}>
+                <p className="font-semibold">
+                  {course.code} - {course.name}
+                </p>
+              </div>
+            </div>
+
+            {/* Role & Availability (Read-only) */}
             <div className={styles.applyModalGrid}>
               <div className={styles.applyModalFieldGroup}>
-                <label className={styles.applyModalLabel}>Course Code</label>
+                <label className={styles.applyModalLabel}>Role</label>
                 <div className={styles.applyModalReadonlyField}>
-                  {course.code}
+                  <p className="font-medium">{course.role}</p>
                 </div>
               </div>
+
               <div className={styles.applyModalFieldGroup}>
-                <label className={styles.applyModalLabel}>Course Name</label>
+                <label className={styles.applyModalLabel}>Availability</label>
                 <div className={styles.applyModalReadonlyField}>
-                  {course.name}
+                  <p className="font-medium">{course.availability}</p>
                 </div>
               </div>
             </div>
 
-            {/* Application Details */}
+            {/* Previous Teaching Roles */}
             <div className={styles.applyModalFieldGroup}>
-              <label
-                htmlFor="previous_roles"
-                className={styles.applyModalLabel}
-              >
-                Previous Teaching Roles (Optional)
+              <label htmlFor="previousRoles" className={styles.applyModalLabel}>
+                Previous Teaching Roles
               </label>
               <textarea
-                id="previous_roles"
-                name="previous_roles"
-                rows={4}
+                id="previousRoles"
                 value={previousRoles}
                 onChange={(e) => setPreviousRoles(e.target.value)}
-                className={styles.applyModalInput}
-                placeholder="List any previous teaching or tutoring experience (one per line)&#10;Format: [Course Code] [Role Type] (Year)&#10;Example: COSC1111 Lab Assistant (2024)"
+                placeholder="List your previous roles (one per line), e.g., COSC1111 Lab Assistant (2024)"
+                className={`${styles.applyModalInput} ${
+                  errors.previousRoles ? styles.applyModalInputError : ""
+                }`}
+                rows={3}
               />
-              <div className={styles.applyModalSecondaryText}>
-                Each role should be on a separate line. Format: [Course Code]
-                [Role Type] (Year)
-              </div>
+              {errors.previousRoles && (
+                <p className={styles.applyModalErrorText}>
+                  {errors.previousRoles}
+                </p>
+              )}
+              <p className={styles.applyModalSecondaryText}>
+                Format: [Course Code] [Role Type] (Year) - One per line, maximum
+                10 roles
+              </p>
             </div>
 
-            <div className={styles.applyModalFieldGroup}>
-              <label htmlFor="motivation" className={styles.applyModalLabel}>
-                Why do you want to tutor this course? *
-              </label>
-              <textarea
-                id="motivation"
-                name="motivation"
-                rows={4}
-                required
-                value={academicCredentials}
-                onChange={(e) => setAcademicCredentials(e.target.value)}
-                className={styles.applyModalInput}
-                placeholder="Explain your motivation for tutoring this course..."
-              />
-            </div>
-
+            {/* Academic Credentials */}
             <div className={styles.applyModalFieldGroup}>
               <label
-                htmlFor="qualifications"
+                htmlFor="academicCredentials"
                 className={styles.applyModalLabel}
               >
-                Relevant Qualifications *
+                Academic Credentials
               </label>
               <textarea
-                id="qualifications"
-                name="qualifications"
-                rows={4}
-                required
+                id="academicCredentials"
                 value={academicCredentials}
                 onChange={(e) => setAcademicCredentials(e.target.value)}
-                className={styles.applyModalInput}
-                placeholder="Describe your academic background, relevant experience, and qualifications..."
+                placeholder="Describe your academic background, degrees, certifications, etc."
+                className={`${styles.applyModalInput} ${
+                  errors.academicCredentials ? styles.applyModalInputError : ""
+                }`}
+                rows={4}
+                required
               />
+              {errors.academicCredentials && (
+                <p className={styles.applyModalErrorText}>
+                  {errors.academicCredentials}
+                </p>
+              )}
+              <p className={styles.applyModalSecondaryText}>
+                Minimum 10 characters required.
+              </p>
             </div>
 
             {/* Skills */}
             <div className={styles.applyModalFieldGroup}>
               <label className={styles.applyModalLabel}>Skills</label>
 
-              {/* Display current skills */}
-              {selectedSkills.length > 0 && (
-                <div className={styles.applyModalSkillsContainer}>
-                  {selectedSkills.map((skill, index) => (
-                    <SkillTag
-                      key={index}
-                      skill={skill}
-                      onRemove={handleRemoveSkill}
-                    />
-                  ))}
-                </div>
-              )}
+              <div className={styles.applyModalSkillsContainer}>
+                {selectedSkills.map((skill, index) => (
+                  <SkillTag
+                    key={index}
+                    skill={skill}
+                    onRemove={handleRemoveSkill}
+                  />
+                ))}
+              </div>
 
-              {/* Add skills input */}
+              {/* Skill input field */}
               {showSkillInput ? (
                 <div className={styles.applyModalSkillInput}>
                   <input
                     type="text"
                     value={skillInput}
                     onChange={(e) => setSkillInput(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleSkillInputKeyDown(e);
-                      }
-                    }}
-                    placeholder="Enter a skill..."
-                    className={styles.applyModalSkillInputField}
+                    onKeyDown={handleSkillInputKeyDown}
+                    placeholder="Type skill and press Enter"
+                    className={`${styles.applyModalSkillInputField} ${
+                      errors.skills ? styles.applyModalInputError : ""
+                    }`}
                     autoFocus
                   />
                   <button
@@ -411,55 +413,67 @@ const ApplyModal: React.FC<ApplyModalProps> = ({
                   className={styles.applyModalAddSkillsButton}
                 >
                   <svg
-                    className="h-4 w-4 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    className="h-5 w-5 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
+                      fillRule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clipRule="evenodd"
                     />
                   </svg>
                   Add Skills
                 </button>
               )}
 
-              {/* Popular skills */}
+              {errors.skills && (
+                <p className={styles.applyModalErrorText}>{errors.skills}</p>
+              )}
+              <p className={styles.applyModalSecondaryText}>
+                At least 2 skills required, maximum 5 skills allowed. Skills
+                should be relevant to the course.
+              </p>
+
+              {/* Popular skills section */}
               <div className={styles.applyModalPopularSkills}>
-                <span className={styles.applyModalPopularSkillsLabel}>
+                <p className={styles.applyModalPopularSkillsLabel}>
                   Popular skills:
-                </span>
+                </p>
                 <div className={styles.applyModalPopularSkillsContainer}>
-                  {availableSkills
-                    .filter((skill) => !selectedSkills.includes(skill))
-                    .slice(0, 10)
-                    .map((skill) => (
-                      <button
-                        key={skill}
-                        type="button"
-                        onClick={() => {
-                          if (!selectedSkills.includes(skill)) {
-                            setSelectedSkills([...selectedSkills, skill]);
+                  {availableSkills.slice(0, 6).map((skill, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        if (!selectedSkills.includes(skill)) {
+                          if (selectedSkills.length >= 5) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              skills: "Maximum 5 skills allowed",
+                            }));
+                            return;
                           }
-                        }}
-                        className={styles.popularSkillButton}
-                      >
-                        {skill}
-                      </button>
-                    ))}
+                          setSelectedSkills([...selectedSkills, skill]);
+                          setErrors((prev) => ({
+                            ...prev,
+                            skills: undefined,
+                          }));
+                        }
+                      }}
+                      className={`${styles.popularSkillButton} ${
+                        selectedSkills.includes(skill) ? "opacity-50" : ""
+                      }`}
+                      disabled={selectedSkills.includes(skill)}
+                    >
+                      {skill}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Error display */}
-            {errors.skills && (
-              <div className={styles.applyModalErrorText}>{errors.skills}</div>
-            )}
-
-            {/* Form Actions */}
+            {/* Form actions */}
             <div className={styles.applyModalActions}>
               <button
                 type="button"

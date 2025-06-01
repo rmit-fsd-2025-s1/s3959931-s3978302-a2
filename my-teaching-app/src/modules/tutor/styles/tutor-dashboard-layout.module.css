@@ -389,7 +389,7 @@
 }
 
 /* Dark Mode Adjustments */
-.dark .tutorHeroSection {
+:global(.dark) .tutorHeroSection {
   background: linear-gradient(
     135deg,
     var(--color-bg-secondary) 0%,
@@ -397,12 +397,12 @@
   );
 }
 
-.dark .heroHighlight::after {
+:global(.dark) .heroHighlight::after {
   background-color: rgba(249, 115, 22, 0.3);
 }
 
-.dark .searchClear:hover,
-.dark .filterPill:hover {
+:global(.dark) .searchClear:hover,
+:global(.dark) .filterPill:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
@@ -444,7 +444,7 @@
   letter-spacing: 0.05em;
 }
 
-.dark .courseCode {
+:global(.dark) .courseCode {
   background-color: rgba(249, 115, 22, 0.2);
 }
 
@@ -459,8 +459,8 @@
   background-color: #dcfce7;
 }
 
-.dark .bgGreen100 {
-  background-color: rgba(16, 185, 129, 0.2);
+:global(.dark) .bgGreen100 {
+  background-color: rgba(16, 185, 129, 0.25) !important;
 }
 
 .bgGreen900_30 {
@@ -471,24 +471,24 @@
   color: #166534;
 }
 
-.dark .textGreen800 {
-  color: #86efac;
+:global(.dark) .textGreen800 {
+  color: #6ee7b7 !important;
 }
 
 .textGreen300 {
   color: #166534;
 }
 
-.dark .textGreen300 {
-  color: #86efac;
+:global(.dark) .textGreen300 {
+  color: #6ee7b7 !important;
 }
 
 .bgBlue100 {
   background-color: #dbeafe;
 }
 
-.dark .bgBlue100 {
-  background-color: rgba(59, 130, 246, 0.2);
+:global(.dark) .bgBlue100 {
+  background-color: rgba(59, 130, 246, 0.25) !important;
 }
 
 .bgBlue900_30 {
@@ -499,24 +499,24 @@
   color: #1e40af;
 }
 
-.dark .textBlue800 {
-  color: #93c5fd;
+:global(.dark) .textBlue800 {
+  color: #93c5fd !important;
 }
 
 .textBlue300 {
   color: #1e40af;
 }
 
-.dark .textBlue300 {
-  color: #93c5fd;
+:global(.dark) .textBlue300 {
+  color: #93c5fd !important;
 }
 
 .bgPurple100 {
   background-color: #f3e8ff;
 }
 
-.dark .bgPurple100 {
-  background-color: rgba(168, 85, 247, 0.2);
+:global(.dark) .bgPurple100 {
+  background-color: rgba(168, 85, 247, 0.25) !important;
 }
 
 .bgPurple900_30 {
@@ -527,16 +527,16 @@
   color: #6b21a8;
 }
 
-.dark .textPurple800 {
-  color: #d8b4fe;
+:global(.dark) .textPurple800 {
+  color: #c4b5fd !important;
 }
 
 .textPurple300 {
   color: #6b21a8;
 }
 
-.dark .textPurple300 {
-  color: #d8b4fe;
+:global(.dark) .textPurple300 {
+  color: #c4b5fd !important;
 }
 
 /* Card Body */
@@ -566,22 +566,6 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1.25rem;
-}
-
-.skillTag {
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-secondary);
-  padding: 0.4rem 0.7rem;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
-}
-
-.enhancedCourseCard:hover .skillTag {
-  background-color: rgba(249, 115, 22, 0.1);
-  color: var(--color-primary);
-  border-color: rgba(249, 115, 22, 0.2);
 }
 
 /* Role Tag */
@@ -724,51 +708,37 @@
 }
 
 /* Dark Mode Adjustments */
-.dark .enhancedCourseCard {
+:global(.dark) .enhancedCourseCard {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.dark .enhancedCourseCard:hover {
+:global(.dark) .enhancedCourseCard:hover {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.dark .courseCode {
-  background-color: rgba(249, 115, 22, 0.2);
-}
-
-.dark .skillTag {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: var(--color-border);
-}
-
-.dark .enhancedCourseCard:hover .skillTag {
-  background-color: rgba(249, 115, 22, 0.2);
-  border-color: rgba(249, 115, 22, 0.3);
-}
-
-.dark .roleIconTutor {
+:global(.dark) .roleIconTutor {
   background-color: rgba(16, 185, 129, 0.2);
 }
 
-.dark .roleIconAssistant {
+:global(.dark) .roleIconAssistant {
   background-color: rgba(79, 70, 229, 0.2);
 }
 
 /* Dark mode card footer adjustments */
-.dark .cardFooter {
+:global(.dark) .cardFooter {
   background-color: var(--color-bg-primary);
   border-top-color: var(--color-border);
 }
 
-.dark .applyButton {
+:global(.dark) .applyButton {
   box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
 }
 
-.dark .applyButton:hover {
+:global(.dark) .applyButton:hover {
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 
-.dark .appliedStatus {
+:global(.dark) .appliedStatus {
   background-color: rgba(16, 185, 129, 0.1);
   border-color: rgba(16, 185, 129, 0.3);
   color: #34d399;

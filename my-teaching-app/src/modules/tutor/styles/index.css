@@ -1,9 +1,11 @@
 /* ======== TUTOR MODULE STYLES ======== */
 /* Entry point for all tutor module styles */
 
-/* Core tutor styles */
-@import "./tutor.css";
+/* Global CSS custom properties and base styles */
+@import "./apply-modal-globals.css";
 
-/* Tutor components */
-@import "./modal.css"; /* Tutor-specific modals */
-@import "./course-card.css"; /* Course card components */
+/* Note: Component-specific styles are handled via CSS modules:
+ * - apply-modal.module.css (imported in ApplyModal component)
+ * - skill-tag.module.css (imported in SkillTag component)
+ * - tutor-dashboard-layout.module.css (imported in TutorDashboardPage)
+ */

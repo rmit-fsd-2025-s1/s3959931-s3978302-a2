@@ -2,7 +2,8 @@ import React from "react";
 import type { CourseDetails } from "@/shared/types/course";
 import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import { motion } from "framer-motion";
-import styles from "@/modules/tutor/styles/tutor-dashboard-layout.module.css";
+import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";
+import styles from "./course-card.module.css";
 
 interface CourseCardProps {
   course: CourseDetails;
@@ -59,16 +60,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
         {/* Skills tags */}
         <div className={styles.skillsContainer}>
           {course.skills?.map((skill, index) => (
-            <span key={index} className={styles.skillTag}>
-              {skill}
-            </span>
+            <SkillTag key={index} skill={skill} />
           ))}
           {!course.skills &&
-            availableSkills.slice(0, 2).map((skill, index) => (
-              <span key={index} className={styles.skillTag}>
-                {skill}
-              </span>
-            ))}
+            availableSkills
+              .slice(0, 2)
+              .map((skill, index) => <SkillTag key={index} skill={skill} />)}
         </div>
 
         {/* Role tag */}

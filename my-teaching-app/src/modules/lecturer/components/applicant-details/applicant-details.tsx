@@ -2,6 +2,7 @@ import React from "react";
 import type { Application as TutorApplication } from "@/shared/types/application"; // Updated
 import { availableCourses } from "@/modules/course/utils/courseDisplay.utils"; // Updated
 import { motion, AnimatePresence } from "framer-motion";
+import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";
 import styles from "./applicant-details.module.css";
 
 interface ApplicantDetailsProps {
@@ -265,9 +266,7 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
               <h5 className={styles.subsectionTitle}>Skills</h5>
               <div className={styles.skillsContainer}>
                 {application.skills.map((skill) => (
-                  <span key={skill} className={styles.skillTag}>
-                    {skill}
-                  </span>
+                  <SkillTag key={skill} skill={skill} />
                 ))}
               </div>
             </div>

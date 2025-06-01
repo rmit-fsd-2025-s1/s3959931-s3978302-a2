@@ -1,26 +1,27 @@
-/* Light Mode Colors for Apply Modal */
+/* Apply Modal Global CSS Custom Properties */
+/* These variables are used by the apply-modal.module.css file */
+
 :root {
   /* Primary colors */
-  --apply-modal-primary: #f97316 !important; /* Orange color to match the theme */
-  --apply-modal-secondary: #fb923c !important; /* Lighter orange */
-  --apply-modal-accent: #fdba74 !important; /* Even lighter orange */
+  --apply-modal-primary: #f97316; /* Orange color to match the theme */
+  --apply-modal-secondary: #fb923c; /* Lighter orange */
+  --apply-modal-accent: #fdba74; /* Even lighter orange */
 
   /* Background colors */
-  --apply-modal-bg: #ffffff !important;
-  --apply-modal-bg-secondary: #f3f4f6 !important;
-  --apply-modal-readonly: #f3f4f6 !important;
-  --apply-modal-backdrop: rgba(255, 255, 255, 0.8) !important;
+  --apply-modal-bg: #ffffff;
+  --apply-modal-bg-secondary: #f3f4f6;
+  --apply-modal-readonly: #f3f4f6;
+  --apply-modal-backdrop: rgba(255, 255, 255, 0.8);
 
   /* Text colors */
-  --apply-modal-text-primary: #111827 !important;
-  --apply-modal-text-secondary: #4b5563 !important;
+  --apply-modal-text-primary: #111827;
+  --apply-modal-text-secondary: #4b5563;
 
   /* Border colors */
-  --apply-modal-border: #e5e7eb !important;
-  --apply-modal-border-header: #e5e7eb !important;
+  --apply-modal-border: #e5e7eb;
+  --apply-modal-border-header: #e5e7eb;
 
   /* Button colors */
-  --apply-modal-button-bg: #f97316 !important;
   --apply-modal-button-bg: #f97316;
   --apply-modal-button-hover: #ea580c;
 }
