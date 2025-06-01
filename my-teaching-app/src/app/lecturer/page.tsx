@@ -28,6 +28,8 @@ const LecturerDashboardPage: React.FC = () => {
     applications,
     selectedCourse,
     setSelectedCourse,
+    selectedRankingCourse,
+    setSelectedRankingCourse,
     selectedApplication,
     setSelectedApplication,
     comment,
@@ -88,14 +90,15 @@ const LecturerDashboardPage: React.FC = () => {
   });
 
   useEffect(() => {
+    // Initialize ranking course selection when switching to rankings tab
     if (
       activeTab === "rankings" &&
-      !selectedCourse &&
+      !selectedRankingCourse &&
       availableCourses.length > 0
     ) {
-      setSelectedCourse(availableCourses[0].code);
+      setSelectedRankingCourse(availableCourses[0].code);
     }
-  }, [activeTab, selectedCourse, setSelectedCourse]);
+  }, [activeTab, selectedRankingCourse, setSelectedRankingCourse]);
 
   return (
     <>
@@ -191,12 +194,12 @@ const LecturerDashboardPage: React.FC = () => {
               >
                 <RankedCandidates
                   rankedApplications={rankedApplications}
-                  selectedCourse={selectedCourse}
+                  selectedCourse={selectedRankingCourse}
                   onMoveUp={handleMoveUp}
                   onMoveDown={handleMoveDown}
                   onRemove={handleRemoveFromRanking}
                   showCourseFilter={true}
-                  onCourseChange={setSelectedCourse}
+                  onCourseChange={setSelectedRankingCourse}
                   availableCourses={availableCourses}
                 />
               </motion.div>

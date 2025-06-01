@@ -76,11 +76,29 @@ export const useApplicationActions = ({
         selectedBy: undefined,
         selectedDate: undefined,
         selectedForCourses: undefined,
+        rank: undefined,
       };
       saveApplication(updatedApplication);
+
+      if (selectedApplication.rank !== undefined) {
+        const newRankedApplications = rankedApplications
+          .filter(
+            (app) =>
+              app.id !== selectedApplication.id &&
+              app.userId !== selectedApplication.userId
+          )
+          .map((app, index) => ({ ...app, rank: index + 1 }));
+
+        newRankedApplications.forEach((app) => {
+          saveApplication(app);
+        });
+
+        setRankedApplications(newRankedApplications);
+      }
+
       loadApplications();
       setSelectedApplication(updatedApplication);
-      showToast("Applicant unselected!", "success");
+      showToast("Applicant unselected and removed from ranking!", "success");
     }
   };
 
@@ -103,7 +121,7 @@ export const useApplicationActions = ({
 
   const handleMoveUp = (application: TutorApplication) => {
     const currentIndex = rankedApplications.findIndex(
-      (app) => app.userId === application.userId
+      (app) => app.id === application.id || app.userId === application.userId
     );
     if (currentIndex > 0) {
       const newRankedApplications = [...rankedApplications];
@@ -128,7 +146,7 @@ export const useApplicationActions = ({
 
   const handleMoveDown = (application: TutorApplication) => {
     const currentIndex = rankedApplications.findIndex(
-      (app) => app.userId === application.userId
+      (app) => app.id === application.id || app.userId === application.userId
     );
     if (currentIndex < rankedApplications.length - 1) {
       const newRankedApplications = [...rankedApplications];
@@ -153,13 +171,15 @@ export const useApplicationActions = ({
 
   const handleRemoveFromRanking = (applicationId: string) => {
     const appToRemove = rankedApplications.find(
-      (app) => app.userId === applicationId
+      (app) => app.id === applicationId || app.userId === applicationId
     );
     if (appToRemove) {
       const updatedApplication = { ...appToRemove, rank: undefined };
       saveApplication(updatedApplication);
       const newRankedApplications = rankedApplications
-        .filter((app) => app.userId !== applicationId)
+        .filter(
+          (app) => app.id !== applicationId && app.userId !== applicationId
+        )
         .map((app, index) => ({ ...app, rank: index + 1 }));
 
       newRankedApplications.forEach((app) => {

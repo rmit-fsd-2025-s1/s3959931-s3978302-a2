@@ -10,6 +10,8 @@ import { availableCourses } from "@/shared/data/courses";
 export const useApplicationManagement = () => {
   const [applications, setApplications] = useState<TutorApplication[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [selectedRankingCourse, setSelectedRankingCourse] =
+    useState<string>("");
   const [selectedApplication, setSelectedApplication] =
     useState<TutorApplication | null>(null);
   const [comment, setComment] = useState<string>("");
@@ -20,12 +22,13 @@ export const useApplicationManagement = () => {
   const [sortBy, setSortBy] = useState<string>("none");
 
   useEffect(() => {
+    // Initialize storage first
     initializeDetailedApplicationsInStorage();
-    loadApplications();
-  }, []);
 
-  useEffect(() => {
+    // Then load applications
     loadApplications();
+
+    // Set up event listeners for real-time updates
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "applications") {
         loadApplications();
@@ -34,9 +37,13 @@ export const useApplicationManagement = () => {
     const handleApplicationUpdate = () => {
       loadApplications();
     };
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("applicationUpdated", handleApplicationUpdate);
+
+    // Set up periodic refresh (optional - can be removed if not needed)
     const intervalId = setInterval(loadApplications, 5000);
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("applicationUpdated", handleApplicationUpdate);
@@ -45,12 +52,18 @@ export const useApplicationManagement = () => {
   }, []);
 
   const loadApplications = () => {
-    const appData = getApplications();
-    setApplications(appData);
-    const ranked = appData.filter((app) => app.rank !== undefined);
-    setRankedApplications(
-      ranked.sort((a, b) => (a.rank || 999) - (b.rank || 999))
-    );
+    try {
+      const appData = getApplications();
+      setApplications(appData);
+      const ranked = appData.filter((app) => app.rank !== undefined);
+      setRankedApplications(
+        ranked.sort((a, b) => (a.rank || 999) - (b.rank || 999))
+      );
+    } catch (error) {
+      console.error("Error loading applications:", error);
+      setApplications([]);
+      setRankedApplications([]);
+    }
   };
 
   const filteredApplications = useMemo(() => {
@@ -126,6 +139,8 @@ export const useApplicationManagement = () => {
     applications,
     selectedCourse,
     setSelectedCourse,
+    selectedRankingCourse,
+    setSelectedRankingCourse,
     selectedApplication,
     setSelectedApplication,
     comment,
