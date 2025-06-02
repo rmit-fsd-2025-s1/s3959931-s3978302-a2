@@ -47,10 +47,16 @@ const RankedCandidates: React.FC<RankedCandidatesProps> = ({
           <label htmlFor="rankingCourseFilter">Filter by Course:</label>
           <select
             id="rankingCourseFilter"
-            value={selectedCourse}
+            value={
+              selectedCourse ||
+              (availableCourses.length > 0 ? availableCourses[0].code : "")
+            }
             onChange={(e) => onCourseChange?.(e.target.value)}
             className={styles.filterSelect}
           >
+            {availableCourses.length === 0 && (
+              <option value="">No courses available</option>
+            )}
             {availableCourses.map((course) => (
               <option key={course.code} value={course.code}>
                 {course.code} - {course.name}

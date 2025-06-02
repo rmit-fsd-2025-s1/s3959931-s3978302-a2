@@ -125,7 +125,8 @@ const TutorDashboardPage: React.FC = () => {
           type={successToast.type}
           visible={successToast.visible}
           onClose={hideSuccess}
-          variant="inline"
+          variant="toast"
+          position="bottom-left"
           autoClose={true}
           autoCloseDelay={5000}
         />
@@ -135,7 +136,8 @@ const TutorDashboardPage: React.FC = () => {
           type={errorToast.type}
           visible={errorToast.visible}
           onClose={hideError}
-          variant="inline"
+          variant="toast"
+          position="bottom-left"
           autoClose={false}
         />
 

@@ -219,7 +219,9 @@ const LecturerDashboardPage: React.FC = () => {
                   onMoveUp={handleMoveUp}
                   onMoveDown={handleMoveDown}
                   onRemove={handleRemoveFromRanking}
+                  showCourseFilter={true}
                   onCourseChange={setSelectedRankingCourse}
+                  availableCourses={availableCourses}
                 />
               </motion.div>
             )}
