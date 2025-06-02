@@ -1,0 +1,132 @@
+/* Dashboard Header */
+.dashboardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 4.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 100%
+  );
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboardTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.dashboardSubtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+/* Quick Stats Grid */
+.quickStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Stat Card Styles */
+.statCard {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+}
+
+.statIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.statIcon.totalIcon {
+  background-color: var(--stat-icon-total-bg);
+  color: var(--stat-icon-total-color);
+}
+
+.statIcon.selectedIcon {
+  background-color: var(--stat-icon-selected-bg);
+  color: var(--stat-icon-selected-color);
+}
+
+.statIcon.pendingIcon {
+  background-color: var(--stat-icon-pending-bg);
+  color: var(--stat-icon-pending-color);
+}
+
+.statIcon.rateIcon {
+  background-color: var(--stat-icon-rate-bg);
+  color: var(--stat-icon-rate-color);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+/* Dark mode adjustments */
+.dark .dashboardHeader {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 100%
+  );
+}

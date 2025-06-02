@@ -1,0 +1,562 @@
+.statsVisualizationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.emptyStats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  min-height: 300px;
+}
+
+.emptyStatsIcon {
+  color: var(--color-text-secondary);
+  opacity: 0.3;
+  margin-bottom: 1.5rem;
+}
+
+.emptyStatsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyStatsText {
+  color: var(--color-text-secondary);
+}
+
+.statsHeader {
+  margin-bottom: 1rem;
+}
+
+.statsSummaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.summaryCard {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.summaryCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.summaryIcon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+}
+
+.summaryIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.summaryIcon.totalIcon {
+  background-color: var(--stat-icon-total-bg);
+  color: var(--stat-icon-total-color);
+}
+
+.totalIcon {
+  background-color: var(--stat-icon-total-bg);
+  color: var(--stat-icon-total-color);
+}
+
+.summaryIcon.selectedIcon {
+  background-color: var(--stat-icon-selected-bg);
+  color: var(--stat-icon-selected-color);
+}
+
+.selectedIcon {
+  background-color: var(--stat-icon-selected-bg);
+  color: var(--stat-icon-selected-color);
+}
+
+.summaryIcon.pendingIcon {
+  background-color: var(--stat-icon-pending-bg);
+  color: var(--stat-icon-pending-color);
+}
+
+.pendingIcon {
+  background-color: var(--stat-icon-pending-bg);
+  color: var(--stat-icon-pending-color);
+}
+
+.summaryIcon.rateIcon {
+  background-color: var(--stat-icon-rate-bg);
+  color: var(--stat-icon-rate-color);
+}
+
+.rateIcon {
+  background-color: var(--stat-icon-rate-bg);
+  color: var(--stat-icon-rate-color);
+}
+
+.summaryContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.summaryValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.summaryDesc {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+
+.statsChartsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.statsChartCard {
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.statsChartCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.chartTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.pieChartContainer,
+.barChartContainer {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.customTooltip {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltipValue {
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.chartStats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+.chartStatItem {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.chartStatItem.selected {
+  background-color: var(--color-success-light);
+}
+.chartStatItem.pending {
+  background-color: var(--color-warning-light);
+}
+
+.chartStatItem .statValue {
+  color: var(--color-primary);
+} /* Default, can be overridden */
+.chartStatItem.selected .statValue {
+  color: var(--color-success);
+}
+.chartStatItem.pending .statValue {
+  color: var(--color-warning);
+}
+
+.statTitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.statDesc {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+
+.chartInfo {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.topApplicant {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.infoLabel {
+  font-weight: 500;
+}
+.infoValue {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.infoCount {
+  color: var(--color-text-secondary);
+}
+.noData {
+  font-style: italic;
+}
+
+.statsInsights {
+  background-color: var(--color-bg-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.insightsTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.insightsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.trendChart,
+.skillsDistribution {
+  background-color: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.trendChart h4,
+.skillsDistribution h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.insightsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.insightItem {
+  display: flex;
+  align-items: flex-start;
+  background-color: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.insightContent h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.insightContent p {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.insightIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: white;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.insightIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.insightText {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.insightText strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.dark .summaryCard,
+.dark .statsChartCard,
+.dark .statsInsights,
+.dark .trendChart,
+.dark .skillsDistribution {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border);
+}
+
+.dark .insightItem {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.dark .customTooltip {
+  background-color: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Recharts specific overrides, if needed, might be better in global styles */
+/* :global(.recharts-legend-item-text) { color: var(--color-text-primary) !important; } */
+/* :global(.recharts-cartesian-axis-tick-value) { fill: var(--color-text-secondary) !important; } */
+/* :global(.recharts-cartesian-grid-horizontal line), :global(.recharts-cartesian-grid-vertical line) { stroke: var(--color-border) !important; } */
+
+@media (max-width: 768px) {
+  .statsChartsContainer,
+  .insightsContent {
+    grid-template-columns: 1fr;
+  }
+  .chartStats {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .chartStatItem {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.lineChartContainer {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Ensure skillsListContainer has the chart styling */
+.skillsListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.skillsListContainer h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.skillStatItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.skillStatItem:hover {
+  background-color: var(--color-bg-hover);
+  transform: translateY(-1px);
+}
+
+.skillName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.skillCount {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 80px;
+}
+
+.skillCount span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  min-width: 20px;
+  text-align: right;
+}
+
+.skillBar {
+  height: 4px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  min-width: 40px;
+  transition: width 0.3s ease;
+}
+
+/* Container styles moved from dashboard */
+.analyticsContainer {
+  background-color: var(--color-bg-primary);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+}
+
+.analyticsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.analyticsContent {
+  min-height: 300px;
+}
+
+/* Dark mode for container styles */
+.dark .analyticsContainer {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border);
+}
+
+.dark .analyticsTitle {
+  color: var(--color-text-primary);
+}
+
+/* Icon size classes for consistency */
+.iconLarge {
+  width: 48px;
+  height: 48px;
+}
+
+.iconMedium {
+  width: 24px;
+  height: 24px;
+}
+
+.iconSmall {
+  width: 20px;
+  height: 20px;
+}
+
+/* Additional styles for detailed chart stats */
+.statDetails {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statDetailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.detailLabel {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.detailValue {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.detailBadge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.675rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.detailBadge.success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.detailBadge.warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}

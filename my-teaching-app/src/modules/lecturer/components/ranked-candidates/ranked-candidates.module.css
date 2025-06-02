@@ -1,0 +1,295 @@
+.rankingsListContainer {
+  padding: 1rem 0;
+}
+
+.emptyRankings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.emptyRankingsIcon {
+  color: var(--color-primary);
+  opacity: 0.3;
+  margin-bottom: 1.5rem;
+}
+
+.emptyRankingsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyRankingsText {
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.emptyRankingsHelp {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  max-width: 250px;
+  text-align: center;
+}
+
+.rankedItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-primary);
+  margin-bottom: 0.75rem;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.rankedItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+.rankBadge {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-right: 1rem;
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+}
+
+.rankedInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.rankedName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rankedCourses {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.rankedSkills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rankedSkill {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.moreSkills {
+  /* Assuming this is the same as in applicant-list */
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+}
+
+.rankedActions {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: 1rem;
+}
+
+.moveActions {
+  display: flex;
+  gap: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.rankBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text-secondary);
+}
+
+.rankBtn svg {
+  width: 140px;
+  height: 140px;
+}
+
+.moveUpBtn:hover,
+.moveDownBtn:hover {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--color-primary);
+}
+
+.removeBtn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.rankingsNote {
+  /* Copied from original file */
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(249, 115, 22, 0.05);
+  border-radius: 0.5rem;
+}
+
+.noteIcon {
+  /* Copied from original file */
+  width: 16px;
+  height: 16px;
+  margin-right: 0.5rem;
+  color: var(--color-primary);
+}
+
+.dark .rankedItem {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.dark .rankedItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .rankingsNote {
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+/* Container and layout styles moved from dashboard */
+.rankingsContainer {
+  background-color: var(--color-bg-primary);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+}
+
+.rankingsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.courseFilter {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.courseFilter label {
+  font-weight: 500;
+}
+
+.filterNote {
+  background-color: var(--color-info-light, rgba(59, 130, 246, 0.1));
+  border-left: 4px solid var(--color-info, #3b82f6);
+  color: var(--color-info-dark, #1e40af);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.noteIcon {
+  width: 16px;
+  height: 16px;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.rankingsList {
+  min-height: 200px;
+}
+
+/* Dark mode for container styles */
+.dark .rankingsContainer {
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border);
+}
+
+.dark .rankingsTitle {
+  color: var(--color-text-primary);
+}
+
+.dark .filterNote {
+  background-color: var(--color-info-dark-bg, rgba(59, 130, 246, 0.15));
+  color: var(--color-info-light, #60a5fa);
+}
+
+.dark .noteIcon {
+  color: var(--color-info-light, #60a5fa);
+}
+
+/* Filter select styling moved from dashboard */
+.filterSelect {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-width: 140px;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="m2 0-2 2h4zm0 5 2-2h-4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.65em auto;
+  padding-right: 2.5rem;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light, rgba(249, 115, 22, 0.1));
+}
+
+.filterSelect::-ms-expand {
+  display: none;
+}
+
+.dark .filterSelect {
+  background-color: var(--color-bg-secondary);
+}

@@ -1,0 +1,191 @@
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import styles from "./toast.module.css";
+
+interface ToastProps {
+  message: string;
+  visible: boolean;
+  type?: "success" | "error" | "info" | "warning";
+  onClose: () => void;
+  variant?: "toast" | "inline";
+  position?: "bottom-left" | "top-right" | "top-center" | "bottom-center";
+  autoClose?: boolean;
+  autoCloseDelay?: number;
+  showCloseButton?: boolean;
+  className?: string;
+}
+
+const Toast: React.FC<ToastProps> = ({
+  message,
+  visible,
+  type = "success",
+  onClose,
+  variant = "toast",
+  position = "bottom-left",
+  autoClose = true,
+  autoCloseDelay = 3000,
+  showCloseButton = true,
+  className = "",
+}) => {
+  React.useEffect(() => {
+    if (visible && autoClose) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, autoCloseDelay);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, autoClose, autoCloseDelay, onClose]);
+
+  const icons = {
+    success: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+    ),
+    error: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    ),
+    info: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
+    warning: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+        />
+      </svg>
+    ),
+  };
+
+  // Build CSS classes dynamically
+  const getTypeClassName = () => {
+    switch (type) {
+      case "success": return styles.toastSuccess;
+      case "error": return styles.toastError;
+      case "info": return styles.toastInfo;
+      case "warning": return styles.toastWarning;
+      default: return styles.toastSuccess;
+    }
+  };
+
+  const containerClass = `
+    ${styles.toastNotification} 
+    ${getTypeClassName()} 
+    ${styles[variant]} 
+    ${variant === "toast" ? styles[position] : ""} 
+    ${className}
+  `.trim();
+
+  // Animation variants based on position and variant
+  const getAnimationVariants = () => {
+    if (variant === "inline") {
+      return {
+        initial: { opacity: 0, height: 0, marginBottom: 0 },
+        animate: { opacity: 1, height: "auto", marginBottom: "1rem" },
+        exit: { opacity: 0, height: 0, marginBottom: 0 },
+      };
+    }
+
+    // Toast variant animations based on position
+    const isLeft = position.includes("left");
+    const isRight = position.includes("right");
+    const isTop = position.includes("top");
+    const isBottom = position.includes("bottom");
+
+    return {
+      initial: { 
+        opacity: 0, 
+        x: isLeft ? -100 : isRight ? 100 : 0,
+        y: isTop ? -100 : isBottom ? 100 : 0 
+      },
+      animate: { opacity: 1, x: 0, y: 0 },
+      exit: { 
+        opacity: 0, 
+        x: isLeft ? -100 : isRight ? 100 : 0,
+        y: isTop ? -100 : isBottom ? 100 : 0 
+      },
+    };
+  };
+
+  const animationVariants = getAnimationVariants();
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          className={containerClass}
+          initial={animationVariants.initial}
+          animate={animationVariants.animate}
+          exit={animationVariants.exit}
+          transition={{ duration: 0.3 }}
+        >
+          <div className={styles.toastIcon}>{icons[type]}</div>
+          <div className={styles.toastContent}>{message}</div>
+          {showCloseButton && (
+            <button
+              className={styles.toastClose}
+              onClick={onClose}
+              aria-label="Close toast"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default Toast;

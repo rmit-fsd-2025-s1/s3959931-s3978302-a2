@@ -6,19 +6,19 @@ Repository Link: https://github.com/rmit-fsd-2025-s1/s3959931-s3978302-a1
 
 ## Features
 
--   User authentication (login/registration)
--   Course browsing for tutor applicants
--   Display of lecturer information
--   Application submission system for tutor/lab assistant roles
--   Uses animations (`framer-motion`) and data visualization (`recharts`).
--   Lecturer dashboard (applicant lists, details, select and rank applicants, stats visualization)
+- User authentication (login/registration)
+- Course browsing for tutor applicants
+- Display of lecturer information
+- Application submission system for tutor/lab assistant roles
+- Uses animations (`framer-motion`) and data visualization (`recharts`).
+- Lecturer dashboard (applicant lists, details, select and rank applicants, stats visualization)
 
 ## Getting Started
 
 ### Prerequisites
 
--   Node.js (Check `.nvmrc` or `package.json` engines field if available, otherwise recommend latest LTS)
--   npm, yarn, pnpm, or bun
+- Node.js (Check `.nvmrc` or `package.json` engines field if available, otherwise recommend latest LTS)
+- npm, yarn, pnpm, or bun
 
 ### Installation
 
@@ -58,10 +58,10 @@ The main page can be found at `my-teaching-app/src/pages/index.tsx`.
 
 In the `my-teaching-app` directory, you can run several commands:
 
--   `npm run dev`: Starts the development server.
--   `npm run build`: Builds the application for production usage.
--   `npm run start`: Starts a production server.
--   `npm run lint`: Runs the linter.
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the application for production usage.
+- `npm run start`: Starts a production server.
+- `npm run lint`: Runs the linter.
 
 ## Deployment
 

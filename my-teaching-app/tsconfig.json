@@ -16,8 +16,19 @@
     "types": ["jest"], // Explicitly include Jest types
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.setup.js"], // Explicitly include setup file
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "jest.setup.js",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ], // Explicitly include setup file
   "exclude": ["node_modules"]
 }

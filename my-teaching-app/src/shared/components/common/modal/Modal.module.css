@@ -1,0 +1,194 @@
+/* ======== MODAL STYLES ======== */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modalOverlayActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modalContainer {
+  background-color: var(--color-bg-primary);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.modalOverlayActive .modalContainer {
+  transform: scale(1);
+}
+
+.modalImageSection {
+  width: 40%;
+  position: relative;
+  overflow: hidden;
+}
+
+.modalImageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.modalImageContainer .lecturerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modalDecoration {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  top: -30px;
+  right: -150px;
+  z-index: 0;
+}
+
+.modalContent {
+  width: 60%;
+  padding: 3rem;
+  position: relative;
+}
+
+.modalClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.modalClose:hover {
+  transform: rotate(90deg);
+}
+
+.modalTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.modalSubtitle {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.modalText {
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.modalInfoList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.modalInfoItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.modalInfoIcon {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: var(--color-primary);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.modalContactBtn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.modalContactBtn:hover {
+  background-color: #e86207;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+  .modalContainer {
+    flex-direction: column;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modalImageSection {
+    width: 100%;
+    height: 250px;
+  }
+
+  .modalContent {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 1.5rem;
+  }
+
+  .modalImageSection {
+    height: 200px;
+  }
+}

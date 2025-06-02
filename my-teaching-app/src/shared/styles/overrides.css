@@ -1,0 +1,14 @@
+/* Override Tailwind focus ring styles */
+*:focus {
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+  --tw-ring-inset-shadow: none !important;
+  box-shadow: none !important;
+}
+
+textarea:focus {
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+  --tw-ring-inset-shadow: none !important;
+  box-shadow: none !important;
+}

@@ -1,0 +1,27 @@
+/* ======== CORE/GLOBAL STYLES ======== */
+/* This is the main entry point for all core/global styles */
+
+@import "tailwindcss/preflight"; /* Corrected Tailwind base import */
+@tailwind utilities;
+
+/* Core Foundation */
+@import "./variables.css"; /* CSS custom properties */
+@import "./base.css"; /* Consolidated base styles, animations, and layout components */
+@import "./global/animations.css";
+@import "./global/utilities.css";
+
+/* Themes */
+@import "./themes/light.css";
+@import "./themes/dark.css";
+@import "./themes/lecturer-theme.css";
+
+/* Framework Overrides & Global Essential */
+@import "./overrides.css"; /* Framework overrides */
+
+/* 
+  Removed responsive.css from critical path - it will be loaded lazily
+  to improve initial page load performance. The 9.9KB file was causing
+  delays in the critical rendering path.
+  
+  Component-specific styles should be handled by their respective CSS Modules.
+*/

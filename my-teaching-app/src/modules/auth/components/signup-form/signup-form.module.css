@@ -1,0 +1,287 @@
+/* Styles adapted from original authentication.css */
+/* Copied from signin-form.module.css as structure is similar */
+.formContainer {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.form {
+  background-color: var(--color-bg-primary);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-border);
+  position: relative;
+  z-index: 2;
+}
+
+.dark .form {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Title styling */
+.title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+}
+
+/* Input container styling */
+.inputContainer {
+  margin-bottom: 1rem;
+}
+
+.passwordContainer {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.inputField {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin: 0.7rem 0;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  border-radius: 25px;
+  outline: none;
+  transition: all 0.3s ease;
+  color: var(--color-text-primary);
+}
+
+.inputField:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  background-color: var(--color-bg-primary);
+}
+
+/* Password toggle button */
+.passwordToggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.passwordToggle:hover {
+  color: var(--color-text-primary);
+}
+
+.icon {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+/* Submit button container */
+.submitContainer {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.submitButton {
+  width: auto;
+  min-width: 180px;
+  padding: 0.6rem 2.5rem;
+  margin: 2.5rem auto 0;
+  display: block;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.submitButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(249, 115, 22, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
+}
+
+.passwordStrengthMeter {
+  height: 4px;
+  margin: 0.5rem 0 0.25rem;
+  display: flex;
+  width: 100%;
+  gap: 4px;
+}
+
+.passwordStrengthMeter .segment {
+  height: 100%;
+  flex: 1;
+  border-radius: 2px;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
+}
+
+.passwordStrengthText {
+  color: #ef4444;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+  margin-bottom: 0.75rem;
+}
+
+.veryWeak .segment:nth-child(1) {
+  background-color: #ef4444;
+}
+.veryWeakText {
+  color: #ef4444;
+}
+
+.weak .segment:nth-child(1),
+.weak .segment:nth-child(2) {
+  background-color: #f97316;
+}
+.weakText {
+  color: #f97316;
+}
+
+.medium .segment:nth-child(1),
+.medium .segment:nth-child(2),
+.medium .segment:nth-child(3) {
+  background-color: #10b981;
+}
+.mediumText {
+  color: #10b981;
+}
+
+.strong .segment {
+  background-color: #10b981;
+}
+.strongText {
+  color: #10b981;
+}
+
+/* Role section styling */
+.roleSection {
+  margin-bottom: 1.5rem;
+}
+
+.roleLabel {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.roleToggleContainer {
+  display: flex;
+  background-color: var(--color-bg-secondary);
+  border-radius: 25px;
+  padding: 0.25rem;
+}
+
+.roleBtn {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  border: none;
+  border-radius: 25px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.roleBtn.active {
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+}
+
+/* Link section styling */
+.linkSection {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.linkText {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.link {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+  text-align: center;
+}
+
+.alertError {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  color: #b91c1c;
+}
+
+.alertSuccess {
+  background-color: #dcfce7;
+  border: 1px solid #22c55e;
+  color: #166534;
+}
+
+/* Added alertInfo for signup placeholder */
+.alertInfo {
+  background-color: #dbeafe;
+  border: 1px solid #3b82f6;
+  color: #1d4ed8;
+}
+
+/* Enhanced keyframe animation for pulse */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.25;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
