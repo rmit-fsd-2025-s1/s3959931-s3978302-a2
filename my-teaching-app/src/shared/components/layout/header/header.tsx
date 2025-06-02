@@ -173,13 +173,13 @@ const Header: React.FC = () => {
             <div className={styles.authButtons}>
               <Link
                 href="/signin"
-                className={`${styles.authButton} ${styles.authButtonSecondary}`}
+                className={`${styles.authButton} ${styles.authButtonSecondary} ${pathname === "/signin" ? styles.active : ""}`}
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className={`${styles.authButton} ${styles.authButtonPrimary}`}
+                className={`${styles.authButton} ${styles.authButtonPrimary} ${pathname === "/signup" ? styles.active : ""}`}
               >
                 Sign Up
               </Link>
