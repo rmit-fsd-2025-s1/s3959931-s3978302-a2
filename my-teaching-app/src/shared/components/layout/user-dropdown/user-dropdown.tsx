@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./user-dropdown.module.css";
 
 export interface UserDropdownProps {
@@ -44,6 +45,20 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
       }
 
       return `/avatars/avatar-${(emailHash % 12) + 1}.jpg`;
+    }
+  };
+
+  // Function to get display role
+  const getDisplayRole = () => {
+    switch (user.role) {
+      case "candidate":
+        return "Candidate";
+      case "lecturer":
+        return "Lecturer";
+      case "admin":
+        return "Admin";
+      default:
+        return user.role;
     }
   };
 
@@ -116,7 +131,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
                 )}
               </h3>
               <p className={styles.userEmail}>{user.email}</p>
-              <div className={styles.userRole}>{user.role}</div>
+              <div className={styles.userRole}>{getDisplayRole()}</div>
             </div>
             <button
               className={styles.closeButton}
@@ -139,6 +154,31 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
           </div>
 
           <div className={styles.dropdownContent}>
+            {/* Profile Navigation */}
+            <div className={styles.menuSection}>
+              <Link
+                href="/profile"
+                className={styles.menuItem}
+                onClick={() => setIsOpen(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={styles.menuIcon}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                View Profile
+              </Link>
+            </div>
+
             {/* Actions Row - Dark Mode Toggle and Sign Out on same row */}
             <div className={styles.actionsRow}>
               {/* Theme Toggle */}

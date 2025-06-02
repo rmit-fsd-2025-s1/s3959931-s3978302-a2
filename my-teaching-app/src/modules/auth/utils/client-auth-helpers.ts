@@ -8,7 +8,7 @@ export const validateRoleSpecificEmail = (
 ): boolean => {
   const emailLowercase = email.toLowerCase();
   if (role === "tutor") {
-    return emailLowercase.endsWith("@tutor.edu.au");
+    return emailLowercase.endsWith("@candidate.edu.au");
   } else if (role === "lecturer") {
     return emailLowercase.endsWith("@lecturer.edu.au");
   }

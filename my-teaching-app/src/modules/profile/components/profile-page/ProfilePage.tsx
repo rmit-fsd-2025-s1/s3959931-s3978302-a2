@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { AuthService } from "../../../../shared/services/authService";
 import { User, UserType } from "../../../../shared/types/user";
 import { useAuth } from "../../../auth/hooks/useAuth";
@@ -69,6 +70,21 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  // Function to get avatar path - same logic as user dropdown
+  const getAvatarPath = (userData: User) => {
+    // Generate a consistent avatar number based on email
+    const emailHash = userData.email
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+    // Use lecturer images if user is a lecturer
+    if (userData.userType === UserType.LECTURER) {
+      return `/lecturers/lecturer-${(emailHash % 4) + 1}.jpg`;
+    }
+
+    return `/avatars/avatar-${(emailHash % 12) + 1}.jpg`;
+  };
+
   if (isLoading) {
     return (
       <div className={styles.profileContainer}>
@@ -96,10 +112,13 @@ export const ProfilePage: React.FC = () => {
       <div className={styles.profileCard}>
         <div className={styles.profileHeader}>
           <div className={styles.profileAvatar}>
-            <span className={styles.avatarInitials}>
-              {user.firstName.charAt(0)}
-              {user.lastName.charAt(0)}
-            </span>
+            <Image
+              src={getAvatarPath(user)}
+              alt={`${user.firstName} ${user.lastName} avatar`}
+              width={80}
+              height={80}
+              className={styles.avatarImage}
+            />
           </div>
           <div className={styles.profileInfo}>
             <h1 className={styles.profileName}>

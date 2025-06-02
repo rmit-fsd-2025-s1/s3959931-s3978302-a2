@@ -191,9 +191,13 @@ describe("User Accounts Utilities", () => {
   // Test 7: Validate role-specific email validates emails correctly
   test("validateRoleSpecificEmail validates email formats correctly", () => {
     // Test tutor emails
-    expect(validateRoleSpecificEmail("valid@tutor.edu.au", "tutor")).toBe(true);
+    expect(validateRoleSpecificEmail("valid@candidate.edu.au", "tutor")).toBe(
+      true
+    );
     expect(validateRoleSpecificEmail("invalid@gmail.com", "tutor")).toBe(false);
-    expect(validateRoleSpecificEmail("test@TUTOR.EDU.AU", "tutor")).toBe(true); // Case insensitive
+    expect(validateRoleSpecificEmail("test@CANDIDATE.EDU.AU", "tutor")).toBe(
+      true
+    ); // Case insensitive
 
     // Test lecturer emails
     expect(validateRoleSpecificEmail("valid@lecturer.edu.au", "lecturer")).toBe(

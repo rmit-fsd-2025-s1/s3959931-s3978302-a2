@@ -82,8 +82,9 @@ export default function SignUpForm() {
       newErrors.email = "Please enter a valid email address";
     } else if (!validateRoleSpecificEmail(email, role)) {
       const expectedDomain =
-        role === "tutor" ? "@tutor.edu.au" : "@lecturer.edu.au";
-      newErrors.email = `${role.charAt(0).toUpperCase() + role.slice(1)} email must end with ${expectedDomain}`;
+        role === "tutor" ? "@candidate.edu.au" : "@lecturer.edu.au";
+      const roleDisplayName = role === "tutor" ? "Candidate" : "Lecturer";
+      newErrors.email = `${roleDisplayName} email must end with ${expectedDomain}`;
     }
 
     // Validate password strength
@@ -351,7 +352,7 @@ export default function SignUpForm() {
               className={`${styles.roleBtn} ${role === "tutor" ? styles.active : ""}`}
               onClick={() => setRole("tutor")}
             >
-              Tutor
+              Candidate
             </button>
             <button
               type="button"

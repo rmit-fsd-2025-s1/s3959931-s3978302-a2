@@ -71,7 +71,7 @@ const Header: React.FC = () => {
     if (!user) return "user";
     switch (user.userType) {
       case "candidate":
-        return "tutor";
+        return "candidate";
       case "lecturer":
         return "lecturer";
       case "admin":
@@ -121,7 +121,7 @@ const Header: React.FC = () => {
                 href="/tutor"
                 className={`${styles["nav-link"]} ${pathname === "/tutor" ? styles.active : ""}`}
               >
-                Tutors
+                Candidates
               </Link>
             )}
             {showLecturerLink && (
