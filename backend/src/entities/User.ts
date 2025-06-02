@@ -1,0 +1,113 @@
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToMany,
+    Index,
+} from "typeorm";
+import { CourseAssignment } from "./CourseAssignment";
+import { Application } from "./Application";
+import { SelectedCandidate } from "./SelectedCandidate";
+
+export enum UserType {
+    CANDIDATE = "candidate",
+    LECTURER = "lecturer",
+    ADMIN = "admin",
+}
+
+@Entity("users")
+@Index(["email"], { unique: true })
+export class User {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        unique: true,
+        nullable: false,
+    })
+    email: string;
+
+    @Column({
+        type: "varchar",
+        length: 255,
+        nullable: false,
+    })
+    password: string;
+
+    @Column({
+        type: "varchar",
+        length: 100,
+        nullable: false,
+    })
+    firstName: string;
+
+    @Column({
+        type: "varchar",
+        length: 100,
+        nullable: false,
+    })
+    lastName: string;
+
+    @Column({
+        type: "enum",
+        enum: UserType,
+        nullable: false,
+    })
+    userType: UserType;
+
+    @Column({
+        type: "varchar",
+        length: 20,
+        nullable: true,
+    })
+    phone?: string;
+
+    @Column({
+        type: "boolean",
+        default: false,
+    })
+    isBlocked: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    // Relationships
+    @OneToMany(
+        () => CourseAssignment,
+        (courseAssignment) => courseAssignment.lecturer
+    )
+    courseAssignments: CourseAssignment[];
+
+    @OneToMany(() => Application, (application) => application.candidate)
+    applications: Application[];
+
+    @OneToMany(
+        () => SelectedCandidate,
+        (selectedCandidate) => selectedCandidate.selectedBy
+    )
+    candidateSelections: SelectedCandidate[];
+
+    // Virtual properties
+    get fullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
+
+    get isCandidate(): boolean {
+        return this.userType === UserType.CANDIDATE;
+    }
+
+    get isLecturer(): boolean {
+        return this.userType === UserType.LECTURER;
+    }
+
+    get isAdmin(): boolean {
+        return this.userType === UserType.ADMIN;
+    }
+}
