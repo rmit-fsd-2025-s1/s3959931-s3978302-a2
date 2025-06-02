@@ -131,7 +131,7 @@ export const useAuth = () => {
     if (isLoading) {
       setIsLoading(false);
     }
-  }, [userData?.id, isLoggedIn, isLoading]);
+  }, [userData, isLoggedIn, isLoading]);
 
   const signOut = useCallback(() => {
     localStorage.removeItem("currentUser");
@@ -144,7 +144,6 @@ export const useAuth = () => {
     window.dispatchEvent(new Event("auth-change"));
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const invalidateAuthCache = useCallback(() => {
     clearCache();
     checkAuthState();
@@ -170,8 +169,7 @@ export const useAuth = () => {
       window.removeEventListener("auth-change", handleAuthChange);
       window.removeEventListener("storage", handleStorageChange);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [invalidateAuthCache]);
+  }, [checkAuthState, invalidateAuthCache]);
 
   // Memoize the return object to prevent unnecessary re-renders
   const authState = useMemo(

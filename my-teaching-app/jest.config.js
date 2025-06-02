@@ -17,8 +17,8 @@ const customJestConfig = {
   coverageProvider: "v8",
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   moduleNameMapper: {
-    // Handle module aliases (this will be automatically configured for you if you have a tsconfig.json or jsconfig.json)
-    // Example: '^@/components/(.*)$': '<rootDir>/components/$1',
+    // Handle module aliases - map @/ to src/
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   collectCoverage: true,
   coverageDirectory: "coverage",

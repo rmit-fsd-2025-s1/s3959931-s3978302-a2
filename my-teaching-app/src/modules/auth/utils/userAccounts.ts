@@ -176,19 +176,15 @@ export const userAccounts: UserAccount[] = [
 
 // Initialize user accounts in localStorage
 export const initializeUserAccounts = () => {
-  console.log("initializeUserAccounts called");
   if (typeof window !== "undefined") {
-    console.log("Window is defined, checking localStorage");
     // Check if accounts already exist
     const existingUsers = localStorage.getItem("users");
-    console.log("Existing users in localStorage:", existingUsers);
 
     // Check if we need to reinitialize (no users or users missing password fields)
     let needsUpdate = false;
 
     if (!existingUsers) {
       needsUpdate = true;
-      console.log("No existing users found, initializing with mock data");
     } else {
       // Check if existing users have password fields
       try {
@@ -198,25 +194,14 @@ export const initializeUserAccounts = () => {
         );
         if (!hasPasswordFields) {
           needsUpdate = true;
-          console.log(
-            "Existing users missing password fields, updating with new data"
-          );
         }
-      } catch (error) {
-        console.log("Error parsing existing users:", error);
+      } catch {
         needsUpdate = true;
-        console.log("Error parsing existing users, reinitializing");
       }
     }
 
     if (needsUpdate) {
-      console.log("userAccounts to be stored:", userAccounts);
       localStorage.setItem("users", JSON.stringify(userAccounts));
-      console.log("Users stored in localStorage successfully");
-    } else {
-      console.log(
-        "Users already exist in localStorage, skipping initialization"
-      );
     }
   }
 };

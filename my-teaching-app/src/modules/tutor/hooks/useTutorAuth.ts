@@ -97,14 +97,12 @@ export const useTutorAuth = () => {
     if (authLoading) return;
 
     if (!isLoggedIn || !userData) {
-      console.log("User not authenticated, redirecting to signin");
       redirect("/signin");
       return;
     }
 
     // Check if user has tutor role
     if (userData.role !== "tutor") {
-      console.log("User is not a tutor, redirecting to appropriate page");
       redirect(userData.role === "lecturer" ? "/lecturer" : "/");
       return;
     }

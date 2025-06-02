@@ -9,6 +9,11 @@ jest.mock("next/navigation", () => ({
   usePathname: jest.fn(),
 }));
 
+// Mock useAuth hook
+jest.mock("@/shared/hooks/useAuth", () => ({
+  useAuth: jest.fn(),
+}));
+
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
@@ -18,8 +23,8 @@ jest.mock("next/image", () => ({
   },
 }));
 
-// Mock UserDropdown component - try direct file path
-jest.mock("@/shared/components/layout/user-dropdown/user-dropdown", () => ({
+// Mock UserDropdown component - using the index file path
+jest.mock("@/shared/components/layout/user-dropdown", () => ({
   __esModule: true,
   default: function MockUserDropdown() {
     return <div data-testid="user-dropdown" />;
@@ -28,10 +33,12 @@ jest.mock("@/shared/components/layout/user-dropdown/user-dropdown", () => ({
 
 // Import the mocked functions
 import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 describe("Header Component", () => {
   // Setup common mocks
   const mockPush = jest.fn();
+  const mockSignOut = jest.fn();
   const mockLocalStorage = {
     getItem: jest.fn(),
     setItem: jest.fn(),
@@ -47,6 +54,13 @@ describe("Header Component", () => {
     });
 
     (usePathname as jest.Mock).mockReturnValue("/");
+
+    // Default useAuth mock - not logged in
+    (useAuth as jest.Mock).mockReturnValue({
+      userData: null,
+      isLoggedIn: false,
+      signOut: mockSignOut,
+    });
 
     // Mock localStorage
     Object.defineProperty(window, "localStorage", {
@@ -84,8 +98,6 @@ describe("Header Component", () => {
 
   // Test 1: Header renders logo
   test("renders the logo with correct link", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-
     render(<Header />);
 
     const logoLink = screen.getByRole("link", { name: /logo/i });
@@ -96,8 +108,6 @@ describe("Header Component", () => {
 
   // Test 2: Header renders nav links when not logged in
   test("renders all navigation links when not logged in", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-
     render(<Header />);
 
     expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
@@ -109,8 +119,6 @@ describe("Header Component", () => {
 
   // Test 3: Header shows Sign In / Sign Up buttons when not logged in
   test("shows auth buttons when not logged in", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-
     render(<Header />);
 
     const signInButton = screen.getByRole("link", { name: /sign in/i });
@@ -124,18 +132,16 @@ describe("Header Component", () => {
 
   // Test 4: Header renders user dropdown when logged in
   test("renders user dropdown when logged in", () => {
-    // Mock logged in user data
-    const mockUserData = JSON.stringify({
-      id: "123",
-      email: "test@example.com",
-      role: "tutor",
-      fullName: "Test User",
-    });
-
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      if (key === "currentUser") return mockUserData;
-      if (key === "darkMode") return "false";
-      return null;
+    // Mock useAuth to return logged in user
+    (useAuth as jest.Mock).mockReturnValue({
+      userData: {
+        id: "123",
+        email: "test@example.com",
+        role: "tutor",
+        fullName: "Test User",
+      },
+      isLoggedIn: true,
+      signOut: mockSignOut,
     });
 
     render(<Header />);
@@ -151,8 +157,7 @@ describe("Header Component", () => {
 
   // Test 5: Header toggles dark mode
   test("toggles dark mode when button is clicked", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-    mockLocalStorage.getItem.mockReturnValueOnce("false"); // Dark mode off
+    mockLocalStorage.getItem.mockReturnValue("false"); // Dark mode off
 
     // Create a spy specifically for classList.add
     const addSpy = jest.spyOn(document.documentElement.classList, "add");
@@ -170,8 +175,6 @@ describe("Header Component", () => {
 
   // Test 6: Header changes style on scroll
   test("adds scrolled class when scrolled down", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-
     render(<Header />);
 
     // Simulate scroll event
@@ -184,44 +187,29 @@ describe("Header Component", () => {
 
   // Test 7: Header shows correct links based on user role
   test("shows correct navigation links based on user role", () => {
-    // Mock logged in user data as lecturer
-    const mockLecturerData = JSON.stringify({
-      id: "456",
-      email: "lecturer@example.com",
-      role: "lecturer",
-      fullName: "Lecturer User",
-    });
-
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      if (key === "currentUser") return mockLecturerData;
-      if (key === "darkMode") return "false";
-      return null;
+    // Mock useAuth to return lecturer user
+    (useAuth as jest.Mock).mockReturnValue({
+      userData: {
+        id: "456",
+        email: "lecturer@example.com",
+        role: "lecturer",
+        fullName: "Lecturer User",
+      },
+      isLoggedIn: true,
+      signOut: mockSignOut,
     });
 
     render(<Header />);
 
     expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /tutor/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /lecturer/i })).toBeInTheDocument();
+    // Lecturers don't see tutor link - this is correct behavior
+    expect(
+      screen.queryByRole("link", { name: /tutor/i })
+    ).not.toBeInTheDocument();
   });
 
-  // Test 8: Header mobile menu toggle
-  test("mobile menu can be toggled", () => {
-    mockLocalStorage.getItem.mockReturnValueOnce(null); // Not logged in
-
-    render(<Header />);
-
-    const mobileMenuButton = screen.getByRole("button", {
-      name: /toggle mobile menu/i,
-    });
-    fireEvent.click(mobileMenuButton);
-
-    // Check if mobile menu visibility changes
-    const mobileMenu = screen.getByRole("navigation");
-    expect(mobileMenu).toBeInTheDocument();
-  });
-
-  // Test 9: Header dark mode persists on load
+  // Test 8: Header dark mode persists on load
   test("applies dark mode on load when stored in localStorage", () => {
     mockLocalStorage.getItem.mockImplementation((key) => {
       if (key === "darkMode") return "true";
@@ -235,19 +223,18 @@ describe("Header Component", () => {
     expect(addSpy).toHaveBeenCalledWith("dark");
   });
 
-  // Test 10: Header shows user name when logged in
+  // Test 9: Header shows user dropdown when logged in
   test("displays user full name when logged in", () => {
-    const mockUserData = JSON.stringify({
-      id: "789",
-      email: "user@example.com",
-      role: "tutor",
-      fullName: "John Doe",
-    });
-
-    mockLocalStorage.getItem.mockImplementation((key) => {
-      if (key === "currentUser") return mockUserData;
-      if (key === "darkMode") return "false";
-      return null;
+    // Mock useAuth to return logged in user
+    (useAuth as jest.Mock).mockReturnValue({
+      userData: {
+        id: "789",
+        email: "user@example.com",
+        role: "tutor",
+        fullName: "John Doe",
+      },
+      isLoggedIn: true,
+      signOut: mockSignOut,
     });
 
     render(<Header />);

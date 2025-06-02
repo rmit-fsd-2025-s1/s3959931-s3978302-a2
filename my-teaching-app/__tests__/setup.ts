@@ -39,12 +39,10 @@ jest.mock("framer-motion", () => ({
   AnimatePresence: {},
 }));
 
-// Setup to suppress console errors during tests (use with caution)
-/*
+// Setup to suppress console errors/warnings/logs during tests
 global.console = {
   ...console,
-  error: jest.fn(),
-  warn: jest.fn(),
+  log: jest.fn(), // Suppress console.log
+  error: jest.fn(), // Suppress console.error
+  warn: jest.fn(), // Suppress console.warn
 };
-*/
-console.log("Jest setup file loaded: __tests__/setup.ts");
