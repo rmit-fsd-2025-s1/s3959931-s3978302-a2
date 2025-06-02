@@ -1,11 +1,14 @@
 {
-  "name": "my-teaching-app",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:full": "concurrently \"npm run dev\" \"npm run dev --prefix ../backend\"",
     "build": "next build",
+    "build:full": "npm run build && npm run build --prefix ../backend",
     "start": "next start",
+    "start:full": "concurrently \"npm run start\" \"npm run start --prefix ../backend\"",
     "lint": "next lint",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "prettier --write ./**/*.{ts,tsx,css,md,json} --config ./.prettierrc.json",
@@ -38,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "babel-jest": "^29.7.0",
+    "concurrently": "^7.6.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.5",
     "eslint-config-prettier": "^10.1.5",
