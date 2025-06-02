@@ -1,4 +1,4 @@
-import type { CourseDetails } from "@/shared/types/course";
+import type { CourseDetails } from "@/shared/types/courseTypes";
 import { availableCourses } from "@/shared/data/courses";
 
 // Function to get random role - client-side display helper

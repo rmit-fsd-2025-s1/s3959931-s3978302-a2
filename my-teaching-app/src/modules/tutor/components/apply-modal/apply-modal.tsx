@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { CourseDetails } from "@/shared/types/course";
+import type { CourseDetails } from "@/shared/types/courseTypes";
 import type { Application as TutorApplication } from "@/shared/types/application";
 import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";

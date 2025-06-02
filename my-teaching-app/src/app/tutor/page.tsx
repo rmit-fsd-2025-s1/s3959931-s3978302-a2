@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import type { CourseDetails } from "@/shared/types/course";
+import type { CourseDetails } from "@/shared/types/courseTypes";
 import type { Application as TutorApplication } from "@/shared/types/application";
 import { saveApplicationToStorage } from "@/modules/tutor/utils/applicationDisplay.utils";
 import ApplyModal from "@/modules/tutor/components/apply-modal/apply-modal";

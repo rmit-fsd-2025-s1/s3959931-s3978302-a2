@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import type { CourseDetails } from "@/shared/types/course";
-import CourseCard from "@/modules/tutor/components/course-card/course-card";
+import type { CourseDetails } from "@/shared/types/courseTypes";
+import CourseCard from "../course-card/course-card";
 import styles from "./CourseGrid.module.css";
 
 interface CourseGridProps {

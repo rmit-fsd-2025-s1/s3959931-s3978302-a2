@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import type { CourseDetails } from "@/shared/types/course";
+import type { CourseDetails } from "@/shared/types/courseTypes";
 import { getCoursesWithDetails } from "@/modules/tutor/utils/courseHelpers";
 
 // Cache for courses data using sessionStorage

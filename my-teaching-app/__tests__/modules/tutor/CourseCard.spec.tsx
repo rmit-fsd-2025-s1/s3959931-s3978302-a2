@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import CourseCard from "@/modules/tutor/components/course-card/course-card";
-import { CourseDetails } from "@/shared/types/course";
+import { CourseDetails } from "@/shared/types/courseTypes";
 
 // Mock framer-motion to avoid issues in tests
 jest.mock("framer-motion", () => ({

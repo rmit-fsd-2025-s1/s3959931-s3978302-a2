@@ -1,5 +1,5 @@
 import React from "react";
-import type { CourseDetails } from "@/shared/types/course";
+import type { CourseDetails } from "@/shared/types/courseTypes";
 import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import { motion } from "framer-motion";
 import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";
