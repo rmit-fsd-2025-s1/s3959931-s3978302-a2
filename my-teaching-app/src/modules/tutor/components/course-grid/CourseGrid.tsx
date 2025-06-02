@@ -11,7 +11,7 @@ interface CourseGridProps {
   existingApplications: string[];
   searchQuery: string;
   activeFilter: "all" | "applied" | "available";
-  onApplyToourse: (course: CourseDetails) => void;
+  onApplyToCourse: (course: CourseDetails) => void;
 }
 
 const CourseGrid: React.FC<CourseGridProps> = ({
@@ -20,7 +20,7 @@ const CourseGrid: React.FC<CourseGridProps> = ({
   existingApplications,
   searchQuery,
   activeFilter,
-  onApplyToourse,
+  onApplyToCourse,
 }) => {
   // Animation variants
   const containerVariants = {
@@ -101,7 +101,7 @@ const CourseGrid: React.FC<CourseGridProps> = ({
         >
           <CourseCard
             course={course}
-            openApplyModal={onApplyToourse}
+            openApplyModal={onApplyToCourse}
             hasApplied={existingApplications.includes(course.code)}
           />
         </motion.div>

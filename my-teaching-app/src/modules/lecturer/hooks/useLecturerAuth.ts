@@ -1,29 +1,32 @@
 import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 export const useLecturerAuth = () => {
+  const { userData, isLoggedIn, isLoading } = useAuth();
   const [lecturerName, setLecturerName] = useState<string>("");
   const [currentLecturerId, setCurrentLecturerId] = useState<string>("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const user = localStorage.getItem("currentUser");
-      if (!user) {
-        redirect("/signin");
-        return;
-      }
-      const userData = JSON.parse(user);
-      if (userData.role !== "lecturer") {
-        redirect("/signin");
-        return;
-      }
-      setLecturerName(userData.fullName || "Lecturer");
-      setCurrentLecturerId(userData.id);
+    if (isLoading) return;
+
+    if (!isLoggedIn || !userData) {
+      redirect("/signin");
+      return;
     }
-  }, []);
+
+    if (userData.role !== "lecturer") {
+      redirect(userData.role === "tutor" ? "/tutor" : "/");
+      return;
+    }
+
+    setLecturerName(userData.fullName || "Lecturer");
+    setCurrentLecturerId(userData.id);
+  }, [userData, isLoggedIn, isLoading]);
 
   return {
     lecturerName,
     currentLecturerId,
+    isLoading,
   };
 };

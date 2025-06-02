@@ -40,4 +40,4 @@ const LecturerShowcase: React.FC<LecturerShowcaseProps> = ({
   );
 };
 
-export default LecturerShowcase;
+export default React.memo(LecturerShowcase);

@@ -3,63 +3,22 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { useAuth } from "@/shared/hooks/useAuth";
 import UserDropdown from "../user-dropdown";
 import buttonStyles from "../../common/Button/Button.module.css";
 import styles from "./header.module.css";
 
-interface UserData {
-  id: string;
-  email: string;
-  role: "tutor" | "lecturer" | "user"; // Added user for default case
-  fullName: string;
-  bio?: string;
-  skills?: string[];
-  academicCredentials?: string;
-  avatarPath?: string;
-}
-
 const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState<
-    "tutor" | "lecturer" | "user" | null
-  >(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const { userData, isLoggedIn, signOut } = useAuth();
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isThemeToggleRemoving, setIsThemeToggleRemoving] = useState(false);
   const [isThemeToggleAdding, setIsThemeToggleAdding] = useState(false);
 
-  // Function to check and update authentication state
-  const checkAuthState = () => {
-    if (typeof window !== "undefined") {
-      const user = localStorage.getItem("currentUser");
-      if (user) {
-        try {
-          const userDataParsed = JSON.parse(user);
-          setIsLoggedIn(true);
-          setUserRole(userDataParsed.role || "user");
-          setUserData(userDataParsed);
-        } catch (e) {
-          console.error("Failed to parse user data from localStorage:", e);
-          setIsLoggedIn(false);
-          setUserRole(null);
-          setUserData(null);
-          localStorage.removeItem("currentUser"); // Clear corrupted data
-        }
-      } else {
-        setIsLoggedIn(false);
-        setUserRole(null);
-        setUserData(null);
-      }
-    }
-  };
-
   useEffect(() => {
-    // Initial check on component mount
-    checkAuthState();
-
     if (typeof window !== "undefined") {
       const darkModePreference = localStorage.getItem("darkMode") === "true";
       setIsDarkMode(darkModePreference);
@@ -74,36 +33,15 @@ const Header: React.FC = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    // Listen for storage events (fired when localStorage changes in other tabs/windows)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "currentUser") {
-        checkAuthState();
-      }
-    };
-
-    // Listen for custom events (for same-window localStorage changes)
-    const handleAuthChange = () => {
-      checkAuthState();
-    };
-
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("auth-change", handleAuthChange);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("auth-change", handleAuthChange);
     };
   }, []);
 
   const handleSignOut = () => {
-    localStorage.removeItem("currentUser");
-    setIsLoggedIn(false);
-    setUserRole(null);
-    setUserData(null);
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new Event("auth-change"));
+    signOut();
     router.push("/");
   };
 
@@ -129,8 +67,8 @@ const Header: React.FC = () => {
     }
   }, [isLoggedIn]);
 
-  const showTutorLink = !isLoggedIn || userRole === "tutor";
-  const showLecturerLink = !isLoggedIn || userRole === "lecturer";
+  const showTutorLink = !isLoggedIn || userData?.role === "tutor";
+  const showLecturerLink = !isLoggedIn || userData?.role === "lecturer";
 
   return (
     <header
@@ -264,4 +202,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

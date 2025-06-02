@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { lecturers } from "@/modules/lecturer/utils/lecturerDisplay.utils";
 import modalStyles from "@/shared/components/common/modal/Modal.module.css";
@@ -9,28 +9,16 @@ import LecturerShowcase from "@/modules/home/components/lecturer-showcase/Lectur
 import Modal from "@/shared/components/common/modal/Modal";
 import type { Lecturer } from "@/shared/types/lecturer";
 import HeroSection from "@/modules/home/components/hero-section/HeroSection";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 export default function HomePage() {
   const [activeLecturer, setActiveLecturer] = useState<Lecturer | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
 
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      if (typeof window !== "undefined") {
-        const user = localStorage.getItem("currentUser");
-        if (user) {
-          const userData = JSON.parse(user);
-          setIsLoggedIn(true);
-          setUserRole(userData.role);
-        } else {
-          setIsLoggedIn(false);
-          setUserRole(null);
-        }
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  // Use centralized auth
+  const { userData, isLoggedIn } = useAuth();
+
+  // Derive user role from centralized auth
+  const userRole = userData?.role || null;
 
   const handleOpenLecturerModal = (lecturerId: string): void => {
     const lecturer = lecturers.find((l) => l.id === lecturerId);

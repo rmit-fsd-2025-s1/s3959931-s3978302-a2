@@ -9,6 +9,7 @@ import RankedCandidates from "@/modules/lecturer/components/ranked-candidates/ra
 import ApplicantStatsVisualization from "@/modules/lecturer/components/applicant-stats-visualization/applicant-stats-visualization";
 import Toast from "@/shared/components/common/toast/toast";
 import SearchInput from "@/shared/components/common/search-input/SearchInput";
+import LoadingWrapper from "@/shared/components/common/loading-wrapper/LoadingWrapper";
 import { useLecturerAuth } from "@/modules/lecturer/hooks/useLecturerAuth";
 import { useApplicationManagement } from "@/modules/lecturer/hooks/useApplicationManagement";
 import { useApplicationActions } from "@/modules/lecturer/hooks/useApplicationActions";
@@ -21,7 +22,11 @@ type TabType = "applications" | "rankings" | "stats";
 
 const LecturerDashboardPage: React.FC = () => {
   // Authentication
-  const { lecturerName, currentLecturerId } = useLecturerAuth();
+  const {
+    lecturerName,
+    currentLecturerId,
+    isLoading: authLoading,
+  } = useLecturerAuth();
 
   // Application management
   const {
@@ -45,6 +50,7 @@ const LecturerDashboardPage: React.FC = () => {
     handleSelectApplication,
     statistics,
     saveApplication,
+    isInitialized,
   } = useApplicationManagement();
 
   // UI state
@@ -99,6 +105,21 @@ const LecturerDashboardPage: React.FC = () => {
       setSelectedRankingCourse(availableCourses[0].code);
     }
   }, [activeTab, selectedRankingCourse, setSelectedRankingCourse]);
+
+  // Show loading state during authentication or data initialization
+  if (authLoading || !isInitialized) {
+    return (
+      <main className={`flex-grow pt-24 ${styles.lecturerDashboardContainer}`}>
+        <LoadingWrapper
+          isLoading={true}
+          loadingMessage="Loading lecturer dashboard..."
+          minHeight="60vh"
+        >
+          <div />
+        </LoadingWrapper>
+      </main>
+    );
+  }
 
   return (
     <>
@@ -198,15 +219,13 @@ const LecturerDashboardPage: React.FC = () => {
                   onMoveUp={handleMoveUp}
                   onMoveDown={handleMoveDown}
                   onRemove={handleRemoveFromRanking}
-                  showCourseFilter={true}
                   onCourseChange={setSelectedRankingCourse}
-                  availableCourses={availableCourses}
                 />
               </motion.div>
             )}
             {activeTab === "stats" && (
               <motion.div
-                className={styles.analyticsTab}
+                className={styles.statsTab}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
@@ -217,12 +236,15 @@ const LecturerDashboardPage: React.FC = () => {
           </div>
         </div>
       </main>
-      <Toast
-        message={toast.message}
-        visible={toast.visible}
-        type={toast.type}
-        onClose={() => setToast((prev) => ({ ...prev, visible: false }))}
-      />
+
+      {toast.visible && (
+        <Toast
+          message={toast.message}
+          visible={toast.visible}
+          type={toast.type}
+          onClose={() => setToast((prev) => ({ ...prev, visible: false }))}
+        />
+      )}
     </>
   );
 };

@@ -112,32 +112,29 @@ export default function SignInForm() {
             avatarPath = `/avatars/avatar-${tutorIndex}.jpg`;
           }
         }
-        localStorage.setItem(
-          "currentUser",
-          JSON.stringify({
-            email: user.email,
-            role: user.role,
-            fullName: user.fullName,
-            id: user.id,
-            avatarPath: avatarPath,
-          })
-        );
 
-        // Dispatch custom event to notify other components of auth state change
+        const userData = {
+          email: user.email,
+          role: user.role,
+          fullName: user.fullName,
+          id: user.id,
+          avatarPath: avatarPath,
+        };
+
+        localStorage.setItem("currentUser", JSON.stringify(userData));
+
         window.dispatchEvent(new Event("auth-change"));
 
         setSuccess("Sign in successful! Redirecting...");
+
         setTimeout(() => {
-          // TODO: Refactor routing
-          // if (user.role === "tutor") router.push("/tutor");
-          // else if (user.role === "lecturer") router.push("/lecturer");
-          redirect(`/${user.role}`); // Use Next.js redirect
-        }, 1000);
+          redirect(`/${user.role}`);
+        }, 500);
       } else {
         setError("Invalid email or password for selected role");
       }
       setIsLoading(false);
-    }, 1000);
+    }, 300);
   };
 
   const handleRoleChange = (newRole: "tutor" | "lecturer") => {

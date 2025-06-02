@@ -143,6 +143,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                       alt="User avatar"
                       width={36}
                       height={36}
+                      style={{ width: "36px", height: "36px" }}
+                      priority={i < 3} // Only prioritize first 3 images
                     />
                   </div>
                 ))}

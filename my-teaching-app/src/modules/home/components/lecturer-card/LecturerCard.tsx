@@ -15,10 +15,19 @@ const LecturerCard: React.FC<LecturerCardProps> = ({
   onOpenModal,
   imageIndex,
 }) => {
+  const handleCardClick = () => {
+    onOpenModal(lecturer.id);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onOpenModal(lecturer.id);
+  };
+
   return (
     <div
       className={`${styles.lecturerCard} lecturer${imageIndex + 1}`}
-      onClick={() => onOpenModal(lecturer.id)}
+      onClick={handleCardClick}
     >
       <div>
         <div className={styles.lecturerImageContainer}>
@@ -28,6 +37,7 @@ const LecturerCard: React.FC<LecturerCardProps> = ({
             width={200}
             height={200}
             className={styles.lecturerImage}
+            loading={imageIndex < 2 ? "eager" : "lazy"} // Prioritize first 2 images
           />
           <div className={styles.lecturerDecoration}></div>
         </div>
@@ -37,17 +47,11 @@ const LecturerCard: React.FC<LecturerCardProps> = ({
           {lecturer.specialization}
         </p>
       </div>
-      <button
-        className={styles.moreInfoBtn}
-        onClick={(e) => {
-          e.stopPropagation();
-          onOpenModal(lecturer.id);
-        }}
-      >
+      <button className={styles.moreInfoBtn} onClick={handleButtonClick}>
         More Information
       </button>
     </div>
   );
 };
 
-export default LecturerCard;
+export default React.memo(LecturerCard);

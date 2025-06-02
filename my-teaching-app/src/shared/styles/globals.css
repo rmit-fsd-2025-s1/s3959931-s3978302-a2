@@ -15,13 +15,13 @@
 @import "./themes/dark.css";
 @import "./themes/lecturer-theme.css";
 
-/* Framework Overrides & Global Responsive */
+/* Framework Overrides & Global Essential */
 @import "./overrides.css"; /* Framework overrides */
-@import "./responsive.css"; /* Global responsive utilities */
 
 /* 
-  Removed imports for component-specific styles like toast.css, timeline.css 
-  as they should be handled by their respective CSS Modules or page-specific modules.
-  Removed import for old core/styles/utilities.css; Tailwind handles most utilities.
-  Module-specific styles should be imported within their respective modules/pages.
+  Removed responsive.css from critical path - it will be loaded lazily
+  to improve initial page load performance. The 9.9KB file was causing
+  delays in the critical rendering path.
+  
+  Component-specific styles should be handled by their respective CSS Modules.
 */

@@ -112,4 +112,4 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({
   );
 };
 
-export default TimelineSection;
+export default React.memo(TimelineSection);

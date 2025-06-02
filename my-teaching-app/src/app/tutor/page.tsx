@@ -6,6 +6,7 @@ import type { Application as TutorApplication } from "@/shared/types/application
 import { saveApplicationToStorage } from "@/modules/tutor/utils/applicationDisplay.utils";
 import ApplyModal from "@/modules/tutor/components/apply-modal/apply-modal";
 import Toast from "@/shared/components/common/toast/toast";
+import LoadingWrapper from "@/shared/components/common/loading-wrapper/LoadingWrapper";
 import { useToast } from "@/shared/hooks/useNotification";
 import { useTutorAuth } from "@/modules/tutor/hooks/useTutorAuth";
 import { useCourseFiltering } from "@/modules/tutor/hooks/useCourseFiltering";
@@ -106,7 +107,10 @@ const TutorDashboardPage: React.FC = () => {
   };
 
   return (
-    <>
+    <LoadingWrapper
+      isLoading={isLoading}
+      loadingMessage="Loading tutor dashboard..."
+    >
       {/* Hero Section */}
       <TutorHeroSection
         totalCourses={courses.length}
@@ -145,12 +149,12 @@ const TutorDashboardPage: React.FC = () => {
 
         {/* Course Cards */}
         <CourseGrid
-          isLoading={isLoading}
+          isLoading={false} // We handle loading at the page level now
           filteredCourses={filteredCourses}
           existingApplications={existingApplications}
           searchQuery={searchQuery}
           activeFilter={activeFilter}
-          onApplyToourse={openApplyModal}
+          onApplyToCourse={openApplyModal}
         />
       </main>
 
@@ -162,7 +166,7 @@ const TutorDashboardPage: React.FC = () => {
         onSubmit={handleSubmitApplication}
         currentUserId={userData?.id || ""}
       />
-    </>
+    </LoadingWrapper>
   );
 };
 
