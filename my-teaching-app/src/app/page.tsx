@@ -9,16 +9,17 @@ import LecturerShowcase from "@/modules/home/components/lecturer-showcase/Lectur
 import Modal from "@/shared/components/common/modal/Modal";
 import type { Lecturer } from "@/shared/types/lecturer";
 import HeroSection from "@/modules/home/components/hero-section/HeroSection";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { WelcomeBanner } from "@/shared/components/WelcomeBanner";
 
 export default function HomePage() {
   const [activeLecturer, setActiveLecturer] = useState<Lecturer | null>(null);
 
-  // Use centralized auth
-  const { userData, isLoggedIn } = useAuth();
+  // Use new centralized AuthContext
+  const { user, isAuthenticated } = useAuth();
 
-  // Derive user role from centralized auth
-  const userRole = userData?.role || null;
+  // Convert user type to role for compatibility with existing components
+  const userRole = user?.userType || null;
 
   const handleOpenLecturerModal = (lecturerId: string): void => {
     const lecturer = lecturers.find((l) => l.id === lecturerId);
@@ -38,10 +39,13 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Welcome Banner for authenticated users */}
+      {isAuthenticated && user && <WelcomeBanner user={user} />}
+
       <main className="flex-grow pt-24">
         <HeroSection />
 
-        <TimelineSection isLoggedIn={isLoggedIn} userRole={userRole} />
+        <TimelineSection isLoggedIn={isAuthenticated} userRole={userRole} />
 
         <LecturerShowcase
           lecturers={lecturers}

@@ -3,15 +3,14 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import UserDropdown from "../user-dropdown";
-import buttonStyles from "../../common/Button/Button.module.css";
 import styles from "./header.module.css";
 
 const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { userData, isLoggedIn, signOut } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -41,7 +40,7 @@ const Header: React.FC = () => {
   }, []);
 
   const handleSignOut = () => {
-    signOut();
+    logout();
     router.push("/");
   };
 
@@ -58,32 +57,47 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       setIsThemeToggleRemoving(true);
       setTimeout(() => setIsThemeToggleRemoving(false), 300);
     } else {
       setIsThemeToggleAdding(true);
       setTimeout(() => setIsThemeToggleAdding(false), 300);
     }
-  }, [isLoggedIn]);
+  }, [isAuthenticated]);
 
-  const showTutorLink = !isLoggedIn || userData?.role === "tutor";
-  const showLecturerLink = !isLoggedIn || userData?.role === "lecturer";
+  // Convert user type to role for compatibility
+  const getUserRole = () => {
+    if (!user) return "user";
+    switch (user.userType) {
+      case "candidate":
+        return "tutor";
+      case "lecturer":
+        return "lecturer";
+      case "admin":
+        return "admin";
+      default:
+        return "user";
+    }
+  };
+
+  const showTutorLink = !isAuthenticated || user?.userType === "candidate";
+  const showLecturerLink = !isAuthenticated || user?.userType === "lecturer";
 
   return (
     <header
       className={`${styles["main-header"]} ${isScrolled ? styles.scrolled : ""}`}
     >
-      <div className={`${styles.container} mx-auto ${styles["header-grid"]}`}>
+      <div className={styles["header-grid"]}>
         <div className={styles["logo-wrapper"]}>
           <Link href="/" className={styles["logo-link"]}>
             <div className={styles["logo-container"]}>
-              <div>
+              <div className={styles["logo-image-container"]}>
                 <Image
                   src="/letter-e.png"
-                  alt="Logo"
-                  width={36}
-                  height={36}
+                  alt="duTeam Logo"
+                  width={45}
+                  height={45}
                   className={styles["logo-image"]}
                 />
               </div>
@@ -98,103 +112,78 @@ const Header: React.FC = () => {
           <div className={styles["nav-links"]}>
             <Link
               href="/"
-              className={`${styles["nav-link"]} ${
-                pathname === "/" ? styles.active : ""
-              }`}
+              className={`${styles["nav-link"]} ${pathname === "/" ? styles.active : ""}`}
             >
               Home
             </Link>
             {showTutorLink && (
               <Link
                 href="/tutor"
-                className={`${styles["nav-link"]} ${
-                  pathname.startsWith("/tutor") ? styles.active : ""
-                }`}
+                className={`${styles["nav-link"]} ${pathname === "/tutor" ? styles.active : ""}`}
               >
-                Tutor
+                Tutors
               </Link>
             )}
             {showLecturerLink && (
               <Link
                 href="/lecturer"
-                className={`${styles["nav-link"]} ${
-                  pathname.startsWith("/lecturer") ? styles.active : ""
-                }`}
+                className={`${styles["nav-link"]} ${pathname === "/lecturer" ? styles.active : ""}`}
               >
-                Lecturer
+                Lecturers
               </Link>
             )}
           </div>
         </nav>
 
         <div className={styles["header-actions"]}>
-          {!isLoggedIn && (
+          {!isAuthenticated && (
             <button
               onClick={toggleDarkMode}
               className={`${styles["theme-toggle-btn"]} ${
-                styles["header-theme-toggle"]
-              } ${
-                isThemeToggleAdding ? styles.adding : ""
-              } ${isThemeToggleRemoving ? styles.removing : ""}`}
+                isThemeToggleRemoving
+                  ? styles.removing
+                  : isThemeToggleAdding
+                    ? styles.adding
+                    : ""
+              }`}
               aria-label="Toggle dark mode"
             >
               <div className={styles["theme-icon-wrapper"]}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={`${styles["theme-icon"]} ${styles.sun}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={`${styles["theme-icon"]} ${styles.moon}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
-                </svg>
+                <span className={`${styles["theme-icon"]} ${styles.sun}`}>
+                  ☀️
+                </span>
+                <span className={`${styles["theme-icon"]} ${styles.moon}`}>
+                  🌙
+                </span>
               </div>
             </button>
           )}
-          {isLoggedIn && userData ? (
+          {isAuthenticated && user ? (
             <UserDropdown
               user={{
-                ...userData,
-                role: userData.role || "user", // Ensure role is not null
+                fullName: `${user.firstName} ${user.lastName}`,
+                email: user.email,
+                role: getUserRole(),
               }}
               onSignOut={handleSignOut}
               onToggleDarkMode={toggleDarkMode}
               isDarkMode={isDarkMode}
             />
           ) : (
-            <>
+            <div className={styles.authButtons}>
               <Link
                 href="/signin"
-                className={`${buttonStyles.btn} ${buttonStyles.btnOutline}`}
+                className={`${styles.authButton} ${styles.authButtonSecondary}`}
               >
                 Sign In
               </Link>
               <Link
                 href="/signup"
-                className={`${buttonStyles.btn} ${buttonStyles.btnPrimary}`}
+                className={`${styles.authButton} ${styles.authButtonPrimary}`}
               >
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>

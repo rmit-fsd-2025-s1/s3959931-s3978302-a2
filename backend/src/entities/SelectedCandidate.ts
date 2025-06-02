@@ -38,7 +38,7 @@ export class SelectedCandidate {
     @JoinColumn({ name: "applicationId" })
     application: Application;
 
-    @ManyToOne(() => User, (user) => user.candidateSelections, {
+    @ManyToOne(() => User, {
         onDelete: "CASCADE",
     })
     @JoinColumn({ name: "selectedById" })

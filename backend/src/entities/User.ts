@@ -4,12 +4,11 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToMany,
-    Index,
+    // OneToMany,
 } from "typeorm";
-import { CourseAssignment } from "./CourseAssignment";
-import { Application } from "./Application";
-import { SelectedCandidate } from "./SelectedCandidate";
+// import { CourseAssignment } from "./CourseAssignment";
+// import { Application } from "./Application";
+// import { SelectedCandidate } from "./SelectedCandidate";
 
 export enum UserType {
     CANDIDATE = "candidate",
@@ -18,7 +17,6 @@ export enum UserType {
 }
 
 @Entity("users")
-@Index(["email"], { unique: true })
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -78,21 +76,21 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    // Relationships
-    @OneToMany(
-        () => CourseAssignment,
-        (courseAssignment) => courseAssignment.lecturer
-    )
-    courseAssignments: CourseAssignment[];
+    // Relationships - Commented out for PA part b (authentication only)
+    // @OneToMany(
+    //     () => CourseAssignment,
+    //     (courseAssignment) => courseAssignment.lecturer
+    // )
+    // courseAssignments: CourseAssignment[];
 
-    @OneToMany(() => Application, (application) => application.candidate)
-    applications: Application[];
+    // @OneToMany(() => Application, (application) => application.candidate)
+    // applications: Application[];
 
-    @OneToMany(
-        () => SelectedCandidate,
-        (selectedCandidate) => selectedCandidate.selectedBy
-    )
-    candidateSelections: SelectedCandidate[];
+    // @OneToMany(
+    //     () => SelectedCandidate,
+    //     (selectedCandidate) => selectedCandidate.selectedBy
+    // )
+    // candidateSelections: SelectedCandidate[];
 
     // Virtual properties
     get fullName(): string {

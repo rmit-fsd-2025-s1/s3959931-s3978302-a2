@@ -1,16 +1,42 @@
-export interface UserAccount {
-  id: string;
-  email: string;
-  password?: string;
-  role: "tutor" | "lecturer" | "admin"; // Added admin as a potential future role
-  fullName: string;
-  bio?: string;
-  skills?: string[]; // For tutors
-  academicCredentials?: string; // For tutors
-  avatarPath?: string;
-  // Consider adding other relevant non-sensitive fields
+export enum UserType {
+  CANDIDATE = "candidate",
+  LECTURER = "lecturer",
+  ADMIN = "admin",
 }
 
-// You might also define specific types for different user roles if they diverge significantly
-// export interface TutorProfile extends UserAccount { role: "tutor"; /* tutor-specific fields */ }
-// export interface LecturerProfile extends UserAccount { role: "lecturer"; /* lecturer-specific fields */ }
+export interface User {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  userType: UserType;
+  phone?: string;
+  isBlocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    user: User;
+    token: string;
+  };
+  errors?: Record<string, string>;
+}
+
+export interface SignupData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  userType: UserType;
+  phone?: string;
+}
+
+export interface SigninData {
+  email: string;
+  password: string;
+}

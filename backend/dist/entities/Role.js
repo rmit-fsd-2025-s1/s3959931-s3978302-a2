@@ -49,6 +49,5 @@ __decorate([
     __metadata("design:type", Array)
 ], Role.prototype, "applications", void 0);
 exports.Role = Role = Role_1 = __decorate([
-    (0, typeorm_1.Entity)("roles"),
-    (0, typeorm_1.Index)(["roleName"], { unique: true })
+    (0, typeorm_1.Entity)("roles")
 ], Role);

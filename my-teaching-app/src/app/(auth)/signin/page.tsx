@@ -1,10 +1,10 @@
-import SignInForm from "@/modules/auth/components/signin-form/signin-form";
+import SigninForm from "../../../modules/auth/components/signin-form/signin-form";
 import styles from "./signin-page.module.css";
 
-export default function SignInPage() {
+export default function SigninPage() {
   return (
     <div className={styles.pageContainer}>
-      <SignInForm />
+      <SigninForm />
     </div>
   );
 }

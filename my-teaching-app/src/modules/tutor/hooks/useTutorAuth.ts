@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import type { Application as TutorApplication } from "@/shared/types/application";
 
 // Cache for application data using sessionStorage
@@ -43,7 +43,7 @@ const clearApplicationCache = (userId: string): void => {
 };
 
 export const useTutorAuth = () => {
-  const { userData, isLoggedIn, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [existingApplications, setExistingApplications] = useState<string[]>(
     []
   );
@@ -96,35 +96,35 @@ export const useTutorAuth = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    if (!isLoggedIn || !userData) {
+    if (!isAuthenticated || !user) {
       redirect("/signin");
       return;
     }
 
-    // Check if user has tutor role
-    if (userData.role !== "tutor") {
-      redirect(userData.role === "lecturer" ? "/lecturer" : "/");
+    // Check if user has candidate role (tutors are candidates)
+    if (user.userType !== "candidate") {
+      redirect(user.userType === "lecturer" ? "/lecturer" : "/");
       return;
     }
 
     // Get user applications using memoized function
-    const userApplications = getUserApplications(userData.id);
+    const userApplications = getUserApplications(user.id.toString());
     setExistingApplications(userApplications);
     setIsLoading(false);
-  }, [userData, isLoggedIn, authLoading, getUserApplications]);
+  }, [user, isAuthenticated, authLoading, getUserApplications]);
 
   const updateExistingApplications = (newApplication: string) => {
     setExistingApplications((prev) => {
       const updated = [...prev, newApplication];
 
       // Update cache
-      if (userData) {
+      if (user) {
         const newCache: ApplicationCache = {
           applications: updated,
-          userId: userData.id,
+          userId: user.id.toString(),
           lastChecked: Date.now(),
         };
-        setApplicationCache(userData.id, newCache);
+        setApplicationCache(user.id.toString(), newCache);
       }
 
       return updated;
@@ -132,12 +132,22 @@ export const useTutorAuth = () => {
   };
 
   const invalidateApplicationCache = () => {
-    if (userData) {
-      clearApplicationCache(userData.id);
-      const userApplications = getUserApplications(userData.id);
+    if (user) {
+      clearApplicationCache(user.id.toString());
+      const userApplications = getUserApplications(user.id.toString());
       setExistingApplications(userApplications);
     }
   };
+
+  // Convert user to userData format for compatibility
+  const userData = user
+    ? {
+        id: user.id.toString(),
+        email: user.email,
+        fullName: `${user.firstName} ${user.lastName}`,
+        role: "tutor" as const,
+      }
+    : null;
 
   return {
     userData,

@@ -32,7 +32,7 @@ export class CourseAssignment {
     assignedAt: Date;
 
     // Relationships
-    @ManyToOne(() => User, (user) => user.courseAssignments, {
+    @ManyToOne(() => User, {
         onDelete: "CASCADE",
     })
     @JoinColumn({ name: "lecturerId" })

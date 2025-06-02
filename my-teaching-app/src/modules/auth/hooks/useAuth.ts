@@ -1,5 +1,2 @@
-// Placeholder for useAuth hook
-export const useAuth = () => {
-  // TODO: Implement auth logic
-  return {};
-};
+// Export the useAuth hook from AuthContext
+export { useAuth, AuthProvider } from "../contexts/AuthContext";

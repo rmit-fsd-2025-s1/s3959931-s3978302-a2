@@ -1,67 +1,236 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  validateEmail,
+  validateRoleSpecificEmail,
+  calculatePasswordStrength,
+  getPasswordStrengthFeedback,
+} from "../../utils/authValidation.utils";
+import { AuthService } from "../../../../shared/services/authService";
+import { UserType } from "../../../../shared/types/user";
+import { useAuth } from "../../hooks/useAuth";
 import styles from "./signup-form.module.css";
 
 export default function SignUpForm() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState<"tutor" | "lecturer">("tutor"); // Default to tutor
+  const [role, setRole] = useState<"tutor" | "lecturer">("tutor");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // TODO: Implement actual sign-up logic, state, and handlers.
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // Validation states
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  // Password strength calculation
+  const passwordStrength = calculatePasswordStrength(password);
+  const passwordFeedback = getPasswordStrengthFeedback(
+    password,
+    passwordStrength
+  );
+
+  const handleInputChange = (field: string, value: string) => {
+    // Update form data
+    switch (field) {
+      case "fullName":
+        setFullName(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+      case "confirmPassword":
+        setConfirmPassword(value);
+        break;
+    }
+
+    // Clear field error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "",
+      }));
+    }
+
+    // Clear API error
+    if (apiError) {
+      setApiError("");
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    // Validate full name
+    if (!fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (fullName.trim().length < 2) {
+      newErrors.fullName = "Full name must be at least 2 characters long";
+    }
+
+    // Validate email
+    if (!validateEmail(email)) {
+      newErrors.email = "Please enter a valid email address";
+    } else if (!validateRoleSpecificEmail(email, role)) {
+      const expectedDomain =
+        role === "tutor" ? "@tutor.edu.au" : "@lecturer.edu.au";
+      newErrors.email = `${role.charAt(0).toUpperCase() + role.slice(1)} email must end with ${expectedDomain}`;
+    }
+
+    // Validate password strength
+    if (password.length === 0) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long";
+    } else if (
+      passwordFeedback.level === "veryWeak" ||
+      passwordFeedback.level === "weak"
+    ) {
+      newErrors.password =
+        "Please choose a stronger password with uppercase, lowercase, numbers, and special characters";
+    }
+
+    // Validate confirm password
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Placeholder for submission logic
-    console.log("Form submitted (placeholder):", {
-      fullName,
-      email,
-      password,
-      confirmPassword,
-      role,
-    });
-    // Add actual API call here in the future
-    alert("Sign up submitted (placeholder) - check console for data.");
+    setIsLoading(true);
+    setApiError("");
+
+    // Validate form
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Split the full name into first and last name
+      const nameParts = fullName.trim().split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      // Convert role to UserType
+      const userType =
+        role === "tutor" ? UserType.CANDIDATE : UserType.LECTURER;
+
+      // Prepare the signup data in the format expected by the backend
+      const signupData = {
+        email: email.trim(),
+        password,
+        confirmPassword,
+        firstName,
+        lastName,
+        userType,
+      };
+
+      console.log("Attempting signup with data:", {
+        ...signupData,
+        password: "[HIDDEN]",
+        confirmPassword: "[HIDDEN]",
+      });
+
+      // Call the signup API
+      const response = await AuthService.signup(signupData);
+
+      if (response.success && response.data) {
+        // Use the AuthContext login method to properly set authentication state
+        login(response.data.user, response.data.token);
+
+        // Show success message
+        alert(
+          `Welcome ${response.data.user.firstName}! Account created successfully.`
+        );
+
+        // Redirect to profile or dashboard
+        router.push("/profile");
+      } else {
+        // Handle API errors
+        if (response.errors) {
+          setErrors(response.errors);
+        }
+        setApiError(
+          response.message || "Failed to create account. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      setApiError(
+        "Network error occurred. Please check your connection and try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className={styles.formContainer}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {/* <div className={`${styles.alert} ${styles.alertInfo}`}> // Commenting out placeholder message
-          <p>Sign up functionality will be implemented soon.</p>
-        </div> */}
         <h2 className={styles.title}>Create Account</h2>
+
+        {apiError && (
+          <div className={`${styles.alert} ${styles.alertError}`}>
+            {apiError}
+          </div>
+        )}
+
         <div className={styles.inputContainer}>
           <input
             type="text"
             placeholder="Full Name"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) => handleInputChange("fullName", e.target.value)}
             required
-            className={styles.inputField}
+            className={`${styles.inputField} ${errors.fullName ? styles.inputError : ""}`}
           />
+          {errors.fullName && (
+            <div className={`${styles.alert} ${styles.alertError}`}>
+              {errors.fullName}
+            </div>
+          )}
         </div>
+
         <div className={styles.inputContainer}>
           <input
             type="email"
             placeholder="Email Address"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleInputChange("email", e.target.value)}
             required
-            className={styles.inputField}
+            className={`${styles.inputField} ${errors.email ? styles.inputError : ""}`}
           />
+          {errors.email && (
+            <div className={`${styles.alert} ${styles.alertError}`}>
+              {errors.email}
+            </div>
+          )}
         </div>
+
         <div className={styles.passwordContainer}>
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => handleInputChange("password", e.target.value)}
             required
-            className={styles.inputField}
+            className={`${styles.inputField} ${errors.password ? styles.inputError : ""}`}
           />
           <button
             type="button"
@@ -69,7 +238,6 @@ export default function SignUpForm() {
             className={styles.passwordToggle}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {/* SVG for show/hide password icon - can be conditional */}
             {showPassword ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -100,18 +268,42 @@ export default function SignUpForm() {
               </svg>
             )}
           </button>
+          {errors.password && (
+            <div className={`${styles.alert} ${styles.alertError}`}>
+              {errors.password}
+            </div>
+          )}
         </div>
-        {/* Placeholder for password strength meter - logic not implemented */}
-        {/* <div className={`${styles.passwordStrengthMeter} ${styles.strong}`}> ... </div> */}
-        {/* <div className={`${styles.passwordStrengthText} ${styles.strongText}`}> ... </div> */}
+
+        {/* Password strength meter */}
+        {password && (
+          <>
+            <div
+              className={`${styles.passwordStrengthMeter} ${styles[passwordFeedback.level]}`}
+            >
+              <div className={styles.segment}></div>
+              <div className={styles.segment}></div>
+              <div className={styles.segment}></div>
+              <div className={styles.segment}></div>
+            </div>
+            <div
+              className={`${styles.passwordStrengthText} ${styles[passwordFeedback.level + "Text"]}`}
+            >
+              {passwordFeedback.text}
+            </div>
+          </>
+        )}
+
         <div className={styles.passwordContainer}>
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) =>
+              handleInputChange("confirmPassword", e.target.value)
+            }
             required
-            className={styles.inputField}
+            className={`${styles.inputField} ${errors.confirmPassword ? styles.inputError : ""}`}
           />
           <button
             type="button"
@@ -149,7 +341,13 @@ export default function SignUpForm() {
               </svg>
             )}
           </button>
+          {errors.confirmPassword && (
+            <div className={`${styles.alert} ${styles.alertError}`}>
+              {errors.confirmPassword}
+            </div>
+          )}
         </div>
+
         <div className={styles.roleSection}>
           <p className={styles.roleLabel}>I am a:</p>
           <div className={styles.roleToggleContainer}>
@@ -169,11 +367,17 @@ export default function SignUpForm() {
             </button>
           </div>
         </div>
+
         <div className={styles.submitContainer}>
-          <button type="submit" className={styles.submitButton}>
-            Sign Up
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating Account..." : "Sign Up"}
           </button>
         </div>
+
         <div className={styles.linkSection}>
           <p className={styles.linkText}>
             Already have an account?{" "}

@@ -42,7 +42,7 @@ __decorate([
     __metadata("design:type", Date)
 ], CourseAssignment.prototype, "assignedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.courseAssignments, {
+    (0, typeorm_1.ManyToOne)(() => User_1.User, {
         onDelete: "CASCADE",
     }),
     (0, typeorm_1.JoinColumn)({ name: "lecturerId" }),

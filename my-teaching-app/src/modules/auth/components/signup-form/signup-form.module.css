@@ -60,6 +60,11 @@
   background-color: var(--color-bg-primary);
 }
 
+.inputError {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
 /* Password toggle button */
 .passwordToggle {
   position: absolute;
@@ -127,6 +132,14 @@
   display: flex;
   width: 100%;
   gap: 4px;
+}
+
+.segment {
+  height: 100%;
+  flex: 1;
+  border-radius: 2px;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
 }
 
 .passwordStrengthMeter .segment {

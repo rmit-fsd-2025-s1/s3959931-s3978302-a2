@@ -106,7 +106,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Application.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.applications, {
+    (0, typeorm_1.ManyToOne)(() => User_1.User, {
         onDelete: "CASCADE",
     }),
     (0, typeorm_1.JoinColumn)({ name: "candidateId" }),

@@ -1,14 +1,7 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    OneToMany,
-    Index,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Application } from "./Application";
 
 @Entity("roles")
-@Index(["roleName"], { unique: true })
 export class Role {
     @PrimaryGeneratedColumn()
     id: number;

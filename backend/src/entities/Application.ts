@@ -82,7 +82,7 @@ export class Application {
     updatedAt: Date;
 
     // Relationships
-    @ManyToOne(() => User, (user) => user.applications, {
+    @ManyToOne(() => User, {
         onDelete: "CASCADE",
     })
     @JoinColumn({ name: "candidateId" })
