@@ -22,43 +22,55 @@ export const ProfilePage: React.FC = () => {
 
       if (savedUser) {
         setUser(savedUser);
-        setIsLoading(false);
-
-        // Initialize empty courses for lecturers - will be populated from API
+        
+        // For lecturers, initialize assigned courses based on whether they are mock data or real users
         if (savedUser.userType === UserType.LECTURER) {
-          setAssignedCourses([]);
+          // Mock data lecturers (from seeded database) have assigned courses
+          // Real user lecturers (newly created) have empty courses until admin assigns them
+          const isMockLecturer = [
+            "john.smith@lecturer.edu.au",
+            "sarah.johnson@lecturer.edu.au", 
+            "michael.williams@lecturer.edu.au",
+            "emily.brown@lecturer.edu.au",
+            "david.davis@lecturer.edu.au",
+            "lisa.wilson@lecturer.edu.au"
+          ].includes(savedUser.email);
+
+          if (isMockLecturer) {
+            // For mock lecturers, try to get courses from API
+            try {
+              const response = await AuthService.getProfile();
+              if (response.success && response.data?.assignedCourses && Array.isArray(response.data.assignedCourses)) {
+                console.log("✅ Setting assigned courses for mock lecturer:", response.data.assignedCourses);
+                setAssignedCourses(response.data.assignedCourses);
+              } else {
+                // Fallback: Mock lecturers get placeholder courses for demo
+                setAssignedCourses([]);
+                console.log("📝 Using empty courses for mock lecturer (admin needs to assign)");
+              }
+            } catch (apiError) {
+              console.error("Failed to fetch assigned courses for mock lecturer:", apiError);
+              setAssignedCourses([]);
+            }
+          } else {
+            // Real user lecturers always have empty courses (no admin system yet)
+            setAssignedCourses([]);
+            console.log("👤 Real user lecturer - no courses assigned (admin approval required)");
+          }
         }
 
-        // Fetch fresh data from API to get assigned courses for lecturers
+        setIsLoading(false);
+
+        // Update user data from API (but don't change courses state again)
         try {
           const response = await AuthService.getProfile();
           if (response.success && response.data) {
             const userData = response.data.user;
             setUser(userData);
             updateUser(userData);
-            
-            // Set assigned courses if user is a lecturer
-            if (userData.userType === UserType.LECTURER) {
-              if (response.data.assignedCourses && Array.isArray(response.data.assignedCourses) && response.data.assignedCourses.length > 0) {
-                console.log("✅ Setting assigned courses from API:", response.data.assignedCourses);
-                setAssignedCourses(response.data.assignedCourses);
-              } else {
-                console.log("⚠️ No assigned courses from API - lecturer not assigned to any courses yet");
-                setAssignedCourses([]);
-              }
-            }
-          } else {
-            console.warn("API response not successful:", response.message);
           }
         } catch (apiError) {
           console.error("Failed to fetch fresh profile data:", apiError);
-          // For lecturers, try to sync with database
-          if (savedUser.userType === UserType.LECTURER) {
-            const syncResult = await AuthService.syncWithDatabase();
-            if (!syncResult) {
-              console.warn("Database sync failed, user may be using outdated token");
-            }
-          }
         }
       } else {
         setError("Please log in to view your profile.");

@@ -84,7 +84,6 @@ const LecturerDashboardPage: React.FC = () => {
     comment,
     setComment,
     rankedApplications: rawRankedApplications,
-    setRankedApplications,
     // CR Part: Enhanced filters
     selectedCourse,
     setSelectedCourse,
@@ -256,23 +255,52 @@ const LecturerDashboardPage: React.FC = () => {
   const handleSaveComment = async () => {
     if (!rawSelectedApplication) return;
     
-    // This would need to be implemented in the backend
-    // For now, we'll just show a success message
-    showToast("Comment saved successfully", "success");
+    try {
+      const response = await ApplicationService.updateApplicationComment(
+        rawSelectedApplication.id,
+        comment
+      );
+
+      if (response.success) {
+        showToast("Comment saved successfully", "success");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to save comment", "error");
+      }
+    } catch {
+      showToast("Error saving comment", "error");
+    }
   };
 
   const handleDeleteComment = async () => {
-    setComment("");
-    showToast("Comment deleted", "info");
+    if (!rawSelectedApplication) return;
+
+    try {
+      const response = await ApplicationService.deleteApplicationComment(
+        rawSelectedApplication.id
+      );
+
+      if (response.success) {
+        setComment("");
+        showToast("Comment deleted", "info");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to delete comment", "error");
+      }
+    } catch {
+      showToast("Error deleting comment", "error");
+    }
   };
 
-  const handleSelectApplicantButton = async () => {
+  const handleSelectApplicantButton = async (selectedCourses: string[]) => {
     if (!rawSelectedApplication) return;
 
     try {
       const response = await ApplicationService.updateApplicationStatus(
         rawSelectedApplication.id,
-        "selected"
+        "selected",
+        comment,
+        selectedCourses
       );
 
       if (response.success) {
@@ -306,39 +334,159 @@ const LecturerDashboardPage: React.FC = () => {
     }
   };
 
-  // Ranking functions (simplified for now)
-  const handleAddToRanking = () => {
-    if (selectedApplication && !rankedApplications.find(app => app.id === selectedApplication.id)) {
-      const rawSelectedApp = rawApplications.find(app => app.id.toString() === selectedApplication.id);
-      if (rawSelectedApp) {
-        setRankedApplications([...rawRankedApplications, rawSelectedApp]);
-        showToast("Added to ranking", "success");
+  // Enhanced ranking functions with backend integration
+  const handleAddToRanking = async () => {
+    if (!selectedApplication) return;
+
+    // Validation checks
+    if (!selectedApplication.selected) {
+      showToast("Please select the applicant before adding to ranking", "error");
+      return;
+    }
+
+    if (selectedApplication.rank !== undefined) {
+      showToast("Applicant is already added to ranking", "info");
+      return;
+    }
+
+    if (!selectedApplication.comment || !comment.trim()) {
+      showToast("Please add and save a comment before adding to ranking", "error");
+      return;
+    }
+
+    const hasUnsavedComment = comment !== (selectedApplication.comment || "");
+    if (hasUnsavedComment) {
+      showToast("Please save your comment before adding to ranking", "error");
+      return;
+    }
+
+    if (!selectedRankingCourse) {
+      showToast("Please select a course for ranking", "error");
+      return;
+    }
+
+    try {
+      // Calculate next rank (add to end of list)
+      const currentRankedForCourse = rankedApplications.filter(app => 
+        app.selectedForCourses?.includes(selectedRankingCourse) || 
+        app.courses.includes(selectedRankingCourse)
+      );
+      const nextRank = currentRankedForCourse.length + 1;
+
+      const response = await ApplicationService.addApplicationToRanking(
+        parseInt(selectedApplication.id),
+        nextRank,
+        selectedRankingCourse
+      );
+
+      if (response.success) {
+        showToast("Added to ranking successfully", "success");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to add to ranking", "error");
       }
+    } catch {
+      showToast("Error adding to ranking", "error");
     }
   };
 
-  const handleMoveUp = (app: Application) => {
-    const index = rankedApplications.findIndex(ranked => ranked.id === app.id);
-    if (index > 0) {
-      const newRanked = [...rawRankedApplications];
-      [newRanked[index - 1], newRanked[index]] = [newRanked[index], newRanked[index - 1]];
-      setRankedApplications(newRanked);
+  const handleMoveUp = async (app: Application) => {
+    if (!selectedRankingCourse) return;
+
+    const filteredRanked = rankedApplications.filter(ranked => 
+      ranked.selectedForCourses?.includes(selectedRankingCourse) || 
+      ranked.courses.includes(selectedRankingCourse)
+    );
+
+    const currentIndex = filteredRanked.findIndex(ranked => ranked.id === app.id);
+    if (currentIndex <= 0) return; // Already at top or not found
+
+    const currentRank = currentIndex + 1;
+    const newRank = currentRank - 1;
+
+    try {
+      // Update the rank of the current application
+      const response = await ApplicationService.updateApplicationRanking(
+        parseInt(app.id),
+        newRank,
+        selectedRankingCourse
+      );
+
+      if (response.success) {
+        // Also update the application that was above (move it down)
+        const appAbove = filteredRanked[currentIndex - 1];
+        await ApplicationService.updateApplicationRanking(
+          parseInt(appAbove.id),
+          currentRank,
+          selectedRankingCourse
+        );
+
+        showToast("Ranking updated successfully", "success");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to update ranking", "error");
+      }
+    } catch {
+      showToast("Error updating ranking", "error");
     }
   };
 
-  const handleMoveDown = (app: Application) => {
-    const index = rankedApplications.findIndex(ranked => ranked.id === app.id);
-    if (index < rankedApplications.length - 1) {
-      const newRanked = [...rawRankedApplications];
-      [newRanked[index], newRanked[index + 1]] = [newRanked[index + 1], newRanked[index]];
-      setRankedApplications(newRanked);
+  const handleMoveDown = async (app: Application) => {
+    if (!selectedRankingCourse) return;
+
+    const filteredRanked = rankedApplications.filter(ranked => 
+      ranked.selectedForCourses?.includes(selectedRankingCourse) || 
+      ranked.courses.includes(selectedRankingCourse)
+    );
+
+    const currentIndex = filteredRanked.findIndex(ranked => ranked.id === app.id);
+    if (currentIndex >= filteredRanked.length - 1 || currentIndex < 0) return; // Already at bottom or not found
+
+    const currentRank = currentIndex + 1;
+    const newRank = currentRank + 1;
+
+    try {
+      // Update the rank of the current application
+      const response = await ApplicationService.updateApplicationRanking(
+        parseInt(app.id),
+        newRank,
+        selectedRankingCourse
+      );
+
+      if (response.success) {
+        // Also update the application that was below (move it up)
+        const appBelow = filteredRanked[currentIndex + 1];
+        await ApplicationService.updateApplicationRanking(
+          parseInt(appBelow.id),
+          currentRank,
+          selectedRankingCourse
+        );
+
+        showToast("Ranking updated successfully", "success");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to update ranking", "error");
+      }
+    } catch {
+      showToast("Error updating ranking", "error");
     }
   };
 
-  const handleRemoveFromRanking = (id: string) => {
-    const newRanked = rawRankedApplications.filter(app => app.id.toString() !== id);
-    setRankedApplications(newRanked);
-    showToast("Removed from ranking", "info");
+  const handleRemoveFromRanking = async (id: string) => {
+    try {
+      const response = await ApplicationService.removeApplicationFromRanking(
+        parseInt(id)
+      );
+
+      if (response.success) {
+        showToast("Removed from ranking", "info");
+        await loadApplications(); // Reload to get updated data
+      } else {
+        showToast(response.message || "Failed to remove from ranking", "error");
+      }
+    } catch {
+      showToast("Error removing from ranking", "error");
+    }
   };
 
   useEffect(() => {

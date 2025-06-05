@@ -45,8 +45,17 @@ export const useApplicationManagement = () => {
       if (response.success && response.data) {
         setApplications(response.data);
 
-        // Update ranked applications based on status
-        const ranked = response.data.filter(app => app.status === "selected");
+        // Update ranked applications - filter for applications with ranking data
+        const ranked = response.data.filter(app =>
+          app.status === "selected" &&
+          app.rank !== undefined &&
+          app.rank !== null &&
+          app.rankedForCourse
+        );
+
+        // Sort ranked applications by rank for proper display
+        ranked.sort((a, b) => (a.rank || 0) - (b.rank || 0));
+
         setRankedApplications(ranked);
       } else {
         console.error("Failed to load applications:", response.message);

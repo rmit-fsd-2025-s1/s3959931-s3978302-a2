@@ -50,8 +50,14 @@
   color: white;
 }
 
-.selectButton:hover {
+.selectButton:hover:not(:disabled) {
   background-color: #1d4ed8;
+}
+
+.selectButton:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .unselectButton {
@@ -86,6 +92,222 @@
 .buttonIcon {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+/* Course Selection Styles */
+.sectionDescription {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.courseSelectionControls {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.courseControlButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.courseControlButton:hover:not(:disabled) {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-primary);
+}
+
+.courseControlButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectAllButton:hover:not(:disabled) {
+  background-color: #dbeafe;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.deselectAllButton:hover:not(:disabled) {
+  background-color: #fee2e2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.courseSelectionContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.courseSelectionCard {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.5rem;
+  background-color: var(--color-bg-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.courseSelectionCard:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.courseSelectionCard.courseSelected {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.courseCheckbox {
+  margin-right: 0.75rem;
+  position: relative;
+}
+
+.courseCheckboxInput {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.courseCheckboxInput:checked {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.courseCheckboxInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.courseCheckboxLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.courseCheckboxIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.courseCheckboxInput:checked + .courseCheckboxLabel .courseCheckboxIcon {
+  opacity: 1;
+}
+
+.courseInfo {
+  flex: 1;
+}
+
+.courseSelectionCard .courseCode {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.courseSelectionCard .courseName {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.selectionSummary {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem;
+  background-color: var(--color-bg-tertiary);
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border);
+}
+
+.selectionCount {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Dark mode styles for course selection */
+.dark .courseSelectionCard {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+.dark .courseSelectionCard:hover {
+  background-color: #4b5563;
+  border-color: #6366f1;
+}
+
+.dark .courseSelectionCard.courseSelected {
+  background-color: #1e3a8a;
+  border-color: #3b82f6;
+}
+
+.dark .courseControlButton {
+  background-color: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+.dark .courseControlButton:hover:not(:disabled) {
+  background-color: #4b5563;
+}
+
+.dark .selectAllButton:hover:not(:disabled) {
+  background-color: #1e3a8a;
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+.dark .deselectAllButton:hover:not(:disabled) {
+  background-color: #7f1d1d;
+  border-color: #dc2626;
+  color: #fca5a5;
+}
+
+.dark .courseCheckboxInput {
+  border-color: #6b7280;
+  background-color: #374151;
+}
+
+.dark .courseCheckboxInput:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.dark .selectionSummary {
+  background-color: #374151;
+  border-color: #4b5563;
 }
 
 /* Empty state */
