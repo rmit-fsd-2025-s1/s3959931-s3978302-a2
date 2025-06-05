@@ -75,6 +75,51 @@ export class Application {
     })
     motivation?: string;
 
+    // Lecturer comment fields
+    @Column({
+        type: "text",
+        nullable: true,
+    })
+    comment?: string;
+
+    @Column({
+        type: "int",
+        nullable: true,
+    })
+    commentedBy?: number;
+
+    @Column({
+        type: "datetime",
+        nullable: true,
+    })
+    commentedAt?: Date;
+
+    // Ranking fields
+    @Column({
+        type: "int",
+        nullable: true,
+    })
+    rank?: number;
+
+    @Column({
+        type: "int",
+        nullable: true,
+    })
+    rankedBy?: number;
+
+    @Column({
+        type: "datetime",
+        nullable: true,
+    })
+    rankedAt?: Date;
+
+    @Column({
+        type: "varchar",
+        length: 20,
+        nullable: true,
+    })
+    rankedForCourse?: string;
+
     @CreateDateColumn()
     appliedAt: Date;
 
@@ -106,6 +151,19 @@ export class Application {
     )
     selections: SelectedCandidate[];
 
+    // Comment and ranking relationships
+    @ManyToOne(() => User, {
+        onDelete: "SET NULL",
+    })
+    @JoinColumn({ name: "commentedBy" })
+    commentedByUser?: User;
+
+    @ManyToOne(() => User, {
+        onDelete: "SET NULL",
+    })
+    @JoinColumn({ name: "rankedBy" })
+    rankedByUser?: User;
+
     // Virtual properties
     get isSelected(): boolean {
         return this.status === ApplicationStatus.SELECTED;
@@ -121,5 +179,22 @@ export class Application {
 
     get applicationKey(): string {
         return `${this.candidateId}-${this.courseId}-${this.roleId}`;
+    }
+
+    get hasComment(): boolean {
+        return !!(this.comment && this.comment.trim().length > 0);
+    }
+
+    get isRanked(): boolean {
+        return this.rank !== null && this.rank !== undefined;
+    }
+
+    get canBeRanked(): boolean {
+        return this.isSelected && this.hasComment;
+    }
+
+    get commentSummary(): string {
+        if (!this.comment) return "";
+        return this.comment.length > 50 ? this.comment.substring(0, 50) + "..." : this.comment;
     }
 }

@@ -502,4 +502,296 @@ export class ApplicationController {
             });
         }
     }
+
+    // Comment management methods
+    async updateApplicationComment(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const { comment } = req.body;
+            const lecturerId = req.user?.userId;
+
+            const application = await this.applicationRepository.findOne({
+                where: { id: parseInt(id) },
+                relations: ["course", "role", "candidate"],
+            });
+
+            if (!application) {
+                res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+                return;
+            }
+
+            // Verify lecturer has access to this application's course
+            const courseAssignment = await this.courseAssignmentRepository.findOne({
+                where: {
+                    lecturerId,
+                    courseId: application.courseId,
+                },
+            });
+
+            if (!courseAssignment) {
+                res.status(403).json({
+                    success: false,
+                    message: "You don't have access to this application",
+                });
+                return;
+            }
+
+            // Update comment
+            application.comment = comment || "";
+            application.commentedBy = lecturerId;
+            application.commentedAt = new Date();
+
+            const updatedApplication = await this.applicationRepository.save(application);
+
+            res.status(200).json({
+                success: true,
+                message: "Comment updated successfully",
+                data: updatedApplication,
+            });
+        } catch (error) {
+            console.error("💥 Error updating application comment:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    }
+
+    async deleteApplicationComment(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const lecturerId = req.user?.userId;
+
+            const application = await this.applicationRepository.findOne({
+                where: { id: parseInt(id) },
+                relations: ["course", "role", "candidate"],
+            });
+
+            if (!application) {
+                res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+                return;
+            }
+
+            // Verify lecturer has access to this application's course
+            const courseAssignment = await this.courseAssignmentRepository.findOne({
+                where: {
+                    lecturerId,
+                    courseId: application.courseId,
+                },
+            });
+
+            if (!courseAssignment) {
+                res.status(403).json({
+                    success: false,
+                    message: "You don't have access to this application",
+                });
+                return;
+            }
+
+            // Clear comment
+            application.comment = "";
+            application.commentedBy = undefined;
+            application.commentedAt = undefined;
+
+            const updatedApplication = await this.applicationRepository.save(application);
+
+            res.status(200).json({
+                success: true,
+                message: "Comment deleted successfully",
+                data: updatedApplication,
+            });
+        } catch (error) {
+            console.error("💥 Error deleting application comment:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    }
+
+    // Ranking management methods
+    async addApplicationToRanking(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const { rank, courseCode } = req.body;
+            const lecturerId = req.user?.userId;
+
+            const application = await this.applicationRepository.findOne({
+                where: { id: parseInt(id) },
+                relations: ["course", "role", "candidate"],
+            });
+
+            if (!application) {
+                res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+                return;
+            }
+
+            // Verify lecturer has access to this application's course
+            const courseAssignment = await this.courseAssignmentRepository.findOne({
+                where: {
+                    lecturerId,
+                    courseId: application.courseId,
+                },
+            });
+
+            if (!courseAssignment) {
+                res.status(403).json({
+                    success: false,
+                    message: "You don't have access to this application",
+                });
+                return;
+            }
+
+            // Verify application is selected
+            if (application.status !== ApplicationStatus.SELECTED) {
+                res.status(400).json({
+                    success: false,
+                    message: "Application must be selected before adding to ranking",
+                });
+                return;
+            }
+
+            // Update ranking
+            application.rank = rank;
+            application.rankedBy = lecturerId;
+            application.rankedAt = new Date();
+            application.rankedForCourse = courseCode;
+
+            const updatedApplication = await this.applicationRepository.save(application);
+
+            res.status(200).json({
+                success: true,
+                message: "Application added to ranking successfully",
+                data: updatedApplication,
+            });
+        } catch (error) {
+            console.error("💥 Error adding application to ranking:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    }
+
+    async updateApplicationRanking(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const { rank, courseCode } = req.body;
+            const lecturerId = req.user?.userId;
+
+            const application = await this.applicationRepository.findOne({
+                where: { id: parseInt(id) },
+                relations: ["course", "role", "candidate"],
+            });
+
+            if (!application) {
+                res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+                return;
+            }
+
+            // Verify lecturer has access to this application's course
+            const courseAssignment = await this.courseAssignmentRepository.findOne({
+                where: {
+                    lecturerId,
+                    courseId: application.courseId,
+                },
+            });
+
+            if (!courseAssignment) {
+                res.status(403).json({
+                    success: false,
+                    message: "You don't have access to this application",
+                });
+                return;
+            }
+
+            // Update ranking
+            application.rank = rank;
+            application.rankedBy = lecturerId;
+            application.rankedAt = new Date();
+            application.rankedForCourse = courseCode;
+
+            const updatedApplication = await this.applicationRepository.save(application);
+
+            res.status(200).json({
+                success: true,
+                message: "Application ranking updated successfully",
+                data: updatedApplication,
+            });
+        } catch (error) {
+            console.error("💥 Error updating application ranking:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    }
+
+    async removeApplicationFromRanking(req: AuthenticatedRequest, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const lecturerId = req.user?.userId;
+
+            const application = await this.applicationRepository.findOne({
+                where: { id: parseInt(id) },
+                relations: ["course", "role", "candidate"],
+            });
+
+            if (!application) {
+                res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+                return;
+            }
+
+            // Verify lecturer has access to this application's course
+            const courseAssignment = await this.courseAssignmentRepository.findOne({
+                where: {
+                    lecturerId,
+                    courseId: application.courseId,
+                },
+            });
+
+            if (!courseAssignment) {
+                res.status(403).json({
+                    success: false,
+                    message: "You don't have access to this application",
+                });
+                return;
+            }
+
+            // Remove ranking
+            application.rank = undefined;
+            application.rankedBy = undefined;
+            application.rankedAt = undefined;
+            application.rankedForCourse = undefined;
+
+            const updatedApplication = await this.applicationRepository.save(application);
+
+            res.status(200).json({
+                success: true,
+                message: "Application removed from ranking successfully",
+                data: updatedApplication,
+            });
+        } catch (error) {
+            console.error("💥 Error removing application from ranking:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+    }
 } 

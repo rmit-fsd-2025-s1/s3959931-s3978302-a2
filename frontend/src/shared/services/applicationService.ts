@@ -64,9 +64,30 @@ export interface ApplicationResponse {
     motivation?: string;
     appliedAt: string;
     updatedAt: string;
+    // New lecturer fields
+    comment?: string;
+    commentedBy?: number;
+    commentedAt?: string;
+    rank?: number;
+    rankedBy?: number;
+    rankedAt?: string;
+    rankedForCourse?: string;
+    // Relationships
     course: Course;
     role: Role;
     candidate?: {
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+    };
+    commentedByUser?: {
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+    };
+    rankedByUser?: {
         id: number;
         firstName: string;
         lastName: string;
@@ -210,10 +231,16 @@ export class ApplicationService {
     // CR Part: Update application status
     static async updateApplicationStatus(
         applicationId: number,
-        status: "pending" | "selected" | "rejected"
+        status: "pending" | "selected" | "rejected",
+        comment?: string,
+        selectedCourses?: string[]
     ): Promise<ApiResponse<ApplicationResponse>> {
         try {
-            const response = await applicationAPI.put(`/${applicationId}/status`, { status });
+            const requestData: { status: string; comment?: string; selectedCourses?: string[] } = { status };
+            if (comment) requestData.comment = comment;
+            if (selectedCourses) requestData.selectedCourses = selectedCourses;
+
+            const response = await applicationAPI.put(`/${applicationId}/status`, requestData);
             return response.data;
         } catch (error: unknown) {
             const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
@@ -223,6 +250,103 @@ export class ApplicationService {
             return {
                 success: false,
                 message: "Network error occurred while updating application status.",
+            };
+        }
+    }
+
+    // Comment management methods
+    static async updateApplicationComment(
+        applicationId: number,
+        comment: string
+    ): Promise<ApiResponse<ApplicationResponse>> {
+        try {
+            const response = await applicationAPI.put(`/${applicationId}/comment`, { comment });
+            return response.data;
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
+            if (axiosError.response?.data) {
+                return axiosError.response.data;
+            }
+            return {
+                success: false,
+                message: "Network error occurred while updating comment.",
+            };
+        }
+    }
+
+    static async deleteApplicationComment(
+        applicationId: number
+    ): Promise<ApiResponse<ApplicationResponse>> {
+        try {
+            const response = await applicationAPI.delete(`/${applicationId}/comment`);
+            return response.data;
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
+            if (axiosError.response?.data) {
+                return axiosError.response.data;
+            }
+            return {
+                success: false,
+                message: "Network error occurred while deleting comment.",
+            };
+        }
+    }
+
+    // Ranking management methods
+    static async addApplicationToRanking(
+        applicationId: number,
+        rank: number,
+        courseCode: string
+    ): Promise<ApiResponse<ApplicationResponse>> {
+        try {
+            const response = await applicationAPI.post(`/${applicationId}/ranking`, { rank, courseCode });
+            return response.data;
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
+            if (axiosError.response?.data) {
+                return axiosError.response.data;
+            }
+            return {
+                success: false,
+                message: "Network error occurred while adding to ranking.",
+            };
+        }
+    }
+
+    static async updateApplicationRanking(
+        applicationId: number,
+        rank: number,
+        courseCode: string
+    ): Promise<ApiResponse<ApplicationResponse>> {
+        try {
+            const response = await applicationAPI.put(`/${applicationId}/ranking`, { rank, courseCode });
+            return response.data;
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
+            if (axiosError.response?.data) {
+                return axiosError.response.data;
+            }
+            return {
+                success: false,
+                message: "Network error occurred while updating ranking.",
+            };
+        }
+    }
+
+    static async removeApplicationFromRanking(
+        applicationId: number
+    ): Promise<ApiResponse<ApplicationResponse>> {
+        try {
+            const response = await applicationAPI.delete(`/${applicationId}/ranking`);
+            return response.data;
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError<ApiResponse<ApplicationResponse>>;
+            if (axiosError.response?.data) {
+                return axiosError.response.data;
+            }
+            return {
+                success: false,
+                message: "Network error occurred while removing from ranking.",
             };
         }
     }

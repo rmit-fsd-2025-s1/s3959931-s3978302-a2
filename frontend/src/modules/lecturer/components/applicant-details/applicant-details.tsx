@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import type { Application as TutorApplication } from "@/shared/types/application"; // Updated
 import { availableCourses } from "@/shared/data/courses";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./applicant-details.module.css";
+import { 
+  validateLecturerComment, 
+  validateStatusUpdate,
+  sanitizeComment,
+  formatValidationErrors,
+  DEFAULT_COMMENT_CONFIG 
+} from "../../utils/lecturerValidation.utils";
 
 interface ApplicantDetailsProps {
   application: TutorApplication | null;
@@ -29,6 +36,22 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
   showToast,
   title = "Applicant Details",
 }) => {
+  // Validation states
+  const [commentError, setCommentError] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+
+  // Clear validation errors when application changes
+  useEffect(() => {
+    setCommentError("");
+    setHasUnsavedChanges(false);
+  }, [application?.id]);
+
+  // Track unsaved changes
+  useEffect(() => {
+    const originalComment = application?.comment || "";
+    setHasUnsavedChanges(comment !== originalComment);
+  }, [comment, application?.comment]);
   if (!application) {
     return (
       <div className={styles.applicantDetailsPanel}>
@@ -58,10 +81,80 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
     );
   }
 
-  const handleSelectButtonClick = () => {
-    if (application) {
-      onSelectApplicant(application.courses);
+  // Handle comment changes with validation
+  const handleCommentChange = (value: string) => {
+    setComment(value);
+    setCommentError(""); // Clear error on change
+  };
+
+  // Validate and save comment
+  const handleSaveComment = async () => {
+    if (!application || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setCommentError("");
+
+    try {
+      // Sanitize comment
+      const sanitizedComment = sanitizeComment(comment);
+      
+      // Validate comment
+      const validation = validateLecturerComment(sanitizedComment, {
+        ...DEFAULT_COMMENT_CONFIG,
+        allowEmpty: true,
+        minLength: 3
+      });
+
+      if (!validation.isValid) {
+        const errorMessages = formatValidationErrors(validation.errors);
+        setCommentError(errorMessages[0] || "Invalid comment");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Update comment value with sanitized version
+      if (sanitizedComment !== comment) {
+        setComment(sanitizedComment);
+      }
+
+      // Call the parent's save function (this should handle the API call)
+      await onSaveComment(application.courses);
+      
+      showToast("Comment saved successfully!", "success");
+      setHasUnsavedChanges(false);
+      
+    } catch {
+      setCommentError("Failed to save comment. Please try again.");
+      showToast("Failed to save comment", "error");
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  // Handle status updates with validation
+  const handleSelectButtonClick = () => {
+    if (!application) return;
+
+    // Validate status update
+    const validation = validateStatusUpdate(
+      application.id,
+      "selected",
+      application.courses,
+      comment,
+      {
+        allowedStatuses: ["pending", "shortlisted", "selected", "rejected"],
+        requireComment: false,
+        requireCourseSelection: true
+      }
+    );
+
+    if (!validation.isValid) {
+      const errorMessages = formatValidationErrors(validation.errors);
+      showToast(errorMessages[0] || "Validation failed", "error");
+      return;
+    }
+
+    onSelectApplicant(application.courses);
   };
 
   const handleAddToRankingClick = () => {
@@ -330,23 +423,89 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
               </svg>
               Comments & Notes
             </h4>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Add your comments about this applicant..."
-              className={styles.commentTextarea}
-            />
-            <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
+            <div className={styles.commentInputContainer}>
+              <textarea
+                value={comment}
+                onChange={(e) => handleCommentChange(e.target.value)}
+                placeholder="Add your comments about this applicant..."
+                className={`${styles.commentTextarea} ${commentError ? styles.commentTextareaError : ''}`}
+                maxLength={1000}
+                disabled={isSubmitting}
+              />
+              <div className={styles.commentMeta}>
+                <span className={styles.characterCount}>
+                  {comment.length}/1000 characters
+                </span>
+                {hasUnsavedChanges && (
+                  <span className={styles.unsavedIndicator}>
+                    • Unsaved changes
+                  </span>
+                )}
+              </div>
+              {commentError && (
+                <div className={styles.errorMessage}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={styles.errorIcon}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {commentError}
+                </div>
+              )}
+            </div>
+            <div className={styles.commentActions}>
               <button
-                onClick={() => onSaveComment(application.courses)}
+                onClick={handleSaveComment}
+                disabled={isSubmitting || (!comment.trim() && !application.comment)}
                 className={`${styles.actionButton} ${styles.addToRankingButton}`}
                 style={{ fontSize: "0.875rem" }}
               >
-                Save Comment
+                {isSubmitting ? (
+                  <>
+                    <svg className={styles.spinner} viewBox="0 0 24 24">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeDasharray="32"
+                        strokeDashoffset="32"
+                      >
+                        <animate
+                          attributeName="strokeDasharray"
+                          dur="2s"
+                          values="0 32;16 16;0 32;0 32"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="strokeDashoffset"
+                          dur="2s"
+                          values="0;-16;-32;-32"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Comment"
+                )}
               </button>
               {application.comment && (
                 <button
                   onClick={onDeleteComment}
+                  disabled={isSubmitting}
                   className={`${styles.actionButton} ${styles.unselectButton}`}
                   style={{ fontSize: "0.875rem" }}
                 >

@@ -1,6 +1,14 @@
 import { Router } from "express";
 import { ApplicationController } from "../controllers/ApplicationController";
 import { authenticateToken, requireUserType } from "../middleware/auth";
+import {
+    validateStatusUpdate,
+    validateCommentSubmission,
+    validateRankingOperation,
+    validateLecturerFilters,
+    validateLecturerApplicationAccess,
+    sanitizeCommentData
+} from "../middleware/lecturerValidation";
 
 const router = Router();
 const applicationController = new ApplicationController();
@@ -92,11 +100,12 @@ router.get(
     applicationController.getCoursesAndRoles.bind(applicationController)
 );
 
-// CR & DI Parts: Lecturer application endpoints
+// CR & DI Parts: Lecturer application endpoints with validation
 router.get(
     "/lecturer",
     authenticateToken,
     requireUserType(["lecturer"]),
+    validateLecturerFilters,
     applicationController.getApplicationsForLecturer.bind(applicationController)
 );
 
@@ -107,11 +116,71 @@ router.get(
     applicationController.getApplicationStatistics.bind(applicationController)
 );
 
+// Status update with comprehensive validation
 router.put(
     "/:id/status",
     authenticateToken,
     requireUserType(["lecturer"]),
+    sanitizeCommentData,
+    validateStatusUpdate,
+    validateLecturerApplicationAccess,
     applicationController.updateApplicationStatus.bind(applicationController)
+);
+
+// Comment submission endpoints
+router.post(
+    "/:id/comment",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    sanitizeCommentData,
+    validateCommentSubmission,
+    validateLecturerApplicationAccess,
+    applicationController.updateApplicationComment.bind(applicationController)
+);
+
+router.put(
+    "/:id/comment",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    sanitizeCommentData,
+    validateCommentSubmission,
+    validateLecturerApplicationAccess,
+    applicationController.updateApplicationComment.bind(applicationController)
+);
+
+router.delete(
+    "/:id/comment",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    validateLecturerApplicationAccess,
+    applicationController.deleteApplicationComment.bind(applicationController)
+);
+
+// Ranking operations
+router.post(
+    "/:id/ranking",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    validateRankingOperation,
+    validateLecturerApplicationAccess,
+    applicationController.addApplicationToRanking.bind(applicationController)
+);
+
+router.put(
+    "/:id/ranking",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    validateRankingOperation,
+    validateLecturerApplicationAccess,
+    applicationController.updateApplicationRanking.bind(applicationController)
+);
+
+router.delete(
+    "/:id/ranking",
+    authenticateToken,
+    requireUserType(["lecturer"]),
+    validateLecturerApplicationAccess,
+    applicationController.removeApplicationFromRanking.bind(applicationController)
 );
 
 router.get(
