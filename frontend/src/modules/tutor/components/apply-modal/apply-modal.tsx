@@ -6,6 +6,7 @@ import { Course, Role, ApplicationData } from "@/shared/services/applicationServ
 import { availableSkills } from "@/modules/tutor/utils/applicationDisplay.utils";
 import SkillTag from "@/modules/tutor/components/skill-tag/skill-tag";
 import styles from "./apply-modal.module.css";
+import { getMelbourneTime, getMelbourneDateOnly } from "@/shared/utils/dateUtils";
 
 /**
  * Validation Rules for Tutor Application Form:
@@ -258,7 +259,7 @@ const ApplyModal: React.FC<CombinedApplyModalProps> = (props) => {
     if (legacyProps) {
       // Legacy submission
     const application: TutorApplication = {
-        id: Date.now().toString(),
+        id: getMelbourneTime().getTime().toString(),
       userId: currentUserId,
         email: "",
         fullName: "",
@@ -267,7 +268,7 @@ const ApplyModal: React.FC<CombinedApplyModalProps> = (props) => {
         availability: (course as CourseDetails).availability,
       skills: selectedSkills,
       academicCredentials: academicCredentials,
-      dateApplied: new Date().toISOString().split("T")[0],
+      dateApplied: getMelbourneDateOnly(),
     };
       legacyProps.onSubmit(application);
     } else if (enhancedProps && role) {

@@ -1,4 +1,5 @@
 import type { Application as TutorApplication } from "@/shared/types/application";
+import { getMelbourneDateOnly } from "@/shared/utils/dateUtils";
 
 interface UseApplicationActionsProps {
   selectedApplication: TutorApplication | null;
@@ -58,7 +59,7 @@ export const useApplicationActions = ({
         ...selectedApplication,
         selected: true,
         selectedBy: currentLecturerId,
-        selectedDate: new Date().toISOString().split("T")[0],
+        selectedDate: getMelbourneDateOnly(),
         selectedForCourses: selectedCourses,
       };
       saveApplication(updatedApplication);
@@ -129,9 +130,9 @@ export const useApplicationActions = ({
         newRankedApplications[currentIndex],
         newRankedApplications[currentIndex - 1],
       ] = [
-        newRankedApplications[currentIndex - 1],
-        newRankedApplications[currentIndex],
-      ];
+          newRankedApplications[currentIndex - 1],
+          newRankedApplications[currentIndex],
+        ];
 
       newRankedApplications.forEach((app, index) => {
         const updatedApp = { ...app, rank: index + 1 };
@@ -154,9 +155,9 @@ export const useApplicationActions = ({
         newRankedApplications[currentIndex],
         newRankedApplications[currentIndex + 1],
       ] = [
-        newRankedApplications[currentIndex + 1],
-        newRankedApplications[currentIndex],
-      ];
+          newRankedApplications[currentIndex + 1],
+          newRankedApplications[currentIndex],
+        ];
 
       newRankedApplications.forEach((app, index) => {
         const updatedApp = { ...app, rank: index + 1 };

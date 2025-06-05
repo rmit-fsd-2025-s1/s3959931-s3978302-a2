@@ -21,6 +21,7 @@ export const availableSkills = [
 // TutorApplication (now Application) is defined in @/shared/types/application.ts
 import { Application as TutorApplication } from "@/shared/types/application"; // Alias if needed
 import StorageManager from "@/shared/utils/storageManager";
+import { getMelbourneDateOnly } from "@/shared/utils/dateUtils";
 
 // Function to get random skills (2-3) - client-side display helper for UI, if needed for initial form population etc.
 export const getRandomSkillsForDisplay = (): string[] => {
@@ -116,7 +117,7 @@ export const saveApplicationToStorage = (
       applications[existingIndex] = application;
     } else {
       if (!application.dateApplied) {
-        application.dateApplied = new Date().toISOString().split("T")[0];
+        application.dateApplied = getMelbourneDateOnly();
       }
       // Ensure new applications are unselected and unranked by default (if not already set)
       const newApplication = {

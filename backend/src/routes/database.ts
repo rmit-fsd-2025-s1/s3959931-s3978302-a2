@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { getMelbourneTimestamp } from "../utils/dateUtils";
 
 const router = Router();
 
@@ -10,7 +11,8 @@ router.get("/test", (req: Request, res: Response) => {
     res.json({
         success: true,
         message: "Database route is working",
-        timestamp: new Date().toISOString()
+        timestamp: getMelbourneTimestamp(),
+        timezone: "Australia/Melbourne (AEST/AEDT)"
     });
 });
 
@@ -35,7 +37,8 @@ router.get("/status", async (req: Request, res: Response) => {
                     ? "Database is empty or missing essential data"
                     : "Database is properly initialized"
             },
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     } catch (error) {
         console.error("❌ Error checking database status:", error);
@@ -43,7 +46,8 @@ router.get("/status", async (req: Request, res: Response) => {
             success: false,
             error: "Failed to check database status",
             message: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     }
 });
@@ -62,7 +66,8 @@ router.post("/reset", async (req: Request, res: Response) => {
         res.json({
             success: true,
             message: "Database reset completed successfully",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     } catch (error) {
         console.error("❌ Database reset failed:", error);
@@ -70,7 +75,8 @@ router.post("/reset", async (req: Request, res: Response) => {
             success: false,
             error: "Database reset failed",
             message: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     }
 });
@@ -92,7 +98,8 @@ router.post("/auto-reset", async (req: Request, res: Response) => {
             message: wasReset
                 ? "Database was empty and has been reset with essential data"
                 : "Database was already properly initialized, no reset needed",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     } catch (error) {
         console.error("❌ Auto-reset check failed:", error);
@@ -100,7 +107,8 @@ router.post("/auto-reset", async (req: Request, res: Response) => {
             success: false,
             error: "Auto-reset check failed",
             message: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     }
 });
@@ -119,7 +127,8 @@ router.post("/seed", async (req: Request, res: Response) => {
         res.json({
             success: true,
             message: "Essential data seeded successfully",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     } catch (error) {
         console.error("❌ Seeding failed:", error);
@@ -127,7 +136,8 @@ router.post("/seed", async (req: Request, res: Response) => {
             success: false,
             error: "Seeding failed",
             message: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString()
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)"
         });
     }
 });

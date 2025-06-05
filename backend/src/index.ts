@@ -6,6 +6,7 @@ import { initializeDatabase } from "./config/database";
 import authRoutes from "./routes/auth";
 import applicationRoutes from "./routes/application";
 import databaseRoutes from "./routes/database";
+import { getMelbourneTimestamp } from "./utils/dateUtils";
 
 config();
 
@@ -27,7 +28,8 @@ app.get("/health", (req, res) => {
     res.json({
         status: "OK",
         message: "Teaching Tutor Backend API is running",
-        timestamp: new Date().toISOString(),
+        timestamp: getMelbourneTimestamp(),
+        timezone: "Australia/Melbourne (AEST/AEDT)",
     });
 });
 
@@ -46,13 +48,15 @@ app.get("/db-test", async (req, res) => {
                 isEmpty: isEmpty,
                 status: isEmpty ? "EMPTY - needs data" : "HAS DATA"
             },
-            timestamp: new Date().toISOString(),
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)",
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             error: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString(),
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)",
         });
     }
 });
@@ -68,14 +72,16 @@ app.post("/db-reset", async (req, res) => {
         res.json({
             success: true,
             message: "Database reset completed successfully",
-            timestamp: new Date().toISOString(),
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)",
         });
     } catch (error) {
         console.error("❌ Database reset failed:", error);
         res.status(500).json({
             success: false,
             error: error instanceof Error ? error.message : "Unknown error",
-            timestamp: new Date().toISOString(),
+            timestamp: getMelbourneTimestamp(),
+            timezone: "Australia/Melbourne (AEST/AEDT)",
         });
     }
 });
