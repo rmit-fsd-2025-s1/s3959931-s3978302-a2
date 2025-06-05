@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AppDataSource } from "../config/database";
+import { User } from "../entities/User";
 
 interface JwtPayload {
     userId: number;
@@ -20,11 +22,11 @@ declare global {
     }
 }
 
-export const authenticateToken = (
+export const authenticateToken = async (
     req: Request,
     res: Response,
     next: NextFunction
-): void => {
+): Promise<void> => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
 
@@ -42,13 +44,50 @@ export const authenticateToken = (
             process.env.JWT_SECRET || "fallback_secret_key"
         ) as JwtPayload;
 
+        // Verify user still exists in database and is not blocked
+        const userRepository = AppDataSource.getRepository(User);
+        const user = await userRepository.findOne({
+            where: { id: decoded.userId }
+        });
+
+        if (!user) {
+            console.log(`Token verification failed: User ${decoded.userId} not found in database`);
+            res.status(401).json({
+                success: false,
+                message: "User account not found",
+            });
+            return;
+        }
+
+        if (user.isBlocked) {
+            console.log(`Token verification failed: User ${decoded.userId} is blocked`);
+            res.status(403).json({
+                success: false,
+                message: "Account has been blocked. Please contact administrator.",
+            });
+            return;
+        }
+
         req.user = decoded;
         next();
     } catch (error) {
-        res.status(403).json({
-            success: false,
-            message: "Invalid or expired token",
-        });
+        if (error instanceof jwt.TokenExpiredError) {
+            res.status(401).json({
+                success: false,
+                message: "Token has expired",
+            });
+        } else if (error instanceof jwt.JsonWebTokenError) {
+            res.status(403).json({
+                success: false,
+                message: "Invalid token",
+            });
+        } else {
+            console.error("Authentication error:", error);
+            res.status(500).json({
+                success: false,
+                message: "Authentication verification failed",
+            });
+        }
         return;
     }
 };

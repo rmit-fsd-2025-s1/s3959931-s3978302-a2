@@ -6,6 +6,7 @@ import Header from "@/shared/components/layout/header/header";
 import Footer from "@/shared/components/layout/footer/footer";
 import { AuthProvider } from "@/modules/auth/contexts/AuthContext";
 import GlobalWelcomeBanner from "@/shared/components/GlobalWelcomeBanner";
+import AppInitializer from "@/shared/components/AppInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         {" "}
         {/* Added flex classes for sticky footer */}
         <AuthProvider>
+          <AppInitializer />
           <Header />
           <GlobalWelcomeBanner />
           <main className="flex-grow">

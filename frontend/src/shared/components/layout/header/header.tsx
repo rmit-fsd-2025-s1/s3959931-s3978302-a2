@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import UserDropdown from "../user-dropdown";
+import StorageManager from "@/shared/utils/storageManager";
 import styles from "./header.module.css";
 
 const Header: React.FC = () => {
@@ -19,12 +20,17 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const darkModePreference = localStorage.getItem("darkMode") === "true";
-      setIsDarkMode(darkModePreference);
-      if (darkModePreference) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
+      try {
+        const darkModePreference = StorageManager.getItem("darkMode") === "true";
+        setIsDarkMode(darkModePreference);
+        if (darkModePreference) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch (e) {
+        console.error("Error loading dark mode preference:", e);
+        setIsDarkMode(false);
       }
     }
 
@@ -45,14 +51,18 @@ const Header: React.FC = () => {
   };
 
   const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
+    try {
+      const newDarkMode = !isDarkMode;
+      setIsDarkMode(newDarkMode);
+      if (newDarkMode) {
+        document.documentElement.classList.add("dark");
+        StorageManager.setItem("darkMode", "true");
+      } else {
+        document.documentElement.classList.remove("dark");
+        StorageManager.setItem("darkMode", "false");
+      }
+    } catch (e) {
+      console.error("Error toggling dark mode:", e);
     }
   };
 

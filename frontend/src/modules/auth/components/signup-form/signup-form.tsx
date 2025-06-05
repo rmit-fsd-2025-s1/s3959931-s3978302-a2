@@ -15,7 +15,7 @@ import styles from "./signup-form.module.css";
 
 export default function SignUpForm() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { } = useAuth(); // Removed login since we don't auto-login after signup
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -152,12 +152,11 @@ export default function SignUpForm() {
       const response = await AuthService.signup(signupData);
 
       if (response.success && response.data) {
-        // Use the AuthContext login method to properly set authentication state - ensure token exists
-        const token = response.data.token || "";
-        login(response.data.user, token);
-
-        // Redirect to profile or dashboard - welcome banner will show automatically
-        router.push("/profile");
+        // Don't auto-login after signup - redirect to signin page instead
+        console.log("✅ Account created successfully, redirecting to signin...");
+        
+        // Redirect to signin page with success message
+        router.push("/signin?message=Account created successfully! Please sign in.");
       } else {
         // Handle API errors
         if (response.errors) {

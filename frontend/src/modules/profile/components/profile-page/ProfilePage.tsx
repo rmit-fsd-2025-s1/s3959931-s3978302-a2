@@ -24,45 +24,41 @@ export const ProfilePage: React.FC = () => {
         setUser(savedUser);
         setIsLoading(false);
 
-        // For lecturer users, add mock assigned courses to test the UI
+        // Initialize empty courses for lecturers - will be populated from API
         if (savedUser.userType === UserType.LECTURER) {
-          const mockAssignedCourses = [
-            {
-              id: 1,
-              courseCode: "COSC2758",
-              courseName: "Full Stack Development",
-              semester: "Semester 1 2025",
-              assignedAt: new Date("2024-01-15")
-            },
-            {
-              id: 2,
-              courseCode: "COSC2671", 
-              courseName: "Introduction to Web Programming",
-              semester: "Semester 1 2025",
-              assignedAt: new Date("2024-01-20")
-            }
-          ];
-          setAssignedCourses(mockAssignedCourses);
+          setAssignedCourses([]);
         }
 
         // Fetch fresh data from API to get assigned courses for lecturers
         try {
           const response = await AuthService.getProfile();
           if (response.success && response.data) {
-            setUser(response.data.user);
-            updateUser(response.data.user);
+            const userData = response.data.user;
+            setUser(userData);
+            updateUser(userData);
             
-            // Set assigned courses if user is a lecturer and data is available from API
-            if (response.data.assignedCourses && response.data.assignedCourses.length > 0) {
-              setAssignedCourses(response.data.assignedCourses);
+            // Set assigned courses if user is a lecturer
+            if (userData.userType === UserType.LECTURER) {
+              if (response.data.assignedCourses && Array.isArray(response.data.assignedCourses) && response.data.assignedCourses.length > 0) {
+                console.log("✅ Setting assigned courses from API:", response.data.assignedCourses);
+                setAssignedCourses(response.data.assignedCourses);
+              } else {
+                console.log("⚠️ No assigned courses from API - lecturer not assigned to any courses yet");
+                setAssignedCourses([]);
+              }
             }
+          } else {
+            console.warn("API response not successful:", response.message);
           }
         } catch (apiError) {
-          console.warn(
-            "Failed to fetch fresh profile data, using cached data:",
-            apiError
-          );
-          // Don't set error state, just use cached data
+          console.error("Failed to fetch fresh profile data:", apiError);
+          // For lecturers, try to sync with database
+          if (savedUser.userType === UserType.LECTURER) {
+            const syncResult = await AuthService.syncWithDatabase();
+            if (!syncResult) {
+              console.warn("Database sync failed, user may be using outdated token");
+            }
+          }
         }
       } else {
         setError("Please log in to view your profile.");
@@ -283,9 +279,13 @@ export const ProfilePage: React.FC = () => {
                     </>
                   ) : (
                     <div className={styles.emptyCourses}>
-                      No courses are currently assigned to you.
-                      <br />
-                      Please contact the administrator if you believe this is an error.
+                      <div className={styles.emptyCoursesIcon}>📚</div>
+                      <div className={styles.emptyCoursesTitle}>No Courses Assigned</div>
+                      <div className={styles.emptyCoursesText}>
+                        You haven&apos;t been assigned to any courses yet.
+                        <br />
+                        Please contact the administrator to request course assignments.
+                      </div>
                     </div>
                   )}
                 </>

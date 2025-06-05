@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { AuthResponse, SignupData, SigninData, User } from "../types/user";
+import StorageManager from "../utils/storageManager";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
@@ -11,9 +12,9 @@ const authAPI = axios.create({
   },
 });
 
-// Add token to requests if available
+// Add token to requests if available and valid
 authAPI.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = AuthService.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -86,31 +87,146 @@ export class AuthService {
   }
 
   static saveToken(token: string): void {
-    localStorage.setItem("token", token);
+    try {
+      // Parse JWT to get expiration
+      const payload = this.parseJWT(token);
+      if (payload && payload.exp) {
+        StorageManager.setItem("token", token);
+        StorageManager.setItem("tokenExpiry", payload.exp.toString());
+        console.log("Token saved with expiry:", new Date(payload.exp * 1000));
+      } else {
+        console.warn("Invalid token structure, saving without expiry validation");
+        StorageManager.setItem("token", token);
+      }
+    } catch (error) {
+      console.error("Error saving token:", error);
+      StorageManager.setItem("token", token);
+    }
   }
 
   static removeToken(): void {
-    localStorage.removeItem("token");
+    StorageManager.removeItem("token");
+    StorageManager.removeItem("tokenExpiry");
   }
 
   static getToken(): string | null {
-    return localStorage.getItem("token");
+    const token = StorageManager.getItem("token");
+    const expiry = StorageManager.getItem("tokenExpiry");
+
+    if (token && expiry) {
+      const now = Math.floor(Date.now() / 1000);
+      const expiryTime = parseInt(expiry);
+
+      if (expiryTime > now) {
+        return token;
+      } else {
+        console.log("Token expired, cleaning up");
+        this.removeToken();
+        this.removeUser();
+        return null;
+      }
+    }
+
+    if (token) {
+      // Token exists but no expiry info - validate anyway
+      const payload = this.parseJWT(token);
+      if (payload && payload.exp) {
+        const now = Math.floor(Date.now() / 1000);
+        if (payload.exp > now) {
+          // Update expiry info
+          StorageManager.setItem("tokenExpiry", payload.exp.toString());
+          return token;
+        } else {
+          this.removeToken();
+          this.removeUser();
+          return null;
+        }
+      }
+    }
+
+    return token;
   }
 
   static saveUser(user: User): void {
-    localStorage.setItem("user", JSON.stringify(user));
+    try {
+      StorageManager.setVersionedItem("user", user);
+    } catch (error) {
+      console.error("Error saving user:", error);
+      StorageManager.setItem("user", JSON.stringify(user));
+    }
   }
 
   static removeUser(): void {
-    localStorage.removeItem("user");
+    StorageManager.removeItem("user");
   }
 
   static getUser(): User | null {
-    const userStr = localStorage.getItem("user");
-    return userStr ? JSON.parse(userStr) : null;
+    try {
+      // Try versioned storage first
+      const versionedUser = StorageManager.getVersionedItem<User>("user");
+      if (versionedUser) {
+        return versionedUser;
+      }
+
+      // Fallback to regular storage
+      const userStr = StorageManager.getItem("user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        // Migrate to versioned storage
+        this.saveUser(user);
+        return user;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error getting user:", error);
+      StorageManager.removeItem("user");
+      return null;
+    }
   }
 
   static isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  // Parse JWT payload without verification (for expiry check)
+  private static parseJWT(token: string): { exp?: number } | null {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Error parsing JWT:", error);
+      return null;
+    }
+  }
+
+  // Sync authentication with database
+  static async syncWithDatabase(): Promise<boolean> {
+    try {
+      const token = this.getToken();
+      if (!token) return false;
+
+      const response = await this.getProfile();
+      if (response.success && response.data) {
+        this.saveUser(response.data.user);
+        return true;
+      } else {
+        // Token is invalid on server side
+        this.removeToken();
+        this.removeUser();
+        return false;
+      }
+    } catch (error) {
+      console.error("Error syncing with database:", error);
+      // If network error, keep local auth but flag for retry
+      return false;
+    }
   }
 }

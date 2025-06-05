@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthService } from "../../../../shared/services/authService";
 import {
   validateEmail,
@@ -14,6 +14,7 @@ import styles from "./signin-form.module.css";
 
 export default function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const [formData, setFormData] = useState<SigninData>({
     email: "",
@@ -24,10 +25,22 @@ export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   
   // New state for login success modal
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+  // Check for success message from signup redirect
+  useEffect(() => {
+    const message = searchParams.get('message');
+    if (message) {
+      setSuccessMessage(message);
+      // Clear URL parameters after showing message
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [searchParams]);
 
   const handleInputChange = (field: keyof SigninData, value: string) => {
     setFormData((prev) => ({
@@ -122,6 +135,12 @@ export default function SignInForm() {
       <div className={styles.formContainer}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <h2 className={styles.title}>Welcome Back</h2>
+
+          {successMessage && (
+            <div className={`${styles.alert} ${styles.alertSuccess}`}>
+              {successMessage}
+            </div>
+          )}
 
           {apiError && (
             <div className={`${styles.alert} ${styles.alertError}`}>

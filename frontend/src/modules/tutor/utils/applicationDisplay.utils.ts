@@ -20,6 +20,7 @@ export const availableSkills = [
 
 // TutorApplication (now Application) is defined in @/shared/types/application.ts
 import { Application as TutorApplication } from "@/shared/types/application"; // Alias if needed
+import StorageManager from "@/shared/utils/storageManager";
 
 // Function to get random skills (2-3) - client-side display helper for UI, if needed for initial form population etc.
 export const getRandomSkillsForDisplay = (): string[] => {
@@ -27,14 +28,74 @@ export const getRandomSkillsForDisplay = (): string[] => {
   return shuffled.slice(0, 2 + Math.floor(Math.random() * 2));
 };
 
-// Get all applications from localStorage (temporary, to be replaced by API call)
+// Validation helper for applications
+const validateApplication = (app: unknown): app is TutorApplication => {
+  if (!app || typeof app !== 'object') return false;
+
+  const typedApp = app as Record<string, unknown>;
+
+  return !!(
+    typeof typedApp.id === 'string' &&
+    typeof typedApp.fullName === 'string' &&
+    typeof typedApp.email === 'string' &&
+    Array.isArray(typedApp.skills) &&
+    Array.isArray(typedApp.courses) &&
+    typeof typedApp.sessionType === 'string' &&
+    Array.isArray(typedApp.availability)
+  );
+};
+
+// Get all applications from storage with validation (temporary, to be replaced by API call)
 export const getApplicationsFromStorage = (): TutorApplication[] => {
   if (typeof window !== "undefined") {
-    const applications = localStorage.getItem("applications");
     try {
-      return applications ? JSON.parse(applications) : [];
+      // Try versioned storage first
+      const versionedApplications = StorageManager.getVersionedItem<TutorApplication[]>("applications");
+      if (versionedApplications && Array.isArray(versionedApplications)) {
+        const validApplications = versionedApplications.filter(validateApplication);
+        if (validApplications.length !== versionedApplications.length) {
+          console.warn(`${versionedApplications.length - validApplications.length} invalid applications filtered out`);
+          StorageManager.setVersionedItem("applications", validApplications);
+        }
+        return validApplications;
+      }
+
+      // Fallback to regular storage
+      const applicationsStr = StorageManager.getItem("applications");
+      if (!applicationsStr) return [];
+
+      const applications = JSON.parse(applicationsStr);
+
+      // Validate data structure
+      if (!Array.isArray(applications)) {
+        console.warn("Invalid applications data structure, resetting...");
+        StorageManager.removeItem("applications");
+        return [];
+      }
+
+      // Validate each application
+      const validApplications = applications.filter((app, index) => {
+        const isValid = validateApplication(app);
+        if (!isValid) {
+          console.warn(`Invalid application at index ${index}:`, app);
+        }
+        return isValid;
+      });
+
+      // If some applications were invalid, update storage
+      if (validApplications.length !== applications.length) {
+        StorageManager.setVersionedItem("applications", validApplications);
+      } else {
+        // Migrate valid data to versioned storage
+        StorageManager.setVersionedItem("applications", validApplications);
+      }
+
+      return validApplications;
+
     } catch (e) {
-      console.error("Error parsing applications from localStorage:", e);
+      console.error("Error parsing applications from storage:", e);
+      // Clear corrupted data
+      StorageManager.removeItem("applications");
       return [];
     }
   }
@@ -69,7 +130,7 @@ export const saveApplicationToStorage = (
       };
       applications.push(newApplication);
     }
-    localStorage.setItem("applications", JSON.stringify(applications));
+    StorageManager.setVersionedItem("applications", applications);
 
     // Trigger a custom event to notify other components (e.g., lecturer dashboard)
     const event = new CustomEvent("applicationUpdated", {
@@ -99,7 +160,7 @@ export const initializeDetailedApplicationsInStorage = () => {
     const applications = getApplicationsFromStorage(); // Use the local getter
     if (applications.length === 0) {
       // Only initialize if truly empty after parsing
-      localStorage.setItem("applications", JSON.stringify([]));
+      StorageManager.setVersionedItem("applications", []);
     }
     // The original also reset all applications, that logic might be separate or re-evaluated.
     // For now, this just ensures the key exists.
@@ -109,32 +170,37 @@ export const initializeDetailedApplicationsInStorage = () => {
 // Reset all applications to unselected status (moved from tutorUtils.ts)
 export const resetAllApplicationsToUnselectedInStorage = () => {
   if (typeof window !== "undefined") {
-    const applications = getApplicationsFromStorage(); // Use local getter
-    const updatedApplications = applications.map((app) => ({
-      ...app,
-      selected: false,
-      selectedBy: undefined,
-      selectedDate: undefined,
-      selectedForCourses: undefined,
-      rank: undefined,
-      comment: undefined,
-    }));
-    localStorage.setItem("applications", JSON.stringify(updatedApplications));
+    try {
+      const applications = getApplicationsFromStorage(); // Use local getter with validation
+      const updatedApplications = applications.map((app) => ({
+        ...app,
+        selected: false,
+        selectedBy: undefined,
+        selectedDate: undefined,
+        selectedForCourses: undefined,
+        rank: undefined,
+        comment: undefined,
+      }));
+      StorageManager.setVersionedItem("applications", updatedApplications);
+    } catch (e) {
+      console.error("Error resetting applications:", e);
+    }
   }
 };
 
-// Initialize and reset applications in localStorage (moved and adapted from tutorUtils.ts)
+// Initialize and reset applications in storage (moved and adapted from tutorUtils.ts)
 export const initializeAndResetApplicationsInStorage = () => {
   if (typeof window !== "undefined") {
-    if (!localStorage.getItem("applications")) {
-      localStorage.setItem("applications", JSON.stringify([]));
-    } else {
-      // Optionally reset all applications upon initialization if desired
-      // resetAllApplicationsToUnselectedInStorage();
-      // For now, just ensuring it exists or is empty array from initializeDetailedApplicationsInStorage is enough.
-      // If a full reset is intended on every app load, uncomment the line above.
+    try {
+      const existingApplications = getApplicationsFromStorage();
+      if (existingApplications.length === 0) {
+        StorageManager.setVersionedItem("applications", []);
+      }
+      // Ensure it's at least an empty array if `initializeDetailedApplicationsInStorage` hasn't run
+      initializeDetailedApplicationsInStorage();
+    } catch (e) {
+      console.error("Error initializing applications storage:", e);
+      StorageManager.setVersionedItem("applications", []);
     }
-    // Ensure it's at least an empty array if `initializeDetailedApplicationsInStorage` hasn't run
-    initializeDetailedApplicationsInStorage();
   }
 };

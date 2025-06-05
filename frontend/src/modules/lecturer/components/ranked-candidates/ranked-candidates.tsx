@@ -104,7 +104,10 @@ const RankedCandidates: React.FC<RankedCandidatesProps> = ({
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.02 }}
             >
-              <div className={styles.rankBadge}>{application.rank}</div>
+              <div className={styles.rankBadge}>
+                <span className={styles.rankNumber}>#{application.rank}</span>
+                <span className={styles.rankLabel}>Rank</span>
+              </div>
               <div className={styles.rankedInfo}>
                 <div className={styles.rankedName}>{application.fullName}</div>
                 <div className={styles.rankedCourses}>
