@@ -26,6 +26,11 @@ const RankedCandidates: React.FC<RankedCandidatesProps> = ({
   onCourseChange,
   availableCourses = [],
 }) => {
+  // Function to format rank display
+  const formatRankDisplay = (rank: number) => {
+    return rank.toString();
+  };
+
   const filteredRankedApplications = rankedApplications.filter((app) => {
     // Require a course to be selected for rankings
     if (!selectedCourse) {
@@ -105,8 +110,7 @@ const RankedCandidates: React.FC<RankedCandidatesProps> = ({
               whileHover={{ scale: 1.02 }}
             >
               <div className={styles.rankBadge}>
-                <span className={styles.rankNumber}>#{application.rank}</span>
-                <span className={styles.rankLabel}>Rank</span>
+                <span className={styles.rankNumber}>{formatRankDisplay(application.rank || 1)}</span>
               </div>
               <div className={styles.rankedInfo}>
                 <div className={styles.rankedName}>{application.fullName}</div>

@@ -104,7 +104,7 @@ const ApplicantItem = React.memo<{
       {application.rank !== undefined && (
         <div
           className={styles.applicantRankedIconContainer}
-          title={`Ranked #${application.rank}`}
+          title={`Ranked ${application.rank}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

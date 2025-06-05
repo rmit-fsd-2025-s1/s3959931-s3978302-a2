@@ -89,8 +89,8 @@ app.post("/db-reset", async (req, res) => {
 // Start server
 const startServer = async () => {
     try {
-        // Initialize database connection with auto-reset functionality
-        await initializeDatabaseWithAutoReset();
+        // Initialize database connection (NO AUTO-RESET)
+        await initializeDatabaseSafely();
 
         app.listen(PORT, () => {
             console.log(`✅ Server is running on port ${PORT}`);
@@ -112,54 +112,24 @@ const startServer = async () => {
     }
 };
 
-// Enhanced database initialization with auto-reset
-const initializeDatabaseWithAutoReset = async () => {
+// Safe database initialization - NO AUTO-RESET, preserves existing data
+const initializeDatabaseSafely = async () => {
     console.log("🚀 Starting Teaching Tutor Backend API...");
-    console.log("🔄 Initializing database with auto-reset capability...");
+    console.log("🔄 Initializing database connection (safe mode)...");
 
     try {
-        // Import the reset service
-        const { DatabaseResetService } = await import("./utils/dbReset");
-
-        // Check if database is empty or needs reset
-        console.log("🔍 Checking if database needs initialization...");
-        const isEmpty = await DatabaseResetService.isDatabaseEmpty();
-
-        if (isEmpty) {
-            console.log("📊 Database is empty, performing auto-reset...");
-            await DatabaseResetService.resetDatabase();
-            console.log("✅ Database auto-reset completed successfully");
-        } else {
-            console.log("📊 Database has data, checking for updates...");
-            // Try normal initialization to add any missing data
-            try {
-                await initializeDatabase();
-                console.log("✅ Database initialization completed successfully");
-            } catch (initError) {
-                console.warn("⚠️ Standard initialization failed, attempting reset...");
-                await DatabaseResetService.resetDatabase();
-                console.log("✅ Database reset completed successfully");
-            }
-        }
-
-        // Verify database status
-        const isConnected = await DatabaseResetService.checkDatabaseConnection();
-        const finalIsEmpty = await DatabaseResetService.isDatabaseEmpty();
-
-        console.log(`📊 Final database status: Connected=${isConnected}, Empty=${finalIsEmpty}`);
+        // Just initialize the database connection
+        await initializeDatabase();
+        console.log("✅ Database initialization completed successfully");
+        console.log("💾 User data will be preserved across server restarts");
 
     } catch (error) {
         console.error("❌ Database initialization failed:", error);
-        console.log("🔄 Attempting emergency database reset...");
+        console.warn("⚠️ Manual database intervention may be required");
 
-        try {
-            const { DatabaseResetService } = await import("./utils/dbReset");
-            await DatabaseResetService.resetDatabase();
-            console.log("✅ Emergency database reset completed");
-        } catch (resetError) {
-            console.error("❌ Emergency reset also failed:", resetError);
-            console.warn("⚠️ Continuing server startup without database - manual intervention required");
-        }
+        // Don't auto-reset, just log the error
+        console.log("🔧 To manually reset database if needed: POST /db-reset");
+        throw error;
     }
 };
 
