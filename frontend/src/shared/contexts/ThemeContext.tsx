@@ -21,8 +21,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         const darkModePreference = StorageManager.getItem("darkMode") === "true";
         setIsDarkMode(darkModePreference);
         if (darkModePreference) {
+          document.documentElement.setAttribute("data-theme", "dark");
           document.documentElement.classList.add("dark");
         } else {
+          document.documentElement.setAttribute("data-theme", "light");
           document.documentElement.classList.remove("dark");
         }
       } catch (e) {
@@ -37,9 +39,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       const newDarkMode = !isDarkMode;
       setIsDarkMode(newDarkMode);
       if (newDarkMode) {
+        document.documentElement.setAttribute("data-theme", "dark");
         document.documentElement.classList.add("dark");
         StorageManager.setItem("darkMode", "true");
       } else {
+        document.documentElement.setAttribute("data-theme", "light");
         document.documentElement.classList.remove("dark");
         StorageManager.setItem("darkMode", "false");
       }
