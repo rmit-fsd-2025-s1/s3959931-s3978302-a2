@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
+import Link from "next/link";
 import { GET_USER_STATS, GET_ALL_COURSES } from "@/lib/graphql/queries";
 import {
     UsersIcon,
@@ -251,7 +252,7 @@ export default function Dashboard() {
                         </div>
                         <div className={styles.cardContent}>
                             <div className={styles.actionsList}>
-                                <a
+                                <Link
                                     href="/dashboard/users"
                                     className={styles.actionItem}
                                 >
@@ -265,12 +266,12 @@ export default function Dashboard() {
                                             Manage Users
                                         </h4>
                                         <p className={styles.actionDescription}>
-                                            View and manage all users
+                                            Block/unblock and delete users
                                         </p>
                                     </div>
                                     <div className={styles.actionArrow}>→</div>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     href="/dashboard/courses"
                                     className={styles.actionItem}
                                 >
@@ -284,11 +285,11 @@ export default function Dashboard() {
                                             Manage Courses
                                         </h4>
                                         <p className={styles.actionDescription}>
-                                            Create and assign courses
+                                            CRUD courses and assign lecturers
                                         </p>
                                     </div>
                                     <div className={styles.actionArrow}>→</div>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -11,6 +11,7 @@ import {
 import { Course } from "../types/Course";
 import { CourseAssignment } from "../types/CourseAssignment";
 import { User, UserType } from "../types/User";
+import { ApplicationStatus } from "../types/Application";
 import { AppDataSource } from "../config/database";
 
 @InputType()
@@ -191,7 +192,10 @@ export class CourseResolver {
     ): Promise<CourseResponse> {
         try {
             const courseRepository = AppDataSource.getRepository(Course);
-            const course = await courseRepository.findOne({ where: { id } });
+            const course = await courseRepository.findOne({
+                where: { id },
+                relations: ["courseAssignments", "applications"],
+            });
 
             if (!course) {
                 return {
@@ -200,14 +204,43 @@ export class CourseResolver {
                 };
             }
 
+            // Check if there are active applications
+            const activeApplications =
+                course.applications?.filter(
+                    (app) =>
+                        app.status === ApplicationStatus.PENDING ||
+                        app.status === ApplicationStatus.SELECTED
+                ) || [];
+
+            if (activeApplications.length > 0) {
+                return {
+                    success: false,
+                    message: `Cannot delete course. There are ${activeApplications.length} active application(s). Please handle these applications first.`,
+                };
+            }
+
+            // The database cascade rules will handle the deletion of:
+            // - Course assignments (due to onDelete: "CASCADE" in CourseAssignment entity)
+            // - Applications (due to onDelete: "CASCADE" in Application entity)
             await courseRepository.remove(course);
 
             return {
                 success: true,
-                message: "Course deleted successfully",
+                message:
+                    "Course deleted successfully. All related assignments and applications have been removed.",
             };
         } catch (error) {
             console.error("Delete course error:", error);
+
+            // Check if it's a foreign key constraint error
+            if (error.message.includes("foreign key constraint")) {
+                return {
+                    success: false,
+                    message:
+                        "Cannot delete course due to existing references. Please remove all related data first.",
+                };
+            }
+
             return {
                 success: false,
                 message: "Failed to delete course",
