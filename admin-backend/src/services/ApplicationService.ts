@@ -1,8 +1,92 @@
 import { AppDataSource } from "../config/database";
 import { Application } from "../types/Application";
 import { ApplicationStatus } from "../types/Application";
+import { CourseAssignment } from "../types/CourseAssignment";
 
 export class ApplicationService {
+    /**
+     * Get affected lecturer IDs who have applications from the given candidate
+     * This is used to send targeted notifications only to relevant lecturers
+     */
+    static async getAffectedLecturerIds(
+        candidateId: number
+    ): Promise<number[]> {
+        try {
+            const applicationRepository =
+                AppDataSource.getRepository(Application);
+            const courseAssignmentRepository =
+                AppDataSource.getRepository(CourseAssignment);
+
+            console.log(`🔍 Finding applications for candidate ${candidateId}`);
+
+            // Get all applications for this candidate
+            const candidateApplications = await applicationRepository.find({
+                where: { candidateId: candidateId },
+                relations: ["course"],
+                select: ["id", "courseId"],
+            });
+
+            console.log(
+                `📋 Found ${candidateApplications.length} applications for candidate ${candidateId}`
+            );
+
+            if (candidateApplications.length === 0) {
+                return [];
+            }
+
+            // Get unique course IDs from the applications
+            const courseIds = [
+                ...new Set(candidateApplications.map((app) => app.courseId)),
+            ];
+            console.log(`📚 Candidate has applications in courses:`, courseIds);
+
+            // Find lecturers assigned to these courses
+            const courseAssignments = await courseAssignmentRepository.find({
+                where: {
+                    courseId: courseIds.length === 1 ? courseIds[0] : undefined,
+                },
+                relations: ["lecturer"],
+                select: ["id", "lecturerId", "courseId"],
+            });
+
+            // If multiple course IDs, use a more complex query
+            if (courseIds.length > 1) {
+                const assignments = await courseAssignmentRepository
+                    .createQueryBuilder("assignment")
+                    .select(["assignment.lecturerId", "assignment.courseId"])
+                    .where("assignment.courseId IN (:...courseIds)", {
+                        courseIds,
+                    })
+                    .getMany();
+
+                const affectedLecturerIds = [
+                    ...new Set(
+                        assignments.map((assignment) => assignment.lecturerId)
+                    ),
+                ];
+                console.log(
+                    `👨‍🏫 Found ${affectedLecturerIds.length} affected lecturers:`,
+                    affectedLecturerIds
+                );
+                return affectedLecturerIds;
+            }
+
+            const affectedLecturerIds = [
+                ...new Set(
+                    courseAssignments.map((assignment) => assignment.lecturerId)
+                ),
+            ];
+            console.log(
+                `👨‍🏫 Found ${affectedLecturerIds.length} affected lecturers:`,
+                affectedLecturerIds
+            );
+            return affectedLecturerIds;
+        } catch (error) {
+            console.error("❌ Error finding affected lecturer IDs:", error);
+            return [];
+        }
+    }
+
     /**
      * Unselect and unrank all applications for a blocked candidate
      * This ensures that when a candidate is blocked, they're completely removed from selection and ranking

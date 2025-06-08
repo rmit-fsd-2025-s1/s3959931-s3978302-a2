@@ -234,32 +234,52 @@ const LecturerDashboardInner: React.FC = () => {
     (event: CandidateBlockedEvent) => {
       console.log("🔔 Candidate blocking event received:", event);
 
-      if (event.isBlocked) {
-        console.log(
-          `🚫 Candidate ${event.candidateName} has been blocked - automatically unselecting and unranking their applications`
-        );
+      // Check if current lecturer should be affected by this blocking event
+      const shouldReceiveNotification =
+        user?.userType === "lecturer" &&
+        event.affectedLecturerIds &&
+        event.affectedLecturerIds.includes(user.id);
 
-        const unselectedCount = event.unselectedApplicationsCount || 0;
-        const unrankedCount = event.unrankedApplicationsCount || 0;
+      console.log("🎯 onCandidateBlocked targeting check:", {
+        candidateName: event.candidateName,
+        currentUserId: user?.id,
+        affectedLecturerIds: event.affectedLecturerIds,
+        shouldReceiveNotification,
+      });
 
-        let message = `${event.candidateName} blocked`;
-        if (unselectedCount > 0 || unrankedCount > 0) {
-          const details = [];
-          if (unselectedCount > 0)
-            details.push(
-              `${unselectedCount} application${unselectedCount === 1 ? "" : "s"} unselected`
-            );
-          if (unrankedCount > 0)
-            details.push(
-              `${unrankedCount} ranking${unrankedCount === 1 ? "" : "s"} removed`
-            );
-          message += ` - ${details.join(", ")}`;
+      // Only show toast notifications for affected lecturers
+      if (shouldReceiveNotification) {
+        if (event.isBlocked) {
+          console.log(
+            `🚫 Candidate ${event.candidateName} has been blocked - automatically unselecting and unranking their applications`
+          );
+
+          const unselectedCount = event.unselectedApplicationsCount || 0;
+          const unrankedCount = event.unrankedApplicationsCount || 0;
+
+          let message = `${event.candidateName} blocked`;
+          if (unselectedCount > 0 || unrankedCount > 0) {
+            const details = [];
+            if (unselectedCount > 0)
+              details.push(
+                `${unselectedCount} application${unselectedCount === 1 ? "" : "s"} unselected`
+              );
+            if (unrankedCount > 0)
+              details.push(
+                `${unrankedCount} ranking${unrankedCount === 1 ? "" : "s"} removed`
+              );
+            message += ` - ${details.join(", ")}`;
+          }
+
+          showToast(message, "info");
+        } else {
+          console.log(`✅ Candidate ${event.candidateName} has been unblocked`);
+          showToast(`${event.candidateName} unblocked`, "success");
         }
-
-        showToast(message, "info");
       } else {
-        console.log(`✅ Candidate ${event.candidateName} has been unblocked`);
-        showToast(`${event.candidateName} unblocked`, "success");
+        console.log(
+          `🚫 Not showing toast for ${event.candidateName} - lecturer not affected`
+        );
       }
 
       console.log("🔄 Refreshing applications after blocking event...");
@@ -277,8 +297,8 @@ const LecturerDashboardInner: React.FC = () => {
         // Clear the selected application to force a proper refresh
         setRawSelectedApplication(null);
 
-        if (event.isBlocked) {
-          // Show specific message when the currently selected candidate is blocked
+        if (event.isBlocked && shouldReceiveNotification) {
+          // Show specific message when the currently selected candidate is blocked (only for affected lecturers)
           showToast(
             `Currently selected candidate ${event.candidateName} has been blocked and unselected`,
             "error"
@@ -314,6 +334,7 @@ const LecturerDashboardInner: React.FC = () => {
         });
     },
     [
+      user,
       loadApplications,
       rawSelectedApplication,
       setRawSelectedApplication,

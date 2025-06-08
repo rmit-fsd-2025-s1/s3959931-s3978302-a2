@@ -139,10 +139,21 @@ export class UserResolver {
 
             // If blocking a candidate, automatically unselect and unrank their applications
             let applicationResult = null;
+            let affectedLecturerIds: number[] = [];
+
             if (user.userType === UserType.CANDIDATE) {
                 console.log(
-                    `🔄 Automatically unselecting and unranking applications for blocked candidate ${user.id}`
+                    `🔄 Finding affected lecturers and automatically unselecting applications for blocked candidate ${user.id}`
                 );
+
+                // First find affected lecturers before unselecting applications
+                affectedLecturerIds =
+                    await ApplicationService.getAffectedLecturerIds(user.id);
+                console.log(
+                    `📋 Found ${affectedLecturerIds.length} affected lecturers:`,
+                    affectedLecturerIds
+                );
+
                 applicationResult =
                     await ApplicationService.unselectAndUnrankCandidateApplications(
                         user.id
@@ -170,6 +181,7 @@ export class UserResolver {
                         applicationResult?.unselectedCount || 0,
                     unrankedApplicationsCount:
                         applicationResult?.unrankedCount || 0,
+                    affectedLecturerIds: affectedLecturerIds,
                 };
 
                 console.log("📡 Publishing CANDIDATE_BLOCKED event:", event);
@@ -222,6 +234,14 @@ export class UserResolver {
 
             // Publish subscription event if user is a candidate
             if (user.userType === UserType.CANDIDATE) {
+                // Find affected lecturers who have this candidate's applications
+                const affectedLecturerIds =
+                    await ApplicationService.getAffectedLecturerIds(user.id);
+                console.log(
+                    `📋 Found ${affectedLecturerIds.length} affected lecturers for unblock:`,
+                    affectedLecturerIds
+                );
+
                 const event: CandidateBlockedEvent = {
                     candidateId: user.id,
                     candidateName: user.fullName,
@@ -229,6 +249,7 @@ export class UserResolver {
                     isBlocked: false,
                     timestamp: new Date().toISOString(),
                     candidate: user,
+                    affectedLecturerIds: affectedLecturerIds,
                 };
 
                 console.log("📡 Publishing CANDIDATE_UNBLOCKED event:", event);

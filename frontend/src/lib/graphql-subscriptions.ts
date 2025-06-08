@@ -11,6 +11,7 @@ export const CANDIDATE_BLOCKING_SUBSCRIPTION = gql`
       timestamp
       unselectedApplicationsCount
       unrankedApplicationsCount
+      affectedLecturerIds
       candidate {
         id
         fullName
@@ -31,6 +32,7 @@ export interface CandidateBlockedEvent {
   timestamp: string;
   unselectedApplicationsCount?: number;
   unrankedApplicationsCount?: number;
+  affectedLecturerIds?: number[];
   candidate: {
     id: number;
     fullName: string;

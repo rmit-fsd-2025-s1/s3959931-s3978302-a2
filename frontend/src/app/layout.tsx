@@ -6,6 +6,7 @@ import Header from "@/shared/components/layout/header/header";
 import Footer from "@/shared/components/layout/footer/footer";
 import { AuthProvider } from "@/modules/auth/contexts/AuthContext";
 import { ThemeProvider } from "@/shared/contexts/ThemeContext";
+import { NotificationProvider } from "@/shared/contexts/NotificationContext";
 import GlobalWelcomeBanner from "@/shared/components/welcome/GlobalWelcomeBanner";
 import AppInitializer from "@/shared/components/app-initialization/AppInitializer";
 
@@ -28,15 +29,17 @@ export default function RootLayout({
         {/* Added flex classes for sticky footer */}
         <ThemeProvider>
           <AuthProvider>
-            <AppInitializer />
-            <Header />
-            <GlobalWelcomeBanner />
-            <main className="flex-grow">
-              {" "}
-              {/* Added flex-grow to push footer down */}
-              {children}
-            </main>
-            <Footer />
+            <NotificationProvider>
+              <AppInitializer />
+              <Header />
+              <GlobalWelcomeBanner />
+              <main className="flex-grow">
+                {" "}
+                {/* Added flex-grow to push footer down */}
+                {children}
+              </main>
+              <Footer />
+            </NotificationProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

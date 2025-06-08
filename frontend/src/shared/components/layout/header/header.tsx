@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useTheme } from "@/shared/contexts/ThemeContext";
 import UserDropdown from "../user-dropdown";
+import NotificationBell from "@/shared/components/common/notification-bell/NotificationBell";
 import styles from "./header.module.css";
 
 const Header: React.FC = () => {
@@ -17,6 +18,18 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isThemeToggleRemoving, setIsThemeToggleRemoving] = useState(false);
   const [isThemeToggleAdding, setIsThemeToggleAdding] = useState(false);
+
+  // Debug logging for user state in header
+  useEffect(() => {
+    console.log("🏠 Header user state:", {
+      isAuthenticated,
+      userId: user?.id,
+      userType: user?.userType,
+      isLecturer: user?.userType === "lecturer",
+      shouldShowNotificationBell:
+        isAuthenticated && user?.userType === "lecturer",
+    });
+  }, [isAuthenticated, user?.id, user?.userType]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,16 +152,27 @@ const Header: React.FC = () => {
               </button>
             )}
             {isAuthenticated && user ? (
-              <UserDropdown
-                user={{
-                  fullName: `${user.firstName} ${user.lastName}`,
-                  email: user.email,
-                  role: getUserRole(),
-                }}
-                onSignOut={handleSignOut}
-                onToggleDarkMode={toggleDarkMode}
-                isDarkMode={isDarkMode}
-              />
+              <div className={styles.userSection}>
+                {user.userType === "lecturer" && (
+                  <>
+                    {console.log(
+                      "🔔 Rendering NotificationBell for lecturer:",
+                      user.id
+                    )}
+                    <NotificationBell />
+                  </>
+                )}
+                <UserDropdown
+                  user={{
+                    fullName: `${user.firstName} ${user.lastName}`,
+                    email: user.email,
+                    role: getUserRole(),
+                  }}
+                  onSignOut={handleSignOut}
+                  onToggleDarkMode={toggleDarkMode}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
             ) : (
               <div className={styles.authButtons}>
                 <Link

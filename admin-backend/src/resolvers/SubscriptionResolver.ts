@@ -40,6 +40,9 @@ export class CandidateBlockedEvent {
 
     @Field(() => Int, { nullable: true })
     unrankedApplicationsCount?: number;
+
+    @Field(() => [Int], { nullable: true })
+    affectedLecturerIds?: number[];
 }
 
 @Resolver()
@@ -69,6 +72,7 @@ export class SubscriptionResolver {
             candidateName: eventData?.candidateName,
             isBlocked: eventData?.isBlocked,
             timestamp: eventData?.timestamp,
+            affectedLecturerIds: eventData?.affectedLecturerIds,
         });
 
         if (!eventData) {
@@ -103,6 +107,7 @@ export class SubscriptionResolver {
                 updatedAt: new Date(),
                 password: "",
             } as User,
+            affectedLecturerIds: [1, 2, 3], // Test with some lecturer IDs
         };
 
         console.log("📡 Publishing test CANDIDATE_BLOCKED event:", testEvent);
