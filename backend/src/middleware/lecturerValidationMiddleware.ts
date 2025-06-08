@@ -108,7 +108,7 @@ export const validateStatusUpdate = (
     const errors: ValidationError[] = [];
 
     // Status validation
-    const allowedStatuses = ["pending", "shortlisted", "selected", "rejected"];
+    const allowedStatuses = ["pending", "selected"];
     if (!status) {
         errors.push({
             field: "status",
@@ -182,16 +182,7 @@ export const validateStatusUpdate = (
         }
     }
 
-    // Comment validation for rejected status
-    if (status === "rejected") {
-        if (!comment || !comment.trim()) {
-            errors.push({
-                field: "comment",
-                message: "Comment is required when rejecting an applicant",
-                code: "COMMENT_REQUIRED_FOR_REJECTION",
-            });
-        }
-    }
+
 
     // Validate comment if provided
     if (comment) {
@@ -424,14 +415,14 @@ export const validateLecturerFilters = (
     // Status validation
     if (
         status &&
-        !["all", "pending", "shortlisted", "selected", "rejected"].includes(
+        !["all", "pending", "selected"].includes(
             status as string
         )
     ) {
         errors.push({
             field: "status",
             message:
-                "Status must be one of: all, pending, shortlisted, selected, rejected",
+                "Status must be one of: all, pending, selected",
             code: "STATUS_INVALID",
         });
     }

@@ -10,7 +10,7 @@ export interface Application {
   skills: string[];
   academicCredentials: string;
   dateApplied: string; // ISO date string
-  status?: "pending" | "shortlisted" | "rejected" | "hired"; // More detailed status than just selected
+  status?: "pending" | "selected"; // More detailed status than just selected
   selected?: boolean; // Kept for compatibility, but status is preferred
   selectedBy?: string; // Lecturer User ID
   selectedDate?: string; // ISO date string
@@ -18,10 +18,6 @@ export interface Application {
   comment?: string; // Lecturer's comment
   rank?: number; // Lecturer's ranking
   isBlocked?: boolean; // Whether the candidate is blocked
-  // Add other common application fields
 }
 
-// If distinctions between TutorApplication and a more generic Application arise,
-// you can use interfaces like:
-// export interface TutorApplicationSpecifics { previousRoles: string[]; }
-// export interface TutorApplicationData extends Application, TutorApplicationSpecifics {}
+

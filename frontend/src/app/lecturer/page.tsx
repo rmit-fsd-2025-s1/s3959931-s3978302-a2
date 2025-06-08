@@ -55,9 +55,7 @@ const convertToLegacyApplication = (
     dateApplied: appResponse.appliedAt,
     status: appResponse.status as
       | "pending"
-      | "shortlisted"
-      | "rejected"
-      | "hired",
+      | "selected",
     selected: appResponse.status === "selected",
     comment: appResponse.comment || "",
     rank: appResponse.rank,
@@ -331,17 +329,7 @@ const LecturerDashboardInner: React.FC = () => {
     return () => clearInterval(refreshInterval);
   }, [isInitialized, loadCourses, loadApplications]);
 
-  // Manual refresh function
-  const handleManualRefresh = useCallback(async () => {
-    showToast("Refreshing data...", "success");
-    try {
-      await Promise.all([loadCourses(), loadApplications()]);
-      showToast("Data refreshed successfully", "success");
-    } catch (error) {
-      console.error("Error during manual refresh:", error);
-      showToast("Error refreshing data", "error");
-    }
-  }, [loadCourses, loadApplications, showToast]);
+
 
   // Extract all unique skills from applications
   useEffect(() => {
@@ -739,7 +727,6 @@ const LecturerDashboardInner: React.FC = () => {
           <DashboardHeader
             lecturerName={lecturerName}
             statistics={statistics}
-            onRefresh={handleManualRefresh}
           />
 
           {/* Enhanced Application Filters */}

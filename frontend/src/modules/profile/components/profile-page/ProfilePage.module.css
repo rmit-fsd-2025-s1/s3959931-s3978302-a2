@@ -481,7 +481,7 @@
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   line-height: 1.5;
-  max-width: 300px;
+  max-width: 500px;
 }
 
 .courseCount {

@@ -127,9 +127,9 @@ const TutorDashboardPage: React.FC = () => {
   const stats = getComprehensiveStats();
 
   // Check if user has applied to any role in a course
-  const hasAppliedToCourse = (courseId: number) => {
+  const hasAppliedToCourse = React.useCallback((courseId: number) => {
     return myApplications.some(app => app.courseId === courseId);
-  };
+  }, [myApplications]);
 
 
 
@@ -164,7 +164,7 @@ const TutorDashboardPage: React.FC = () => {
 
       return matchesSearch && matchesFilter;
     });
-  }, [courses, searchQuery, activeFilter, myApplications]);
+  }, [courses, searchQuery, activeFilter, hasAppliedToCourse]);
 
   const openApplyModal = (course: Course, role: Role) => {
     console.log("Apply button clicked for:", course.courseCode, role.roleName);

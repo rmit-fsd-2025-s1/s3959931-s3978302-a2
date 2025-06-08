@@ -27,7 +27,7 @@ export const DEFAULT_COMMENT_CONFIG: CommentValidationConfig = {
 };
 
 export const DEFAULT_STATUS_CONFIG: StatusUpdateValidationConfig = {
-    allowedStatuses: ["pending", "shortlisted", "selected", "rejected"],
+    allowedStatuses: ["pending", "selected"],
     requireComment: false,
     requireCourseSelection: true
 };
@@ -140,12 +140,7 @@ export const validateStatusUpdate = (
         }
     }
 
-    // Comment requirement validation
-    if (config.requireComment && newStatus === "rejected") {
-        if (!comment || !comment.trim()) {
-            errors.comment = "Comment is required when rejecting an applicant";
-        }
-    }
+
 
     // Validate comment if provided
     if (comment && comment.trim()) {
@@ -267,7 +262,7 @@ export const validateLecturerFilters = (filters: {
     }
 
     // Status validation
-    if (filters.status && !["all", "pending", "shortlisted", "selected", "rejected"].includes(filters.status)) {
+    if (filters.status && !["all", "pending", "selected"].includes(filters.status)) {
         errors.status = "Invalid status filter";
     }
 
@@ -383,9 +378,6 @@ export const validateLecturerFormSubmission = (data: {
                     Object.assign(errors, statusValidation.errors);
                     if (data.status === 'selected' && (!data.selectedCourses || data.selectedCourses.length === 0)) {
                         suggestions.push("Select at least one course when accepting an applicant");
-                    }
-                    if (data.status === 'rejected' && !data.comment) {
-                        suggestions.push("Add a comment explaining the rejection reason");
                     }
                 }
             }

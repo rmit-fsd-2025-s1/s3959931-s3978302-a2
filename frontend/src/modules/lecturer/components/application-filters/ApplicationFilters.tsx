@@ -98,9 +98,7 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
   const statusOptions = [
     { value: '', label: 'All Statuses' },
     { value: 'pending', label: 'Pending' },
-    { value: 'shortlisted', label: 'Shortlisted' },
     { value: 'selected', label: 'Selected' },
-    { value: 'rejected', label: 'Rejected' },
   ];
 
   const sortOptions = [
@@ -116,7 +114,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
       <div className={styles.filtersHeader}>
         <div className={styles.headerLeft}>
           <h3 className={styles.filtersTitle}>
-            <span className={styles.filterIcon}>🔍</span>
             Candidate Filters
             {activeFilterCount > 0 && (
               <span className={styles.filterCount}>{activeFilterCount}</span>
@@ -158,7 +155,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             Search by candidate name
           </label>
           <div className={styles.searchInputWrapper}>
-            <span className={styles.searchIcon}>👤</span>
             <input
               id="candidateSearch"
               type="text"
@@ -219,7 +215,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             <div className={styles.filterRow}>
               <div className={styles.filterGroup}>
                 <label htmlFor="roleTypeFilter" className={styles.filterLabel}>
-                  <span className={styles.labelIcon}>🎓</span>
                   Session Type
                 </label>
                 <select
@@ -238,7 +233,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
 
               <div className={styles.filterGroup}>
                 <label htmlFor="availabilityFilter" className={styles.filterLabel}>
-                  <span className={styles.labelIcon}>⏰</span>
                   Availability
                 </label>
                 <select
@@ -257,7 +251,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
 
               <div className={styles.filterGroup}>
                 <label htmlFor="statusFilter" className={styles.filterLabel}>
-                  <span className={styles.labelIcon}>📊</span>
                   Status
                 </label>
                 <select
@@ -276,7 +269,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
 
               <div className={styles.filterGroup}>
                 <label htmlFor="sortBy" className={styles.filterLabel}>
-                  <span className={styles.labelIcon}>🔄</span>
                   Sort By
                 </label>
                 <select
@@ -298,7 +290,6 @@ const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
             <div className={styles.skillsSection}>
               <div className={styles.skillsHeader}>
                 <label className={styles.filterLabel}>
-                  <span className={styles.labelIcon}>🛠️</span>
                   Filter by Skills
                   {skillsFilter.length > 0 && (
                     <span className={styles.skillsCount}>({skillsFilter.length} selected)</span>

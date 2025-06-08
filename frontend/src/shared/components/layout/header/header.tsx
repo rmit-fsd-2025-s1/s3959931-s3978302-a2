@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useTheme } from "@/shared/contexts/ThemeContext";
@@ -10,7 +10,6 @@ import NotificationBell from "@/shared/components/common/notification-bell/Notif
 import styles from "./header.module.css";
 
 const Header: React.FC = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const { user, isAuthenticated, logout, isLoggingOut } = useAuth();
   const { isDarkMode, toggleDarkMode } = useTheme();
