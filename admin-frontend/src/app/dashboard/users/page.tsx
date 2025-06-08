@@ -17,6 +17,7 @@ import {
     CheckCircleIcon,
     XCircleIcon,
     ExclamationTriangleIcon,
+    MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import styles from "./users-management.module.css";
 
@@ -262,13 +263,16 @@ export default function UsersManagement() {
                                     </button>
                                 ))}
                             </div>
-                            <input
-                                type="text"
-                                placeholder="Search users..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className={styles.searchInput}
-                            />
+                            <div className={styles.searchContainer}>
+                                <MagnifyingGlassIcon className={styles.searchIcon} />
+                                <input
+                                    type="text"
+                                    placeholder="Search users..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className={styles.searchInput}
+                                />
+                            </div>
                         </div>
                     </div>
 

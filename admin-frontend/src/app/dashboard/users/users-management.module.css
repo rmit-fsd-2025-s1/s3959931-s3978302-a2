@@ -156,6 +156,7 @@
 
 /* Filters Section */
 .filtersSection {
+    overflow: hidden;
     background: var(--color-bg-surface);
     border-radius: 16px;
     border: 1px solid var(--color-border);
@@ -210,14 +211,32 @@
     border-color: var(--color-primary);
 }
 
+.searchContainer {
+    position: relative;
+    min-width: 250px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    z-index: 1;
+}
+
 .searchInput {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
     border: 1px solid var(--color-border);
     border-radius: 12px;
     background: var(--color-bg-primary);
     color: var(--color-text-primary);
     font-size: 0.875rem;
-    min-width: 250px;
+    width: 100%;
+    transition: all 0.2s ease;
 }
 
 .searchInput:focus {
@@ -226,10 +245,15 @@
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
+.searchInput:focus + .searchIcon,
+.searchContainer:focus-within .searchIcon {
+    color: var(--color-primary);
+}
+
 /* Enhanced Table Styles for Better Balance */
 .usersTable {
+    margin-top: 10px;
     background: var(--color-bg-surface);
-    border-radius: 16px;
     border: 1px solid var(--color-border);
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
@@ -710,6 +734,14 @@
 
 :global(.dark) .searchInput:focus {
     border-color: var(--color-primary);
+}
+
+:global(.dark) .searchIcon {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .searchContainer:focus-within .searchIcon {
+    color: var(--color-primary);
 }
 
 :global(.dark) .filterTab {
