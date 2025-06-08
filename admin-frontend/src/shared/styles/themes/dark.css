@@ -86,11 +86,6 @@
     background-color: var(--color-bg-primary);
 }
 
-.dark .course-card {
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-}
-
 /* Dark theme styles */
 [data-theme="dark"] .details-container {
     background-color: var(--color-bg-primary);
@@ -147,4 +142,35 @@
 
 [data-theme="dark"] .comment-textarea:focus {
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Admin-specific dark theme styles */
+[data-theme="dark"] .admin-card {
+    background-color: var(--color-bg-primary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-button-secondary {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-button-secondary:hover {
+    background-color: var(--color-bg-hover);
+}
+
+[data-theme="dark"] .admin-input {
+    background-color: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .admin-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+[data-theme="dark"] .admin-input::placeholder {
+    color: var(--color-text-tertiary);
 }

@@ -524,11 +524,44 @@
 :global(.dark) .statCard,
 :global(.dark) .contentCard {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
 }
 
 :global(.dark) .statCard:hover,
 :global(.dark) .contentCard:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+:global(.dark) .courseItem,
+:global(.dark) .systemItem,
+:global(.dark) .actionItem {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+}
+
+:global(.dark) .courseItem:hover,
+:global(.dark) .actionItem:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+:global(.dark) .courseTitle,
+:global(.dark) .actionTitle,
+:global(.dark) .systemName {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .courseSemester,
+:global(.dark) .courseStatLabel,
+:global(.dark) .actionDescription,
+:global(.dark) .emptyText,
+:global(.dark) .systemStatus {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .courseStatValue {
+    color: var(--color-text-primary);
 }
 
 /* Responsive Design */

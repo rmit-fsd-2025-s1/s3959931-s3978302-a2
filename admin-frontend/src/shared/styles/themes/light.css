@@ -118,7 +118,42 @@ body {
     color: var(--color-text-secondary);
 }
 
-.course-card {
+/* Admin-specific light theme styles */
+.admin-card {
     background-color: var(--color-bg-primary);
     border: 1px solid var(--color-border);
+}
+
+.admin-button-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.admin-button-primary:hover {
+    background-color: var(--color-secondary);
+}
+
+.admin-button-secondary {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+}
+
+.admin-button-secondary:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.admin-input {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+}
+
+.admin-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.admin-input::placeholder {
+    color: var(--color-text-tertiary);
 }

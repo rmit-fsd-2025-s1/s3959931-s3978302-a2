@@ -97,3 +97,42 @@
         box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
     }
 }
+
+/* Pop in/out animations for theme toggle */
+@keyframes popInRotate {
+    0% {
+        transform: scale(0.8) rotate(-90deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes popOutRotate {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8) rotate(90deg);
+        opacity: 0;
+    }
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

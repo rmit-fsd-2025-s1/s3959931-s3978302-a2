@@ -13,7 +13,6 @@
 /* Themes */
 @import "./themes/light.css";
 @import "./themes/dark.css";
-@import "./themes/lecturer-theme.css";
 
 /* Framework Overrides & Global Essential */
 @import "./overrides.css"; /* Framework overrides */

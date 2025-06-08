@@ -507,15 +507,85 @@
 
 /* Dark Mode Support */
 :global(.dark) .usersManagement {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-bg-primary) 0%,
+        var(--color-bg-secondary) 100%
+    );
 }
 
 :global(.dark) .statCard,
 :global(.dark) .filtersSection,
 :global(.dark) .usersTable,
 :global(.dark) .modal {
-    background: #2a2a2a;
-    border-color: #404040;
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+:global(.dark) .filtersHeader,
+:global(.dark) .tableHeader {
+    background: var(--color-bg-primary);
+    border-bottom-color: var(--color-border);
+}
+
+:global(.dark) .tableRow:hover {
+    background: var(--color-bg-hover);
+}
+
+:global(.dark) .tableHeaderCell {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .tableCell,
+:global(.dark) .userName,
+:global(.dark) .tableTitle {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .userEmail {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .searchInput {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .searchInput:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+:global(.dark) .filterTab {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .filterTab:hover {
+    background: var(--color-bg-hover);
+}
+
+:global(.dark) .filterTab.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+:global(.dark) .actionButton {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .actionButton:hover {
+    background: var(--color-bg-hover);
+}
+
+:global(.dark) .modalText {
+    color: var(--color-text-secondary);
 }
 
 /* Responsive Design */

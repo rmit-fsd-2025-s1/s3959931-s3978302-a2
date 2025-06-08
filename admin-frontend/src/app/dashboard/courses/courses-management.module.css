@@ -623,15 +623,93 @@
 
 /* Dark Mode Support */
 :global(.dark) .coursesManagement {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-bg-primary) 0%,
+        var(--color-bg-secondary) 100%
+    );
 }
 
 :global(.dark) .courseCard,
 :global(.dark) .searchSection,
 :global(.dark) .modal,
 :global(.dark) .lecturersList {
-    background: #2a2a2a;
-    border-color: #404040;
+    background: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+:global(.dark) .courseCard:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+:global(.dark) .courseName,
+:global(.dark) .modalTitle {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .courseSemester,
+:global(.dark) .courseDescription {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .courseStat {
+    background: var(--color-bg-primary);
+}
+
+:global(.dark) .courseStatValue {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .courseStatLabel {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .assignmentItem {
+    background: var(--color-bg-primary);
+}
+
+:global(.dark) .lecturerName {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .searchInput,
+:global(.dark) .formInput,
+:global(.dark) .formTextarea,
+:global(.dark) .formSelect {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .searchInput:focus,
+:global(.dark) .formInput:focus,
+:global(.dark) .formTextarea:focus,
+:global(.dark) .formSelect:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+:global(.dark) .formLabel {
+    color: var(--color-text-primary);
+}
+
+:global(.dark) .actionButton {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .actionButton:hover {
+    background: var(--color-bg-hover);
+}
+
+:global(.dark) .emptyStateText {
+    color: var(--color-text-secondary);
+}
+
+:global(.dark) .deleteWarningIcon {
+    background-color: rgba(239, 68, 68, 0.2);
 }
 
 /* Enhanced Modal Styles - Based on Apply Modal */

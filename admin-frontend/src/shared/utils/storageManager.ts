@@ -127,13 +127,7 @@ class StorageManager {
         key: string,
         success: boolean
     ): void {
-        if (process.env.NODE_ENV === "development") {
-            console.log(
-                `localStorage ${operation} for key '${key}': ${
-                    success ? "success" : "failed"
-                }`
-            );
-        }
+        // Removed debug logging for cleaner console output
     }
 
     // Storage health monitoring
@@ -152,10 +146,6 @@ class StorageManager {
             if (usage > 0.8) {
                 // 80% full
                 console.warn("localStorage is nearly full, consider cleanup");
-            }
-
-            if (process.env.NODE_ENV === "development") {
-                console.log(`Storage usage: ${Math.round(usage * 100)}%`);
             }
         } catch (e) {
             console.error("Error checking storage health:", e);
