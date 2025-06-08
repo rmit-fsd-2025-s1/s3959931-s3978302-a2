@@ -30,7 +30,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         <SearchInput
           value={searchQuery}
           onChange={onSearchChange}
-          placeholder="Smart search: 'data tutor', 'web lab', 'programming'..."
+          placeholder="Search courses, course codes, positions..."
           showLabel={false}
           variant="rounded"
         />

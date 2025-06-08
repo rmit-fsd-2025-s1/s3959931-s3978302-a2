@@ -117,12 +117,12 @@
 
 .descriptionLabel {
   display: block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
   margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.075em;
 }
 
 .courseDescription {
@@ -438,6 +438,9 @@
   background-color: var(--color-bg-secondary);
   margin-top: auto;
   transition: all 0.2s ease;
+  min-height: 160px; /* Increased height to match role sections with multiple positions */
+  display: flex;
+  flex-direction: column;
 }
 
 .roleSection:hover {
@@ -451,6 +454,15 @@
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  flex-shrink: 0; /* Keep title at top */
+}
+
+.roleContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  min-height: 100px; /* Ensure content area has minimum height */
 }
 
 .noPositionsContainer {
@@ -460,6 +472,11 @@
   border: 1px solid rgba(156, 163, 175, 0.1);
   border-radius: 0.5rem;
   margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px; /* Ensure no positions container has consistent height */
 }
 
 .noPositionsText {
@@ -477,6 +494,9 @@
   margin-bottom: 0.5rem;
   padding: 0.25rem 0;
   transition: all 0.2s ease;
+  min-height: 40px; /* Ensure consistent height for each role option */
+  display: flex;
+  align-items: center;
 }
 
 .roleOption:last-child {
@@ -492,6 +512,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  width: 100%; /* Take full width within the roleOption */
 }
 
 .roleInfo {
@@ -577,6 +598,9 @@
 :global(.dark) .roleSection {
   background-color: #111827;
   border-color: #374151;
+  min-height: 160px; /* Increased height to match light mode */
+  display: flex;
+  flex-direction: column;
 }
 
 :global(.dark) .noPositionsContainer {
