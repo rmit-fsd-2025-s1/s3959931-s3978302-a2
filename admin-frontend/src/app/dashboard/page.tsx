@@ -8,9 +8,6 @@ import {
     AcademicCapIcon,
     UserGroupIcon,
     ExclamationTriangleIcon,
-    CheckCircleIcon,
-    CpuChipIcon,
-    CloudIcon,
 } from "@heroicons/react/24/outline";
 import styles from "./admin-dashboard.module.css";
 
@@ -22,57 +19,40 @@ export default function Dashboard() {
 
     const stats = [
         {
-            name: "Total Users",
+            name: "Total Applications",
             value: userStats?.getUserStats?.totalUsers || 0,
             icon: UsersIcon,
-            color: "blue",
+            color: "total",
             trend: "+12%",
         },
         {
-            name: "Candidates",
+            name: "Selected",
             value: userStats?.getUserStats?.totalCandidates || 0,
             icon: UserGroupIcon,
-            color: "green",
+            color: "selected",
             trend: "+8%",
         },
         {
-            name: "Lecturers",
+            name: "Pending",
             value: userStats?.getUserStats?.totalLecturers || 0,
             icon: AcademicCapIcon,
-            color: "purple",
+            color: "pending",
             trend: "+5%",
         },
         {
-            name: "Blocked Users",
-            value: userStats?.getUserStats?.blockedUsers || 0,
+            name: "Selection Rate",
+            value: userStats?.getUserStats?.blockedUsers ? 
+                `${Math.round((userStats.getUserStats.totalCandidates / userStats.getUserStats.totalUsers * 100) || 0)}%` :
+                "0%",
             icon: ExclamationTriangleIcon,
-            color: "red",
+            color: "rate",
             trend: "-2%",
         },
     ];
 
     const courses = coursesData?.getAllCourses || [];
 
-    const systemStatus = [
-        {
-            name: "Database",
-            status: "Connected",
-            icon: CloudIcon,
-            color: "green",
-        },
-        {
-            name: "GraphQL API",
-            status: "Online",
-            icon: CpuChipIcon,
-            color: "green",
-        },
-        {
-            name: "Admin Panel",
-            status: "Active",
-            icon: CheckCircleIcon,
-            color: "green",
-        },
-    ];
+
 
     return (
         <div className={styles.adminDashboard}>
@@ -292,49 +272,7 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* System Status */}
-                <div className={styles.systemStatusSection}>
-                    <div className={styles.contentCard}>
-                        <div className={styles.cardHeader}>
-                            <h3 className={styles.cardTitle}>System Status</h3>
-                            <div className={styles.statusBadge}>
-                                <span className={styles.statusDot}></span>
-                                All Systems Operational
-                            </div>
-                        </div>
-                        <div className={styles.cardContent}>
-                            <div className={styles.systemGrid}>
-                                {systemStatus.map((system) => (
-                                    <div
-                                        key={system.name}
-                                        className={styles.systemItem}
-                                    >
-                                        <div className={styles.systemIcon}>
-                                            <system.icon
-                                                className={styles.systemIconSvg}
-                                            />
-                                        </div>
-                                        <div className={styles.systemInfo}>
-                                            <h4 className={styles.systemName}>
-                                                {system.name}
-                                            </h4>
-                                            <p className={styles.systemStatus}>
-                                                {system.status}
-                                            </p>
-                                        </div>
-                                        <div className={styles.systemIndicator}>
-                                            <div
-                                                className={`${
-                                                    styles.statusIndicator
-                                                } ${styles[system.color]}`}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );

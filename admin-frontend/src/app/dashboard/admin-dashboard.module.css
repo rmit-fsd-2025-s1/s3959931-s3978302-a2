@@ -81,21 +81,8 @@
     border-radius: 16px 16px 0 0;
 }
 
-.statCard.blue::before {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-}
 
-.statCard.green::before {
-    background: linear-gradient(135deg, #10b981, #34d399);
-}
 
-.statCard.purple::before {
-    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-}
-
-.statCard.red::before {
-    background: linear-gradient(135deg, #ef4444, #f87171);
-}
 
 .statCard:hover {
     transform: translateY(-4px);
@@ -115,13 +102,43 @@
     align-items: center;
     justify-content: center;
     border-radius: 12px;
+}
+
+.statCard.total .statIconWrapper {
+    background: rgba(91, 82, 214, 0.1);
+}
+
+.statCard.selected .statIconWrapper {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.statCard.pending .statIconWrapper {
     background: rgba(249, 115, 22, 0.1);
+}
+
+.statCard.rate .statIconWrapper {
+    background: rgba(239, 68, 68, 0.1);
 }
 
 .statIcon {
     width: 1.75rem;
     height: 1.75rem;
-    color: var(--color-primary);
+}
+
+.statCard.total .statIcon {
+    color: #5b52d6;
+}
+
+.statCard.selected .statIcon {
+    color: #22c55e;
+}
+
+.statCard.pending .statIcon {
+    color: #f97316;
+}
+
+.statCard.rate .statIcon {
+    color: #ef4444;
 }
 
 .statInfo {
@@ -412,105 +429,7 @@
     transform: translateX(2px);
 }
 
-/* System Status */
-.systemStatusSection {
-    margin-top: 2rem;
-}
 
-.statusBadge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    padding: 0.5rem 1rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.statusDot {
-    width: 0.5rem;
-    height: 0.5rem;
-    background: #10b981;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%,
-    100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
-
-.systemGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.systemItem {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--color-bg-primary);
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
-}
-
-.systemIcon {
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(16, 185, 129, 0.1);
-    border-radius: 10px;
-}
-
-.systemIconSvg {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #10b981;
-}
-
-.systemInfo {
-    flex: 1;
-}
-
-.systemName {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin: 0 0 0.25rem 0;
-}
-
-.systemStatus {
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    margin: 0;
-}
-
-.systemIndicator {
-    display: flex;
-    align-items: center;
-}
-
-.statusIndicator {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-}
-
-.statusIndicator.green {
-    background: #10b981;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-}
 
 /* Dark Mode Adjustments */
 :global(.dark) .adminDashboard {
@@ -519,6 +438,22 @@
         var(--color-bg-primary) 0%,
         rgba(17, 24, 39, 0.8) 100%
     );
+}
+
+:global(.dark) .statCard.total .statIconWrapper {
+    background: rgba(91, 82, 214, 0.15);
+}
+
+:global(.dark) .statCard.selected .statIconWrapper {
+    background: rgba(34, 197, 94, 0.15);
+}
+
+:global(.dark) .statCard.pending .statIconWrapper {
+    background: rgba(249, 115, 22, 0.15);
+}
+
+:global(.dark) .statCard.rate .statIconWrapper {
+    background: rgba(239, 68, 68, 0.15);
 }
 
 :global(.dark) .statCard,
@@ -534,7 +469,6 @@
 }
 
 :global(.dark) .courseItem,
-:global(.dark) .systemItem,
 :global(.dark) .actionItem {
     background: var(--color-bg-primary);
     border-color: var(--color-border);
@@ -547,16 +481,14 @@
 }
 
 :global(.dark) .courseTitle,
-:global(.dark) .actionTitle,
-:global(.dark) .systemName {
+:global(.dark) .actionTitle {
     color: var(--color-text-primary);
 }
 
 :global(.dark) .courseSemester,
 :global(.dark) .courseStatLabel,
 :global(.dark) .actionDescription,
-:global(.dark) .emptyText,
-:global(.dark) .systemStatus {
+:global(.dark) .emptyText {
     color: var(--color-text-secondary);
 }
 

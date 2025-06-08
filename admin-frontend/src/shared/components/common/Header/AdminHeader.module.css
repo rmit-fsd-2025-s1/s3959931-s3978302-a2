@@ -390,6 +390,131 @@
     padding: 0.75rem 0;
 }
 
+/* Actions Row - Theme Toggle and Sign Out on same row */
+.actionsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 1.5rem 0.75rem 1.5rem;
+}
+
+/* Theme Toggle */
+.themeToggleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 8px;
+    background-color: #efefef;
+    padding: 10px 10px;
+    border-radius: 12px;
+    flex: 1;
+    animation: fadeInUp 0.3s ease;
+}
+
+.themeToggleLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.themeIcon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-secondary);
+}
+
+.lightIcon {
+    color: #fbbf24;
+    stroke: #fbbf24;
+}
+
+.darkIcon {
+    display: none;
+    color: #6366f1;
+}
+
+.themeToggle {
+    position: relative;
+    width: 44px;
+    height: 22px;
+    background-color: #d1d5db;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.themeToggle.active {
+    background-color: #6366f1;
+}
+
+.toggleHandle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.themeToggle.active .toggleHandle {
+    transform: translateX(22px);
+}
+
+/* Dark mode adjustments for toggle */
+:global(.dark) .lightIcon {
+    display: none;
+}
+
+:global(.dark) .darkIcon {
+    display: block;
+}
+
+:global(.dark) .themeToggleContainer {
+    background-color: #2d3748;
+}
+
+/* Sign Out Button */
+.signOutButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.signOutButton:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: translateY(-2px);
+}
+
+.actionIcon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .dropdownItem {
     display: flex;
     align-items: center;
@@ -443,6 +568,14 @@
 
 :global(.dark) .userButton:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+:global(.dark) .signOutButton {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+
+:global(.dark) .signOutButton:hover {
+    background-color: rgba(239, 68, 68, 0.25);
 }
 
 /* Responsive Design */

@@ -1,12 +1,13 @@
 /* Admin Signin Page - Enhanced Styling */
 .pageContainer {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6rem 1rem 3rem;
+    padding: 1rem;
     background-color: var(--color-bg-primary);
     position: relative;
+    overflow: hidden;
 }
 
 .pageContainer::before {
@@ -53,8 +54,8 @@
 
 .darkModeToggle {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.5rem;
+    right: 1.5rem;
     z-index: 10;
 }
 
@@ -161,7 +162,6 @@
     width: 100%;
     padding: 1rem 1.5rem 1rem 3rem;
     margin: 0.7rem 0;
-    border: 1px solid var(--color-border);
     background-color: var(--color-bg-secondary);
     border-radius: 25px;
     outline: none;

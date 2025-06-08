@@ -292,10 +292,7 @@ export default function UsersManagement() {
                                     <th className={styles.tableHeaderCell}>
                                         Created
                                     </th>
-                                    <th
-                                        className={styles.tableHeaderCell}
-                                        style={{ textAlign: "right" }}
-                                    >
+                                    <th className={styles.tableHeaderCell}>
                                         Actions
                                     </th>
                                 </tr>

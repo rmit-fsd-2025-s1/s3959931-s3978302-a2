@@ -18,17 +18,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         if (typeof window !== "undefined") {
             try {
-                const darkModePreference =
-                    StorageManager.getItem("darkMode") === "true";
+                const darkModePreference = StorageManager.getItem("darkMode") === "true";
                 setIsDarkMode(darkModePreference);
                 if (darkModePreference) {
                     document.documentElement.setAttribute("data-theme", "dark");
                     document.documentElement.classList.add("dark");
                 } else {
-                    document.documentElement.setAttribute(
-                        "data-theme",
-                        "light"
-                    );
+                    document.documentElement.setAttribute("data-theme", "light");
                     document.documentElement.classList.remove("dark");
                 }
             } catch (e) {

@@ -21,6 +21,11 @@
     --color-primary-light: rgba(249, 115, 22, 0.2);
 }
 
+.dark body {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+}
+
 .dark .btn-outline {
     border-color: var(--color-primary);
     color: var(--color-primary);
