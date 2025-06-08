@@ -113,9 +113,6 @@ export default function Dashboard() {
                                                 stat.value
                                             )}
                                         </h3>
-                                        <span className={styles.statTrend}>
-                                            {stat.trend}
-                                        </span>
                                     </div>
                                     <p className={styles.statLabel}>
                                         {stat.name}

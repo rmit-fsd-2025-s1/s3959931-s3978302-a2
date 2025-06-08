@@ -555,11 +555,6 @@ export default function ReportsPage() {
                                                                             </span>
                                                                         </div>
                                                                     </div>
-                                                                    <ChevronRightIcon
-                                                                        className={
-                                                                            styles.selectionIcon
-                                                                        }
-                                                                    />
                                                                 </div>
                                                             )
                                                         )}

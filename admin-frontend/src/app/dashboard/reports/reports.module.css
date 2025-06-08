@@ -458,13 +458,6 @@
     flex-wrap: wrap;
 }
 
-.selectionIcon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #9333ea;
-    flex-shrink: 0;
-}
-
 /* Unselected Cards */
 .unselectedCard {
     background: #fefcf8;
