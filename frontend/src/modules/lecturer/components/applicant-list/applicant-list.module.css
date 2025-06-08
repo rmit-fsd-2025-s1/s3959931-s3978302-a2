@@ -310,6 +310,21 @@
   color: #888;
 }
 
+.applicantItem.blocked .roleInfo {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #888;
+}
+
+.applicantItem.blocked .roleIcon {
+  color: #888;
+}
+
+.applicantItem.blocked .courseCode {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #888;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
 /* Dark mode for blocked candidates */
 .dark .applicantItem.blocked {
   background-color: rgba(128, 128, 128, 0.2);
@@ -322,6 +337,21 @@
 
 .dark .applicantItem.blocked .applicantName {
   color: #aaa;
+}
+
+.dark .applicantItem.blocked .roleInfo {
+  background-color: rgba(128, 128, 128, 0.2);
+  color: #aaa;
+}
+
+.dark .applicantItem.blocked .roleIcon {
+  color: #aaa;
+}
+
+.dark .applicantItem.blocked .courseCode {
+  background-color: rgba(128, 128, 128, 0.2);
+  color: #aaa;
+  border-color: rgba(128, 128, 128, 0.2);
 }
 
 /* Dark mode for new elements */

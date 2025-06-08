@@ -18,12 +18,20 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleClose = useCallback(() => {
     setIsAnimating(false);
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     // Add gentle animation delay before closing
-    setTimeout(() => {
-      onClose();
+    timeoutRef.current = setTimeout(() => {
+      // Check if component is still mounted before calling onClose
+      if (modalRef.current) {
+        onClose();
+      }
     }, 200);
   }, [onClose]);
 
@@ -45,6 +53,10 @@ const Modal: React.FC<ModalProps> = ({
     return () => {
       document.removeEventListener("keydown", handleEscapeKey);
       document.body.style.overflow = "unset"; // Ensure overflow is reset on unmount
+      // Clear timeout on cleanup
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
   }, [isOpen, handleClose]);
 
@@ -65,8 +77,8 @@ const Modal: React.FC<ModalProps> = ({
       aria-modal="true"
       aria-labelledby={title ? "modal-title" : undefined}
     >
-      <div 
-        className={`${styles.modalContainer} ${isAnimating ? styles.modalContainerActive : styles.modalContainerClosing}`} 
+      <div
+        className={`${styles.modalContainer} ${isAnimating ? styles.modalContainerActive : styles.modalContainerClosing}`}
         style={{ maxWidth }}
       >
         <button

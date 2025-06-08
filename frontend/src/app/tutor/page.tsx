@@ -210,134 +210,142 @@ const TutorDashboardPage: React.FC = () => {
   const stats = getComprehensiveStats();
 
   // Check if user has applied to any role in a course
-  const hasAppliedToCourse = (courseId: number) => {
-    return myApplications.some((app) => app.courseId === courseId);
-  };
+  const hasAppliedToCourse = React.useCallback(
+    (courseId: number) => {
+      return myApplications.some((app) => app.courseId === courseId);
+    },
+    [myApplications]
+  );
 
   // Smart search utility functions
-  const fuzzyMatch = (text: string, query: string): number => {
-    // Simple fuzzy matching - returns score between 0 and 1
-    const textLower = text.toLowerCase();
-    const queryLower = query.toLowerCase();
+  const fuzzyMatch = React.useCallback(
+    (text: string, query: string): number => {
+      // Simple fuzzy matching - returns score between 0 and 1
+      const textLower = text.toLowerCase();
+      const queryLower = query.toLowerCase();
 
-    // Exact match gets highest score
-    if (textLower.includes(queryLower)) return 1.0;
+      // Exact match gets highest score
+      if (textLower.includes(queryLower)) return 1.0;
 
-    // Character-level fuzzy matching for typos
-    let score = 0;
-    let queryIndex = 0;
+      // Character-level fuzzy matching for typos
+      let score = 0;
+      let queryIndex = 0;
 
-    for (
-      let i = 0;
-      i < textLower.length && queryIndex < queryLower.length;
-      i++
-    ) {
-      if (textLower[i] === queryLower[queryIndex]) {
-        score++;
-        queryIndex++;
-      }
-    }
-
-    return queryIndex === queryLower.length
-      ? (score / queryLower.length) * 0.8
-      : 0;
-  };
-
-  const normalizeSearchTerm = (term: string): string[] => {
-    // Handle common variations and synonyms
-    const synonyms: { [key: string]: string[] } = {
-      tutor: ["tutor", "tutorial", "tutoring", "teach", "instructor"],
-      lab: ["lab", "laboratory", "practical", "workshop"],
-      assistant: ["assistant", "aide", "helper", "support"],
-      programming: ["programming", "coding", "development", "software"],
-      data: ["data", "database", "information"],
-      web: ["web", "website", "internet", "online"],
-      systems: ["systems", "system", "infrastructure"],
-      advanced: ["advanced", "senior", "higher", "level"],
-    };
-
-    const normalized = term.toLowerCase().trim();
-
-    // Check if term matches any synonym group
-    for (const [key, values] of Object.entries(synonyms)) {
-      if (values.some((synonym) => fuzzyMatch(synonym, normalized) > 0.7)) {
-        return values;
-      }
-    }
-
-    return [normalized];
-  };
-
-
-  const calculateSearchScore = (
-    course: Course,
-    searchTerms: string[]
-  ): number => {
-    let totalScore = 0;
-    const weights = {
-      courseCode: 0.9,
-      courseName: 1.0,
-      description: 0.7,
-      semester: 0.5,
-      positions: 1.2, // Higher weight for position-related matches
-    };
-
-    searchTerms.forEach((term) => {
-      const normalizedTerms = normalizeSearchTerm(term);
-
-      normalizedTerms.forEach((normalizedTerm) => {
-        // Position-specific scoring
-        if (
-          ["tutor", "tutorial", "tutoring", "teach", "instructor"].includes(
-            normalizedTerm
-          )
-        ) {
-          const hasAvailableTutors =
-            course.availableTutors !== undefined
-              ? course.availableTutors > 0
-              : course.maxTutors > 0;
-          if (hasAvailableTutors) totalScore += weights.positions;
+      for (
+        let i = 0;
+        i < textLower.length && queryIndex < queryLower.length;
+        i++
+      ) {
+        if (textLower[i] === queryLower[queryIndex]) {
+          score++;
+          queryIndex++;
         }
+      }
 
-        if (
-          [
-            "lab",
-            "laboratory",
-            "assistant",
-            "aide",
-            "helper",
-            "practical",
-          ].includes(normalizedTerm)
-        ) {
-          const hasAvailableLabAssistants =
-            course.availableLabAssistants !== undefined
-              ? course.availableLabAssistants > 0
-              : course.maxLabAssistants > 0;
-          if (hasAvailableLabAssistants) totalScore += weights.positions;
+      return queryIndex === queryLower.length
+        ? (score / queryLower.length) * 0.8
+        : 0;
+    },
+    []
+  );
+
+  const normalizeSearchTerm = React.useCallback(
+    (term: string): string[] => {
+      // Handle common variations and synonyms
+      const synonyms: { [key: string]: string[] } = {
+        tutor: ["tutor", "tutorial", "tutoring", "teach", "instructor"],
+        lab: ["lab", "laboratory", "practical", "workshop"],
+        assistant: ["assistant", "aide", "helper", "support"],
+        programming: ["programming", "coding", "development", "software"],
+        data: ["data", "database", "information"],
+        web: ["web", "website", "internet", "online"],
+        systems: ["systems", "system", "infrastructure"],
+        advanced: ["advanced", "senior", "higher", "level"],
+      };
+
+      const normalized = term.toLowerCase().trim();
+
+      // Check if term matches any synonym group
+      for (const [, values] of Object.entries(synonyms)) {
+        if (values.some((synonym) => fuzzyMatch(synonym, normalized) > 0.7)) {
+          return values;
         }
+      }
 
-        // General content scoring
-        totalScore +=
-          fuzzyMatch(course.courseCode, normalizedTerm) * weights.courseCode;
-        totalScore +=
-          fuzzyMatch(course.courseName, normalizedTerm) * weights.courseName;
-        totalScore +=
-          fuzzyMatch(course.semester, normalizedTerm) * weights.semester;
+      return [normalized];
+    },
+    [fuzzyMatch]
+  );
 
-        if (course.description) {
+  const calculateSearchScore = React.useCallback(
+    (course: Course, searchTerms: string[]): number => {
+      let totalScore = 0;
+      const weights = {
+        courseCode: 0.9,
+        courseName: 1.0,
+        description: 0.7,
+        semester: 0.5,
+        positions: 1.2, // Higher weight for position-related matches
+      };
+
+      searchTerms.forEach((term) => {
+        const normalizedTerms = normalizeSearchTerm(term);
+
+        normalizedTerms.forEach((normalizedTerm) => {
+          // Position-specific scoring
+          if (
+            ["tutor", "tutorial", "tutoring", "teach", "instructor"].includes(
+              normalizedTerm
+            )
+          ) {
+            const hasAvailableTutors =
+              course.availableTutors !== undefined
+                ? course.availableTutors > 0
+                : course.maxTutors > 0;
+            if (hasAvailableTutors) totalScore += weights.positions;
+          }
+
+          if (
+            [
+              "lab",
+              "laboratory",
+              "assistant",
+              "aide",
+              "helper",
+              "practical",
+            ].includes(normalizedTerm)
+          ) {
+            const hasAvailableLabAssistants =
+              course.availableLabAssistants !== undefined
+                ? course.availableLabAssistants > 0
+                : course.maxLabAssistants > 0;
+            if (hasAvailableLabAssistants) totalScore += weights.positions;
+          }
+
+          // General content scoring
           totalScore +=
-            fuzzyMatch(course.description, normalizedTerm) *
-            weights.description;
-        }
-      });
-    });
+            fuzzyMatch(course.courseCode, normalizedTerm) * weights.courseCode;
+          totalScore +=
+            fuzzyMatch(course.courseName, normalizedTerm) * weights.courseName;
+          totalScore +=
+            fuzzyMatch(course.semester, normalizedTerm) * weights.semester;
 
-    return totalScore;
-  };
+          if (course.description) {
+            totalScore +=
+              fuzzyMatch(course.description, normalizedTerm) *
+              weights.description;
+          }
+        });
+      });
+
+      return totalScore;
+    },
+    [fuzzyMatch, normalizeSearchTerm]
+  );
 
   // Enhanced filter courses with smart search
   const filteredCourses = React.useMemo(() => {
-    let coursesWithScores = courses.map((course) => {
+    const coursesWithScores = courses.map((course) => {
       const hasAvailablePositions =
         (course.availableTutors !== undefined
           ? course.availableTutors > 0
@@ -397,8 +405,13 @@ const TutorDashboardPage: React.FC = () => {
       .filter((item) => item.matches)
       .sort((a, b) => b.score - a.score)
       .map((item) => item.course);
-  }, [courses, searchQuery, activeFilter, myApplications, hasAppliedToCourse]);
-
+  }, [
+    courses,
+    searchQuery,
+    activeFilter,
+    hasAppliedToCourse,
+    calculateSearchScore,
+  ]);
 
   const openApplyModal = (course: Course, role: Role) => {
     console.log("Apply button clicked for:", course.courseCode, role.roleName);
