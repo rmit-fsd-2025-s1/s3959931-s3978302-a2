@@ -30,12 +30,24 @@ export default function SignInForm() {
   const [showLoginSuccess, setShowLoginSuccess] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-  // Check for success message from signup redirect
+  // Check for success message and email from signup redirect
   useEffect(() => {
     const message = searchParams.get('message');
+    const email = searchParams.get('email');
+    
     if (message) {
       setSuccessMessage(message);
-      // Clear URL parameters after showing message
+    }
+    
+    if (email) {
+      setFormData(prev => ({
+        ...prev,
+        email: decodeURIComponent(email)
+      }));
+    }
+    
+    // Clear URL parameters after processing
+    if (message || email) {
       const newUrl = window.location.pathname;
       window.history.replaceState({}, '', newUrl);
     }
@@ -93,18 +105,9 @@ export default function SignInForm() {
     }
 
     try {
-      console.log("🔄 Attempting signin with:", { email: formData.email });
       const response = await AuthService.signin(formData);
-      console.log("📥 Signin response:", {
-        success: response.success,
-        hasData: !!response.data,
-      });
 
       if (response.success && response.data) {
-        console.log(
-          "✅ Signin successful, logging in user:",
-          response.data.user.email
-        );
         
         // Use auth context to login - ensure token exists
         const token = response.data.token || "";
@@ -113,10 +116,7 @@ export default function SignInForm() {
         // Store user data and show success modal
         setLoggedInUser(response.data.user);
         setShowLoginSuccess(true);
-        
-        console.log("🎉 Showing login success modal...");
       } else {
-        console.log("❌ Signin failed:", response.message);
         // Handle validation errors from backend
         if (response.errors) {
           setErrors(response.errors);
@@ -125,7 +125,7 @@ export default function SignInForm() {
         }
       }
     } catch (error) {
-      console.error("💥 Signin error:", error);
+      console.error("Signin error:", error);
       setApiError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -134,7 +134,6 @@ export default function SignInForm() {
 
   const handleLoginSuccessModalHide = () => {
     setShowLoginSuccess(false);
-    console.log("🏠 Redirecting to home page...");
     router.push("/");
   };
 

@@ -35,7 +35,7 @@ export class ApplicationController {
             } = req.body;
             const candidateId = req.user?.userId;
 
-            console.log("🔄 Creating application for candidate:", candidateId);
+
 
             // Validate input
             const validation = validateApplicationData(req.body);
@@ -111,10 +111,7 @@ export class ApplicationController {
                 newApplication
             );
 
-            console.log(
-                "✅ Application created successfully:",
-                savedApplication.id
-            );
+
 
             res.status(201).json({
                 success: true,
@@ -122,7 +119,7 @@ export class ApplicationController {
                 data: savedApplication,
             });
         } catch (error) {
-            console.error("💥 Error creating application:", error);
+            console.error("Error creating application:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -149,7 +146,7 @@ export class ApplicationController {
                 data: applications,
             });
         } catch (error) {
-            console.error("💥 Error fetching candidate applications:", error);
+            console.error("Error fetching candidate applications:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -176,7 +173,7 @@ export class ApplicationController {
                 data: { courses, roles },
             });
         } catch (error) {
-            console.error("💥 Error fetching courses and roles:", error);
+            console.error("Error fetching courses and roles:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -200,7 +197,7 @@ export class ApplicationController {
                 status = "all",
             } = req.query;
 
-            console.log("🔄 Fetching applications for lecturer:", lecturerId);
+
 
             // Verify user is a lecturer
             const lecturer = await this.userRepository.findOne({
@@ -292,16 +289,14 @@ export class ApplicationController {
 
             const applications = await queryBuilder.getMany();
 
-            console.log(
-                `✅ Found ${applications.length} applications for lecturer`
-            );
+
 
             res.status(200).json({
                 success: true,
                 data: applications,
             });
         } catch (error) {
-            console.error("💥 Error fetching lecturer applications:", error);
+            console.error("Error fetching lecturer applications:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -399,7 +394,7 @@ export class ApplicationController {
                 data: stats,
             });
         } catch (error) {
-            console.error("💥 Error fetching application statistics:", error);
+            console.error("Error fetching application statistics:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -475,7 +470,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error updating application status:", error);
+            console.error("Error updating application status:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -553,10 +548,7 @@ export class ApplicationController {
         try {
             const lecturerId = req.user?.userId;
 
-            console.log(
-                "🔄 Fetching assigned courses for lecturer:",
-                lecturerId
-            );
+
 
             // Verify user is a lecturer
             const lecturer = await this.userRepository.findOne({
@@ -581,16 +573,14 @@ export class ApplicationController {
 
             const assignedCourses = courseAssignments.map((ca) => ca.course);
 
-            console.log(
-                `✅ Found ${assignedCourses.length} assigned courses for lecturer`
-            );
+
 
             res.status(200).json({
                 success: true,
                 data: assignedCourses,
             });
         } catch (error) {
-            console.error("💥 Error fetching assigned courses:", error);
+            console.error("Error fetching assigned courses:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -653,7 +643,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error updating application comment:", error);
+            console.error("Error updating application comment:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -714,7 +704,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error deleting application comment:", error);
+            console.error("Error deleting application comment:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -788,7 +778,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error adding application to ranking:", error);
+            console.error("Error adding application to ranking:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -851,7 +841,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error updating application ranking:", error);
+            console.error("Error updating application ranking:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -863,11 +853,6 @@ export class ApplicationController {
         req: AuthenticatedRequest,
         res: Response
     ): Promise<void> {
-        console.log("🗑️ DELETE /ranking endpoint hit:", {
-            applicationId: req.params.id,
-            lecturerId: req.user?.userId,
-            timestamp: new Date().toISOString(),
-        });
 
         try {
             const { id } = req.params;
@@ -904,35 +889,14 @@ export class ApplicationController {
             }
 
             // Remove ranking - set to null for MySQL compatibility
-            console.log("🗑️ Before removing ranking:", {
-                applicationId: application.id,
-                currentRank: application.rank,
-                currentRankedBy: application.rankedBy,
-                currentRankedForCourse: application.rankedForCourse,
-            });
-
             application.rank = null;
             application.rankedBy = null;
             application.rankedAt = null;
             application.rankedForCourse = null;
 
-            console.log("🗑️ After setting to null:", {
-                applicationId: application.id,
-                newRank: application.rank,
-                newRankedBy: application.rankedBy,
-                newRankedForCourse: application.rankedForCourse,
-            });
-
             const updatedApplication = await this.applicationRepository.save(
                 application
             );
-
-            console.log("🗑️ After saving to database:", {
-                applicationId: updatedApplication.id,
-                savedRank: updatedApplication.rank,
-                savedRankedBy: updatedApplication.rankedBy,
-                savedRankedForCourse: updatedApplication.rankedForCourse,
-            });
 
             res.status(200).json({
                 success: true,
@@ -940,7 +904,7 @@ export class ApplicationController {
                 data: updatedApplication,
             });
         } catch (error) {
-            console.error("💥 Error removing application from ranking:", error);
+            console.error("Error removing application from ranking:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",
@@ -956,13 +920,7 @@ export class ApplicationController {
         try {
             const { selectedCourses } = req.body;
 
-            console.log("🧪 Test course validation endpoint called:", {
-                selectedCourses,
-                selectedCoursesType: typeof selectedCourses,
-                isArray: Array.isArray(selectedCourses),
-                length: selectedCourses?.length,
-                body: req.body,
-            });
+
 
             // Test the regex validation
             const testResults = selectedCourses?.map((course: string) => ({
@@ -987,7 +945,7 @@ export class ApplicationController {
                 },
             });
         } catch (error) {
-            console.error("💥 Error in test course validation:", error);
+            console.error("Error in test course validation:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",

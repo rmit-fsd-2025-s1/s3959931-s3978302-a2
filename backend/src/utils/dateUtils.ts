@@ -95,10 +95,3 @@ export const getMelbourneOffset = (): string => {
     return offsetMatch ? offsetMatch[1] : '+10';
 };
 
-/**
- * Log timestamp in Melbourne timezone
- */
-export const logWithMelbourneTime = (message: string): void => {
-    const timestamp = formatMelbourneDate();
-    console.log(`[${timestamp} AEST/AEDT] ${message}`);
-}; 

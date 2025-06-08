@@ -177,7 +177,7 @@ const Toast: React.FC<ToastProps> = ({
           exit={animationVariants.exit}
           transition={{ duration: 0.3 }}
         >
-          {/* Floating icon ở trên như Vue template */}
+          {/* Floating icon at the top */}
           <div className={styles.toastFloatingIcon}>
             {icons[type]}
           </div>
@@ -199,7 +199,7 @@ const Toast: React.FC<ToastProps> = ({
               <p className={styles.toastMessage}>{message}</p>
             </div>
             
-            {/* Close button ở góc phải trên */}
+            {/* Close button at top right corner */}
             {showCloseButton && (
               <button
                 className={styles.toastClose}

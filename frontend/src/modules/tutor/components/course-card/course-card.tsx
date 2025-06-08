@@ -93,7 +93,7 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                console.log('Expand skills list');
+        
               }
             }}
           >

@@ -35,15 +35,10 @@ export const ProfilePage: React.FC = () => {
               response.data?.assignedCourses &&
               Array.isArray(response.data.assignedCourses)
             ) {
-              console.log(
-                "✅ Setting assigned courses for lecturer:",
-                response.data.assignedCourses
-              );
               setAssignedCourses(response.data.assignedCourses);
             } else {
               // No courses assigned yet
               setAssignedCourses([]);
-              console.log("📝 No courses assigned to this lecturer yet");
             }
           } catch (apiError) {
             console.error(
@@ -69,10 +64,10 @@ export const ProfilePage: React.FC = () => {
               
               // Calculate available opportunities (same logic as tutor page)
               let availableOpportunities = 0;
-              courses.forEach((course: any) => {
-                roles.forEach((role: any) => {
+              courses.forEach((course: { id: number; courseCode: string; courseName: string }) => {
+                roles.forEach((role: { id: number; roleName: string }) => {
                   const hasApplied = (applicationsResponse.data || []).some(
-                    (app: any) => app.courseId === course.id && app.roleId === role.id
+                    (app: { courseId: number; roleId: number }) => app.courseId === course.id && app.roleId === role.id
                   );
                   if (!hasApplied) {
                     availableOpportunities += 1;
@@ -180,7 +175,11 @@ export const ProfilePage: React.FC = () => {
     return (
       <div className={styles.profileContainer}>
         <div className={styles.errorWrapper}>
-          <div className={styles.errorIcon}>❌</div>
+          <div className={styles.errorIcon}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
           <h2 className={styles.errorTitle}>Error Loading Profile</h2>
           <p className={styles.errorMessage}>
             {error || "Profile information could not be loaded."}

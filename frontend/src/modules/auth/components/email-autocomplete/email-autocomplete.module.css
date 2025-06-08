@@ -1,0 +1,118 @@
+.emailAutocompleteContainer {
+  position: relative;
+  width: 100%;
+}
+
+.emailAutocompleteContainer input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin: 0.7rem 0;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  border-radius: 25px;
+  outline: none;
+  transition: all 0.3s ease;
+  color: var(--color-text-primary);
+}
+
+.emailAutocompleteContainer input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  background-color: var(--color-bg-primary);
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.suggestionsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.25rem;
+}
+
+.dark .suggestionsDropdown {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.suggestionItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+}
+
+.suggestionItem:hover,
+.suggestionSelected {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--color-primary);
+}
+
+.suggestionItem:first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.suggestionItem:last-child {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom: none;
+}
+
+/* Scroll styling for suggestions */
+.suggestionsDropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.suggestionsDropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.suggestionsDropdown::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 2px;
+}
+
+.suggestionsDropdown::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Animation for dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.suggestionsDropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .suggestionItem {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  .suggestionsDropdown {
+    max-height: 150px;
+  }
+} 

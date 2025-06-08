@@ -2,6 +2,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Header from "@/shared/components/layout/header/header";
+import { ThemeProvider } from "@/shared/contexts/ThemeContext";
 
 // Mock next/navigation for App Router
 jest.mock("next/navigation", () => ({
@@ -98,7 +99,11 @@ describe("Header Component", () => {
 
   // Test 1: Header renders logo
   test("renders the logo with correct link", () => {
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     const logoLink = screen.getByRole("link", { name: /logo/i });
     expect(logoLink).toBeInTheDocument();
@@ -108,7 +113,11 @@ describe("Header Component", () => {
 
   // Test 2: Header renders nav links when not logged in
   test("renders all navigation links when not logged in", () => {
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /candidates/i })).toBeInTheDocument();
@@ -119,7 +128,11 @@ describe("Header Component", () => {
 
   // Test 3: Header shows Sign In / Sign Up buttons when not logged in
   test("shows auth buttons when not logged in", () => {
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     const signInButton = screen.getByRole("link", { name: /sign in/i });
     const signUpButton = screen.getByRole("link", { name: /sign up/i });
@@ -144,7 +157,11 @@ describe("Header Component", () => {
       signOut: mockSignOut,
     });
 
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     // Just verify the header renders successfully with user data
     expect(screen.getByRole("banner")).toBeInTheDocument();
@@ -157,7 +174,11 @@ describe("Header Component", () => {
     // Create a spy specifically for classList.add
     const addSpy = jest.spyOn(document.documentElement.classList, "add");
 
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     const darkModeButton = screen.getByRole("button", {
       name: /toggle dark mode/i,
@@ -170,7 +191,11 @@ describe("Header Component", () => {
 
   // Test 6: Header changes style on scroll
   test("adds scrolled class when scrolled down", () => {
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     // Simulate scroll event
     window.scrollY = 20;
@@ -194,7 +219,11 @@ describe("Header Component", () => {
       signOut: mockSignOut,
     });
 
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /lecturers/i })).toBeInTheDocument();
@@ -211,7 +240,11 @@ describe("Header Component", () => {
 
     const addSpy = jest.spyOn(document.documentElement.classList, "add");
 
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     expect(addSpy).toHaveBeenCalledWith("dark");
   });
@@ -230,7 +263,11 @@ describe("Header Component", () => {
       signOut: mockSignOut,
     });
 
-    render(<Header />);
+    render(
+      <ThemeProvider>
+        <Header />
+      </ThemeProvider>
+    );
 
     // Just verify component renders with logged in user
     expect(screen.getByRole("banner")).toBeInTheDocument();

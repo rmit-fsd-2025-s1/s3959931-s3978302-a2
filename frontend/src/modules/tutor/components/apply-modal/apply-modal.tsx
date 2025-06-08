@@ -295,7 +295,6 @@ const ApplyModal: React.FC<CombinedApplyModalProps> = (props) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onClick={onClose}
       >
         <motion.div 
           className={styles.applyModal}

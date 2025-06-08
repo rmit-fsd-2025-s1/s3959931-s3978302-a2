@@ -27,7 +27,7 @@ export const DEFAULT_COMMENT_CONFIG: CommentValidationConfig = {
 };
 
 export const DEFAULT_STATUS_CONFIG: StatusUpdateValidationConfig = {
-    allowedStatuses: ["pending", "selected"],
+    allowedStatuses: ["pending", "selected", "rejected"],
     requireComment: false,
     requireCourseSelection: true
 };
@@ -140,7 +140,12 @@ export const validateStatusUpdate = (
         }
     }
 
-
+    // Comment requirement validation for rejection
+    if (config.requireComment && newStatus === "rejected") {
+        if (!comment || !comment.trim()) {
+            errors.comment = "Comment is required when rejecting an applicant";
+        }
+    }
 
     // Validate comment if provided
     if (comment && comment.trim()) {

@@ -67,8 +67,6 @@ app.get("/db-test", async (req, res) => {
 // Manual database reset route
 app.post("/db-reset", async (req, res) => {
     try {
-        console.log("🔄 Manual database reset requested via /db-reset");
-
         const { DatabaseResetService } = await import("./utils/dbReset");
         await DatabaseResetService.resetDatabase();
 
@@ -79,7 +77,6 @@ app.post("/db-reset", async (req, res) => {
             timezone: "Australia/Melbourne (AEST/AEDT)",
         });
     } catch (error) {
-        console.error("❌ Database reset failed:", error);
         res.status(500).json({
             success: false,
             error: error instanceof Error ? error.message : "Unknown error",
@@ -96,30 +93,30 @@ const startServer = async () => {
         await initializeDatabaseSafely();
 
         app.listen(PORT, () => {
-            console.log(`✅ Server is running on port ${PORT}`);
-            console.log(`🏥 Health check: http://localhost:${PORT}/health`);
-            console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+            console.log(`Server is running on port ${PORT}`);
+            console.log(`Health check: http://localhost:${PORT}/health`);
+            console.log(`Auth endpoints: http://localhost:${PORT}/api/auth`);
             console.log(
-                `📋 Application endpoints: http://localhost:${PORT}/api/applications`
+                `Application endpoints: http://localhost:${PORT}/api/applications`
             );
             console.log(
-                `🗄️ Database endpoints: http://localhost:${PORT}/api/database`
+                `Database endpoints: http://localhost:${PORT}/api/database`
             );
             console.log(
-                `📊 Database status: http://localhost:${PORT}/api/database/status`
+                `Database status: http://localhost:${PORT}/api/database/status`
             );
         });
     } catch (error) {
-        console.error("❌ Failed to start server:", error);
-        console.warn("⚠️ Starting server anyway for debugging purposes");
+        console.error("Failed to start server:", error);
+        console.warn("Starting server anyway for debugging purposes");
 
         app.listen(PORT, () => {
             console.log(
-                `⚠️ Server is running on port ${PORT} (DATABASE MAY NOT BE AVAILABLE)`
+                `Server is running on port ${PORT} (DATABASE MAY NOT BE AVAILABLE)`
             );
-            console.log(`🏥 Health check: http://localhost:${PORT}/health`);
+            console.log(`Health check: http://localhost:${PORT}/health`);
             console.log(
-                `🔧 Manual database reset: POST http://localhost:${PORT}/api/database/reset`
+                `Manual database reset: POST http://localhost:${PORT}/api/database/reset`
             );
         });
     }
@@ -127,20 +124,20 @@ const startServer = async () => {
 
 // Safe database initialization - NO AUTO-RESET, preserves existing data
 const initializeDatabaseSafely = async () => {
-    console.log("🚀 Starting Teaching Tutor Backend API...");
-    console.log("🔄 Initializing database connection (safe mode)...");
+    console.log("Starting Teaching Tutor Backend API...");
+    console.log("Initializing database connection (safe mode)...");
 
     try {
         // Just initialize the database connection
         await initializeDatabase();
-        console.log("✅ Database initialization completed successfully");
-        console.log("💾 User data will be preserved across server restarts");
+        console.log("Database initialization completed successfully");
+        console.log("User data will be preserved across server restarts");
     } catch (error) {
-        console.error("❌ Database initialization failed:", error);
-        console.warn("⚠️ Manual database intervention may be required");
+        console.error("Database initialization failed:", error);
+        console.warn("Manual database intervention may be required");
 
         // Don't auto-reset, just log the error
-        console.log("🔧 To manually reset database if needed: POST /db-reset");
+        console.log("To manually reset database if needed: POST /db-reset");
         throw error;
     }
 };

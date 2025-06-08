@@ -14,11 +14,8 @@ export class DatabaseResetService {
         try {
             // First ensure we have a database connection
             if (!AppDataSource.isInitialized) {
-                console.log("🔌 Database not initialized, attempting connection...");
                 await initializeDatabaseConnection();
             }
-
-            console.log("🔍 Checking database tables and data...");
 
             const userRepository = AppDataSource.getRepository(User);
             const courseRepository = AppDataSource.getRepository(Course);
@@ -28,16 +25,12 @@ export class DatabaseResetService {
             const courseCount = await courseRepository.count();
             const roleCount = await roleRepository.count();
 
-            console.log(`📊 Current data count: Users=${userCount}, Courses=${courseCount}, Roles=${roleCount}`);
-
             // Consider database empty if any essential data is missing
             const isEmpty = userCount === 0 || courseCount === 0 || roleCount === 0;
-            console.log(`📊 Database is ${isEmpty ? 'EMPTY' : 'POPULATED'}`);
 
             return isEmpty;
         } catch (error) {
-            console.error("❌ Error checking database state:", error);
-            console.log("🔌 Assuming database is empty due to connection error");
+            console.error("Error checking database state:", error);
             return true; // Assume empty if error occurs
         }
     }
@@ -55,7 +48,7 @@ export class DatabaseResetService {
             await AppDataSource.query("SELECT 1");
             return true;
         } catch (error) {
-            console.error("❌ Database connection failed:", error);
+            console.error("Database connection failed:", error);
             return false;
         }
     }
@@ -65,19 +58,14 @@ export class DatabaseResetService {
      */
     static async dropAndRecreateSchema(): Promise<void> {
         try {
-            console.log("🗑️ Dropping database schema...");
-
             // Drop all tables to avoid constraint issues
             await AppDataSource.dropDatabase();
-            console.log("✅ Database schema dropped");
 
             // Recreate schema
-            console.log("🔧 Creating database schema...");
             await AppDataSource.synchronize(true);
-            console.log("✅ Database schema recreated");
 
         } catch (error) {
-            console.error("❌ Error dropping/recreating schema:", error);
+            console.error("Error dropping/recreating schema:", error);
             throw error;
         }
     }
@@ -87,8 +75,6 @@ export class DatabaseResetService {
      */
     static async clearAllData(): Promise<void> {
         try {
-            console.log("🗑️ Clearing all database data...");
-
             // Clear in reverse dependency order to avoid foreign key constraint errors
             await AppDataSource.getRepository(SelectedCandidate).clear();
             await AppDataSource.getRepository(Application).clear();
@@ -96,10 +82,8 @@ export class DatabaseResetService {
             await AppDataSource.getRepository(User).clear();
             await AppDataSource.getRepository(Course).clear();
             await AppDataSource.getRepository(Role).clear();
-
-            console.log("✅ All data cleared successfully");
         } catch (error) {
-            console.error("❌ Error clearing database data:", error);
+            console.error("Error clearing database data:", error);
             throw error;
         }
     }
@@ -109,33 +93,24 @@ export class DatabaseResetService {
  */
     static async resetDatabase(): Promise<void> {
         try {
-            console.log("🔄 Starting database reset...");
-
             // Ensure database connection
             if (!AppDataSource.isInitialized) {
-                console.log("🔌 Establishing database connection...");
                 await initializeDatabaseConnection();
-                console.log("✅ Database connection established");
             }
 
             // Drop and recreate schema to avoid constraint issues
-            console.log("🔧 Recreating database schema...");
             await this.dropAndRecreateSchema();
 
             // Seed essential data
-            console.log("🌱 Seeding essential data...");
             await this.seedEssentialData();
 
             // Verify the reset worked
-            console.log("🔍 Verifying database reset...");
             const isEmpty = await this.isDatabaseEmpty();
             if (isEmpty) {
                 throw new Error("Database reset verification failed - database is still empty");
             }
-
-            console.log("✅ Database reset completed successfully");
         } catch (error) {
-            console.error("❌ Database reset failed:", error);
+            console.error("Database reset failed:", error);
             throw error;
         }
     }
@@ -145,16 +120,12 @@ export class DatabaseResetService {
      */
     static async seedEssentialData(): Promise<void> {
         try {
-            console.log("🌱 Seeding essential data...");
-
             await this.seedDefaultRoles();
             await this.seedDefaultCourses();
             await this.seedMockLecturers();
             await this.seedCourseAssignments();
-
-            console.log("✅ Essential data seeded successfully");
         } catch (error) {
-            console.error("❌ Error seeding essential data:", error);
+            console.error("Error seeding essential data:", error);
             throw error;
         }
     }
@@ -167,21 +138,18 @@ export class DatabaseResetService {
             const isEmpty = await this.isDatabaseEmpty();
 
             if (isEmpty) {
-                console.log("📊 Database is empty or missing essential data, auto-resetting...");
                 await this.resetDatabase();
                 return true;
             }
-
-            console.log("✅ Database has essential data, no reset needed");
             return false;
         } catch (error) {
-            console.error("❌ Auto-reset check failed:", error);
+            console.error("Auto-reset check failed:", error);
             // Try to reset anyway if we can't determine state
             try {
                 await this.resetDatabase();
                 return true;
             } catch (resetError) {
-                console.error("❌ Auto-reset failed:", resetError);
+                console.error("Auto-reset failed:", resetError);
                 throw resetError;
             }
         }

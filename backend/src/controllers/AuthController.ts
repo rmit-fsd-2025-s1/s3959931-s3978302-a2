@@ -28,22 +28,11 @@ export class AuthController {
         try {
             const { email, password, firstName, lastName, userType } = req.body;
 
-            console.log("🔄 Signup attempt for email:", email);
-            console.log(
-                "🔍 Request body received:",
-                JSON.stringify(req.body, null, 2)
-            );
-            console.log("🔍 UserType provided:", userType);
-
             // Automatically determine userType from email domain if not provided
             let finalUserType = userType;
             if (!finalUserType) {
-                console.log(
-                    "🔍 No userType provided, determining from email..."
-                );
                 finalUserType = getUserTypeFromEmail(email);
                 if (!finalUserType) {
-                    console.log("❌ Invalid email domain for:", email);
                     res.status(400).json({
                         success: false,
                         message: "Invalid email domain",
@@ -53,16 +42,9 @@ export class AuthController {
                     });
                     return;
                 }
-                console.log(
-                    "📧 Auto-determined userType from email:",
-                    finalUserType
-                );
                 // Set the userType in the request body for validation
                 req.body.userType = finalUserType;
             } else {
-                console.log(
-                    "🔍 UserType provided, validating against email..."
-                );
                 // If userType is provided, verify it matches the email domain
                 const userTypeFromEmail = getUserTypeFromEmail(email);
                 if (userTypeFromEmail && userTypeFromEmail !== finalUserType) {
@@ -70,7 +52,6 @@ export class AuthController {
                         userTypeFromEmail === UserType.CANDIDATE
                             ? "@candidate.edu.au"
                             : "@lecturer.edu.au";
-                    console.log("❌ UserType mismatch for:", email);
                     res.status(400).json({
                         success: false,
                         message: "User type does not match email domain",
@@ -82,20 +63,10 @@ export class AuthController {
                 }
             }
 
-            console.log(
-                "🔍 Data to validate:",
-                JSON.stringify(req.body, null, 2)
-            );
-
             // Validate input data with userType now set
             const validation = validateSignupData(req.body);
-            console.log(
-                "🔍 Validation result:",
-                JSON.stringify(validation, null, 2)
-            );
 
             if (!validation.isValid) {
-                console.log("❌ Signup validation failed:", validation.errors);
                 res.status(400).json({
                     success: false,
                     message: "",
@@ -110,7 +81,6 @@ export class AuthController {
             });
 
             if (existingUser) {
-                console.log("❌ User already exists:", email);
                 res.status(409).json({
                     success: false,
                     message: "User with this email already exists",
@@ -121,7 +91,6 @@ export class AuthController {
             // Hash password
             const saltRounds = 12;
             const hashedPassword = await bcrypt.hash(password, saltRounds);
-            console.log("🔐 Password hashed successfully");
 
             // Create new user with the final userType
             const newUser = this.userRepository.create({
@@ -134,12 +103,6 @@ export class AuthController {
 
             // Save user to database
             const savedUser = await this.userRepository.save(newUser);
-            console.log(
-                "✅ User created successfully:",
-                savedUser.id,
-                "Type:",
-                savedUser.userType
-            );
 
             // Generate JWT token
             const token = jwt.sign(
@@ -149,8 +112,8 @@ export class AuthController {
                     userType: savedUser.userType,
                 },
                 process.env.BACKEND_JWT_SECRET ||
-                    process.env.JWT_SECRET ||
-                    "fallback_secret_key",
+                process.env.JWT_SECRET ||
+                "fallback_secret_key",
                 { expiresIn: "7d" }
             );
 
@@ -166,7 +129,7 @@ export class AuthController {
                 },
             });
         } catch (error) {
-            console.error("💥 Signup error:", error);
+            console.error("Signup error:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error during registration",
@@ -177,12 +140,10 @@ export class AuthController {
     async signin(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
-            console.log("🔍 Signin attempt for email:", email);
 
             // Validate input data
             const validation = validateSigninData(req.body);
             if (!validation.isValid) {
-                console.log("❌ Validation failed:", validation.errors);
                 res.status(400).json({
                     success: false,
                     message: "",
@@ -195,13 +156,8 @@ export class AuthController {
             const user = await this.userRepository.findOne({
                 where: { email },
             });
-            console.log(
-                "🔍 User found in database:",
-                user ? `Yes (ID: ${user.id})` : "No"
-            );
 
             if (!user) {
-                console.log("❌ User not found for email:", email);
                 res.status(401).json({
                     success: false,
                     message: "Invalid email or password",
@@ -211,7 +167,6 @@ export class AuthController {
 
             // Check if user is blocked
             if (user.isBlocked) {
-                console.log("❌ User is blocked:", email);
                 res.status(403).json({
                     success: false,
                     message:
@@ -221,23 +176,18 @@ export class AuthController {
             }
 
             // Verify password
-            console.log("🔍 Comparing password with hash...");
             const isPasswordValid = await bcrypt.compare(
                 password,
                 user.password
             );
-            console.log("🔍 Password valid:", isPasswordValid);
 
             if (!isPasswordValid) {
-                console.log("❌ Invalid password for email:", email);
                 res.status(401).json({
                     success: false,
                     message: "Invalid email or password",
                 });
                 return;
             }
-
-            console.log("✅ Authentication successful for:", email);
 
             // Generate JWT token
             const token = jwt.sign(
@@ -247,15 +197,13 @@ export class AuthController {
                     userType: user.userType,
                 },
                 process.env.BACKEND_JWT_SECRET ||
-                    process.env.JWT_SECRET ||
-                    "fallback_secret_key",
+                process.env.JWT_SECRET ||
+                "fallback_secret_key",
                 { expiresIn: "7d" }
             );
 
             // Return success response (exclude password)
             const { password: _, ...userWithoutPassword } = user;
-
-            console.log("📤 Sending success response to frontend");
             res.status(200).json({
                 success: true,
                 message: "Login successful",
@@ -265,7 +213,7 @@ export class AuthController {
                 },
             });
         } catch (error) {
-            console.error("💥 Signin error:", error);
+            console.error("Signin error:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error during login",
@@ -275,7 +223,6 @@ export class AuthController {
 
     async logout(req: Request, res: Response): Promise<void> {
         try {
-            console.log("🔄 Logout request received");
             // Since we're using JWTs, logout is handled on the client side
             // by removing the token from storage
             res.status(200).json({
@@ -283,7 +230,7 @@ export class AuthController {
                 message: "Logged out successfully",
             });
         } catch (error) {
-            console.error("💥 Logout error:", error);
+            console.error("Logout error:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error during logout",
@@ -294,7 +241,6 @@ export class AuthController {
     async getProfile(req: Request, res: Response): Promise<void> {
         try {
             const userId = (req as any).user?.userId;
-            console.log("🔄 Profile request for user ID:", userId);
 
             if (!userId) {
                 res.status(401).json({
@@ -309,7 +255,6 @@ export class AuthController {
             });
 
             if (!user) {
-                console.log("❌ User not found for ID:", userId);
                 res.status(404).json({
                     success: false,
                     message: "User not found",
@@ -323,16 +268,6 @@ export class AuthController {
             // If user is a lecturer, include their assigned courses
             let assignedCourses: AssignedCourse[] = [];
             if (user.userType === UserType.LECTURER) {
-                console.log(
-                    "🔍 Fetching assigned courses for lecturer:",
-                    userId
-                );
-                console.log(
-                    "🔍 User type is:",
-                    user.userType,
-                    "UserType.LECTURER:",
-                    UserType.LECTURER
-                );
 
                 try {
                     const courseAssignments =
@@ -342,15 +277,6 @@ export class AuthController {
                             order: { course: { courseCode: "ASC" } },
                         });
 
-                    console.log(
-                        "🔍 Found course assignments:",
-                        courseAssignments.length
-                    );
-                    console.log(
-                        "🔍 Course assignments data:",
-                        courseAssignments
-                    );
-
                     assignedCourses = courseAssignments.map((assignment) => ({
                         id: assignment.course.id,
                         courseCode: assignment.course.courseCode,
@@ -358,26 +284,15 @@ export class AuthController {
                         semester: assignment.course.semester,
                         assignedAt: assignment.assignedAt,
                     }));
-
-                    console.log(
-                        `✅ Mapped ${assignedCourses.length} assigned courses for lecturer`
-                    );
-                    console.log("✅ Assigned courses:", assignedCourses);
                 } catch (courseError) {
                     console.error(
-                        "❌ Error fetching course assignments:",
+                        "Error fetching course assignments:",
                         courseError
                     );
                     // Keep assignedCourses as empty array if there's an error
                     assignedCourses = [];
                 }
             }
-
-            console.log("✅ Profile retrieved for:", user.email);
-            console.log(
-                "📊 Final assigned courses count:",
-                assignedCourses.length
-            );
 
             res.status(200).json({
                 success: true,
@@ -388,7 +303,7 @@ export class AuthController {
                 },
             });
         } catch (error) {
-            console.error("💥 Get profile error:", error);
+            console.error("Get profile error:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error while fetching profile",

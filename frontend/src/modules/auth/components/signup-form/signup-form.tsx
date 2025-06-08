@@ -13,6 +13,7 @@ import {
 import { AuthService } from "../../../../shared/services/authService";
 import { UserType } from "../../../../shared/types/user";
 import { useAuth } from "../../hooks/useAuth";
+import EmailAutocomplete from "../email-autocomplete/email-autocomplete";
 import styles from "./signup-form.module.css";
 
 export default function SignUpForm() {
@@ -154,21 +155,14 @@ export default function SignUpForm() {
         userType,
       };
 
-      console.log("Attempting signup with data:", {
-        ...signupData,
-        password: "[HIDDEN]",
-        confirmPassword: "[HIDDEN]",
-      });
-
       // Call the signup API
       const response = await AuthService.signup(signupData);
 
       if (response.success && response.data) {
         // Don't auto-login after signup - redirect to signin page instead
-        console.log("✅ Account created successfully, redirecting to signin...");
         
-        // Redirect to signin page with success message
-        router.push("/signin?message=Account created successfully! Please sign in.");
+        // Redirect to signin page with success message and email
+        router.push(`/signin?message=Account created successfully! Please sign in.&email=${encodeURIComponent(email.trim())}`);
       } else {
         // Handle API errors
         if (response.errors) {
@@ -216,13 +210,13 @@ export default function SignUpForm() {
         </div>
 
         <div className={styles.inputContainer}>
-          <input
-            type="email"
-            placeholder="Email Address"
+          <EmailAutocomplete
             value={email}
-            onChange={(e) => handleInputChange("email", e.target.value)}
-            required
-            className={`${styles.inputField} ${errors.email ? styles.inputError : ""}`}
+            onChange={(value) => handleInputChange("email", value)}
+            placeholder="Email Address"
+            className={styles.inputField}
+            role={role}
+            hasError={!!errors.email}
           />
           {errors.email && (
             <div className={styles.errorMessage}>

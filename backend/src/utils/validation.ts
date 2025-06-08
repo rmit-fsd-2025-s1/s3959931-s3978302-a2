@@ -144,8 +144,6 @@ export const validateSignupData = (data: any): ValidationResult => {
 export const validateSigninData = (data: any): ValidationResult => {
     const errors: Record<string, string> = {};
 
-    console.log("🔍 Validating signin data:", JSON.stringify(data, null, 2));
-
     // Email validation
     if (!data.email) {
         errors.email = "Email is required";
@@ -159,16 +157,12 @@ export const validateSigninData = (data: any): ValidationResult => {
     } else {
         // Check for emojis in password
         const emojiRegex = /[\u{1F000}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\uD800-\uDBFF][\uDC00-\uDFFF]/u;
-        console.log("🔍 Checking password for emojis:", data.password);
         if (emojiRegex.test(data.password)) {
-            console.log("❌ Found emoji in password!");
             errors.password = "Password cannot contain emojis";
         }
     }
 
-    console.log("🔍 Validation errors found:", errors);
     const isValid = Object.keys(errors).length === 0;
-    console.log("🔍 Validation result isValid:", isValid);
 
     return {
         isValid,
