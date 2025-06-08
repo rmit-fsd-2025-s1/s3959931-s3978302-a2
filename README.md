@@ -155,7 +155,7 @@ npm run dev:unix && npm run dev:admin:unix
 -   Rank selected candidates in order of preference
 -   Add comments and feedback to applications
 
-### Administrators (`admin@admin.com`)
+### Administrators (`admin`)
 
 -   Manage all user accounts (create, block, delete)
 -   Create and configure courses with position limits
