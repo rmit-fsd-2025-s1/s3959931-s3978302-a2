@@ -72,18 +72,19 @@ export const useApplicationManagement = () => {
         // Sort ranked applications by rank for proper display
         ranked.sort((a, b) => (a.rank || 0) - (b.rank || 0));
 
-        const allSelectedApps = response.data
-          .filter((app) => app.status === "selected")
-          .map((app) => ({
-            id: app.id,
-            name: app.candidate?.firstName + " " + app.candidate?.lastName,
-            rank: app.rank,
-            rankType: typeof app.rank,
-            rankCheck:
-              app.rank !== undefined && app.rank !== null && app.rank > 0,
-            rankedForCourse: app.rankedForCourse,
-            status: app.status,
-          }));
+        // Available for debugging if needed
+        // const allSelectedApps = response.data
+        //   .filter((app) => app.status === "selected")
+        //   .map((app) => ({
+        //     id: app.id,
+        //     name: app.candidate?.firstName + " " + app.candidate?.lastName,
+        //     rank: app.rank,
+        //     rankType: typeof app.rank,
+        //     rankCheck:
+        //       app.rank !== undefined && app.rank !== null && app.rank > 0,
+        //     rankedForCourse: app.rankedForCourse,
+        //     status: app.status,
+        //   }));
 
         // Applications loaded successfully
 

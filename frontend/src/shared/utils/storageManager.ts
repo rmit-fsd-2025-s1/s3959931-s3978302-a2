@@ -123,11 +123,15 @@ class StorageManager {
 
   // Simple logging - no external analytics per assignment requirements
   private static trackUsage(
-    operation: "read" | "write" | "delete",
-    key: string,
-    success: boolean
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _operation: "read" | "write" | "delete",
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _key: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _success: boolean
   ): void {
     // Removed debug logging for cleaner console output
+    // Parameters prefixed with underscore to indicate they're unused but required for interface
   }
 
   // Storage health monitoring

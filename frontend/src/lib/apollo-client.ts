@@ -38,8 +38,9 @@ const wsClient = createClient({
       errOrCloseEvent &&
       "code" in errOrCloseEvent
     ) {
+      const code = errOrCloseEvent.code as number;
       // Don't retry on authentication/authorization errors (4000-4999 range)
-      return errOrCloseEvent.code < 4000 || errOrCloseEvent.code >= 5000;
+      return code < 4000 || code >= 5000;
     }
     return true;
   },
@@ -59,12 +60,15 @@ const wsClient = createClient({
       }
     },
     closed: (event) => {
-      if (process.env.NODE_ENV === "development" && event?.code !== 1000) {
-        console.warn(
-          "WebSocket connection closed unexpectedly:",
-          event?.code,
-          event?.reason
-        );
+      if (process.env.NODE_ENV === "development") {
+        const closeEvent = event as { code?: number; reason?: string };
+        if (closeEvent?.code !== 1000) {
+          console.warn(
+            "WebSocket connection closed unexpectedly:",
+            closeEvent?.code,
+            closeEvent?.reason
+          );
+        }
       }
     },
   },

@@ -156,16 +156,31 @@ export default function CoursesManagement() {
     });
 
     const [removeLecturer] = useMutation(REMOVE_LECTURER_FROM_COURSE, {
-        onCompleted: () => {
-            refetchCourses();
-            // Refresh lecturers for the current course
-            if (selectedCourse) {
-                getLecturers({
-                    variables: {
-                        courseId: parseInt(selectedCourse.id.toString()),
-                    },
-                });
+        onCompleted: (data) => {
+            if (data.removeLecturerFromCourse.success) {
+                refetchCourses();
+                // Refresh lecturers for the current course
+                if (selectedCourse) {
+                    getLecturers({
+                        variables: {
+                            courseId: parseInt(selectedCourse.id.toString()),
+                        },
+                    });
+                }
+                showSuccess(
+                    data.removeLecturerFromCourse.message ||
+                        "Lecturer removed successfully"
+                );
+            } else {
+                showError(
+                    data.removeLecturerFromCourse.message ||
+                        "Failed to remove lecturer"
+                );
             }
+        },
+        onError: (error) => {
+            console.error("Error removing lecturer:", error);
+            showError(error.message || "Failed to remove lecturer");
         },
     });
 
@@ -258,16 +273,21 @@ export default function CoursesManagement() {
         }
     };
 
-    const handleRemoveLecturer = async (lecturerId: number) => {
-        if (!selectedCourse) return;
+    const handleRemoveLecturer = async (lecturerId: number, course: Course) => {
+        console.log("Removing lecturer:", {
+            lecturerId,
+            courseId: course.id,
+            courseName: course.courseName,
+        });
 
         try {
-            await removeLecturer({
+            const result = await removeLecturer({
                 variables: {
                     lecturerId: parseInt(lecturerId.toString()),
-                    courseId: parseInt(selectedCourse.id.toString()),
+                    courseId: parseInt(course.id.toString()),
                 },
             });
+            console.log("Remove lecturer result:", result);
         } catch (error) {
             console.error("Error removing lecturer:", error);
         }
@@ -507,7 +527,8 @@ export default function CoursesManagement() {
                                                                 onClick={() =>
                                                                     handleRemoveLecturer(
                                                                         assignment.lecturer!
-                                                                            .id
+                                                                            .id,
+                                                                        course
                                                                     )
                                                                 }
                                                                 className={

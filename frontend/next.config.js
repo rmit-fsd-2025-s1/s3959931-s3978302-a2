@@ -4,9 +4,8 @@ const nextConfig = {
   // This eliminates console errors from WebSocket connections being created/destroyed twice
   reactStrictMode: false,
 
-  experimental: {
-    serverComponentsExternalPackages: ["typeorm"],
-  },
+  // Moved from experimental.serverComponentsExternalPackages to serverExternalPackages
+  serverExternalPackages: ["typeorm"],
 };
 
 module.exports = nextConfig;

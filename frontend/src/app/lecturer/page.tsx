@@ -242,12 +242,11 @@ const LecturerDashboardInner: React.FC = () => {
   );
 
   // Candidate blocking subscription with memoized callbacks
-  const subscriptionResult = useCandidateBlockingSubscription({
+  // Initialize subscription for real-time updates
+  useCandidateBlockingSubscription({
     showToast,
     onCandidateBlocked,
   });
-
-  const { isConnected: subscriptionConnected } = subscriptionResult;
 
   // Convert to legacy format for existing components
   const applications = rawApplications.map(convertToLegacyApplication);
