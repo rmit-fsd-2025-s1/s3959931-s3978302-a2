@@ -290,19 +290,28 @@ export function useCandidateBlockingSubscription({
     };
 
     ws.onerror = (error) => {
-      console.error("❌ WebSocket error:", error);
       // Skip if effect was cleaned up (common in React Strict Mode)
       if (isCleanedUpRef.current) {
         return;
       }
 
-      // Only log WebSocket errors if the connection has been open for a reasonable time
+      // Use a more informative error message but don't spam the console
+      if (process.env.NODE_ENV === "development") {
+        console.warn(
+          "⚠️ WebSocket connection issue (admin-backend may not be running):",
+          error
+        );
+      }
+
+      // Only update error state if the connection has been open for a reasonable time
       // This prevents React Strict Mode cleanup errors from being logged
       setTimeout(() => {
         if (!isCleanedUpRef.current && ws.readyState === WebSocket.CLOSED) {
           setSubscriptionState((prev) => ({
             ...prev,
-            error: new Error("WebSocket connection error"),
+            error: new Error(
+              "Admin backend connection unavailable - notifications may not work"
+            ),
             loading: false,
             isConnected: false,
           }));
@@ -311,10 +320,18 @@ export function useCandidateBlockingSubscription({
     };
 
     ws.onclose = (event) => {
-      console.log("🔌 WebSocket connection closed:", event.code, event.reason);
       // Skip if effect was cleaned up
       if (isCleanedUpRef.current) {
         return;
+      }
+
+      // Only log unexpected closures in development
+      if (process.env.NODE_ENV === "development" && event.code !== 1000) {
+        console.warn(
+          "🔌 WebSocket connection closed unexpectedly:",
+          event.code,
+          event.reason
+        );
       }
 
       setSubscriptionState((prev) => ({

@@ -20,18 +20,27 @@ const httpLink = createHttpLink({
   credentials: "include",
 });
 
-// Create WebSocket client with minimal logging
+// Create WebSocket client with improved error handling and resilience
 const wsClient = createClient({
   url: wsUrl,
-  lazy: false, // Connect immediately to avoid loading state issues
+  lazy: true, // Connect lazily to avoid immediate failures on page load
   keepAlive: 30000,
-  retryAttempts: Infinity,
+  retryAttempts: 5, // Limit retries to avoid infinite loops
   retryWait: async (attempt) => {
-    // Exponential backoff: 1s, 2s, 4s, 8s, max 30s
-    const delay = Math.min(1000 * Math.pow(2, attempt), 30000);
+    // Exponential backoff: 1s, 2s, 4s, 8s, max 10s
+    const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
     await new Promise((resolve) => setTimeout(resolve, delay));
   },
-  shouldRetry: () => {
+  shouldRetry: (errOrCloseEvent) => {
+    // Only retry if it's a connection error, not auth/permission errors
+    if (
+      typeof errOrCloseEvent === "object" &&
+      errOrCloseEvent &&
+      "code" in errOrCloseEvent
+    ) {
+      // Don't retry on authentication/authorization errors (4000-4999 range)
+      return errOrCloseEvent.code < 4000 || errOrCloseEvent.code >= 5000;
+    }
     return true;
   },
   connectionParams: () => {
@@ -41,9 +50,21 @@ const wsClient = createClient({
   },
   on: {
     error: (error: unknown) => {
-      // Only log errors in development
+      // Reduce error logging to prevent console spam
       if (process.env.NODE_ENV === "development") {
-        console.error("Apollo WebSocket error:", error);
+        console.warn(
+          "WebSocket connection issue (admin-backend may not be running):",
+          error
+        );
+      }
+    },
+    closed: (event) => {
+      if (process.env.NODE_ENV === "development" && event?.code !== 1000) {
+        console.warn(
+          "WebSocket connection closed unexpectedly:",
+          event?.code,
+          event?.reason
+        );
       }
     },
   },

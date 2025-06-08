@@ -11,31 +11,9 @@ const NotificationBell: React.FC = () => {
     markAsRead,
     markAllAsRead,
     removeNotification,
-    addNotification,
   } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Debug logging
-  useEffect(() => {
-    console.log("🔔 NotificationBell rendered with:", {
-      notifications: notifications.length,
-      unreadCount,
-      isOpen,
-    });
-  }, [notifications.length, unreadCount, isOpen]);
-
-  // Test function to add a notification
-  const addTestNotification = () => {
-    console.log("🧪 Adding test notification");
-    addNotification({
-      type: "candidate_blocked",
-      title: "Test Notification",
-      message: "This is a test notification to verify the system works",
-      candidateId: 999,
-      candidateName: "Test Candidate",
-    });
-  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -55,19 +33,14 @@ const NotificationBell: React.FC = () => {
   }, []);
 
   const toggleDropdown = () => {
-    console.log("🔔 Notification bell clicked, toggling dropdown", {
-      isOpen: !isOpen,
-    });
     setIsOpen(!isOpen);
   };
 
   const handleNotificationClick = (notificationId: string) => {
-    console.log("🔔 Notification clicked:", notificationId);
     markAsRead(notificationId);
   };
 
   const handleMarkAllAsRead = () => {
-    console.log("🔔 Mark all as read clicked");
     markAllAsRead();
   };
 
@@ -100,29 +73,8 @@ const NotificationBell: React.FC = () => {
     }
   };
 
-  console.log("🔔 NotificationBell rendering with unreadCount:", unreadCount);
-
   return (
     <div className={styles.notificationContainer} ref={dropdownRef}>
-      {/* Test Button - Only show in development */}
-      {process.env.NODE_ENV === "development" && (
-        <button
-          onClick={addTestNotification}
-          style={{
-            marginRight: "8px",
-            padding: "4px 8px",
-            background: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            fontSize: "12px",
-            cursor: "pointer",
-          }}
-        >
-          Test
-        </button>
-      )}
-
       {/* Notification Bell Button */}
       <button
         className={styles.bellButton}

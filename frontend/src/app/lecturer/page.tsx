@@ -60,8 +60,7 @@ const convertToLegacyApplication = (
       | "hired",
     selected: appResponse.status === "selected",
     comment: appResponse.comment || "",
-    rank: appResponse.rank, // Preserve rank from backend
-    // Extended properties
+    rank: appResponse.rank,
     role: appResponse.role
       ? { roleName: appResponse.role.roleName }
       : undefined,
@@ -72,13 +71,11 @@ const convertToLegacyApplication = (
           semester: appResponse.course.semester,
         }
       : undefined,
-    // Add fields needed for ranking
     selectedForCourses:
       appResponse.status === "selected"
         ? [appResponse.course.courseCode]
         : undefined,
     rankedForCourse: appResponse.rankedForCourse,
-    // Add blocking status
     isBlocked: appResponse.candidate?.isBlocked || false,
   };
 };
@@ -129,12 +126,7 @@ const LecturerDashboardInner: React.FC = () => {
   // Show toast function
   const showToast = useCallback(
     (message: string, type: "success" | "error" | "info" = "success") => {
-      console.log("🍞 showToast called:", { message, type });
-
-      // Clear any existing toast first
       setToastMessage(null);
-
-      // Set new toast after a small delay to ensure the previous one is cleared
       setTimeout(() => {
         setToastMessage(message);
         setToastType(type);
@@ -142,61 +134,6 @@ const LecturerDashboardInner: React.FC = () => {
     },
     []
   );
-
-  // Test function to manually trigger toast
-  const testToast = useCallback(() => {
-    console.log("🧪 Testing toast functionality");
-    showToast("Test notification: Candidate blocked", "info");
-    showToast("Test notification: Candidate unblocked", "success");
-  }, [showToast]);
-
-  // Test backend connectivity first
-  const testBackendConnectivity = useCallback(async () => {
-    console.log("🧪 Testing backend connectivity...");
-    const httpUrl =
-      process.env.NEXT_PUBLIC_ADMIN_GRAPHQL_ENDPOINT ||
-      "http://localhost:4002/graphql";
-    const healthUrl = "http://localhost:4002/health";
-
-    // Test 1: Health endpoint
-    try {
-      console.log("🏥 Testing health endpoint:", healthUrl);
-      const healthResponse = await fetch(healthUrl);
-      if (healthResponse.ok) {
-        const healthData = await healthResponse.json();
-        console.log("✅ Health endpoint response:", healthData);
-        showToast("Health check: Connected", "success");
-      } else {
-        console.log("❌ Health endpoint failed:", healthResponse.status);
-        showToast(`Health check failed: ${healthResponse.status}`, "error");
-      }
-    } catch (error) {
-      console.error("❌ Health endpoint error:", error);
-      showToast("Health check: Network error", "error");
-    }
-
-    // Test 2: GraphQL endpoint
-    try {
-      console.log("🔗 Testing GraphQL endpoint:", httpUrl);
-      const response = await fetch(httpUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: "query { __typename }" }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("✅ GraphQL endpoint response:", data);
-        showToast("GraphQL test: Connected", "success");
-      } else {
-        console.log("❌ GraphQL endpoint failed:", response.status);
-        showToast(`GraphQL test failed: ${response.status}`, "error");
-      }
-    } catch (error) {
-      console.error("❌ GraphQL endpoint error:", error);
-      showToast("GraphQL test: Network error", "error");
-    }
-  }, [showToast]);
 
   // Application management with enhanced filtering
   const {
@@ -208,7 +145,6 @@ const LecturerDashboardInner: React.FC = () => {
     comment,
     setComment,
     rankedApplications: rawRankedApplications,
-    // CR Part: Enhanced filters
     selectedCourse,
     setSelectedCourse,
     selectedRankingCourse,
@@ -232,28 +168,13 @@ const LecturerDashboardInner: React.FC = () => {
   // Memoize the callback function to prevent excessive re-initializations
   const onCandidateBlocked = useCallback(
     (event: CandidateBlockedEvent) => {
-      console.log("🔔 Candidate blocking event received:", event);
-
-      // Check if current lecturer should be affected by this blocking event
       const shouldReceiveNotification =
         user?.userType === "lecturer" &&
         event.affectedLecturerIds &&
         event.affectedLecturerIds.includes(user.id);
 
-      console.log("🎯 onCandidateBlocked targeting check:", {
-        candidateName: event.candidateName,
-        currentUserId: user?.id,
-        affectedLecturerIds: event.affectedLecturerIds,
-        shouldReceiveNotification,
-      });
-
-      // Only show toast notifications for affected lecturers
       if (shouldReceiveNotification) {
         if (event.isBlocked) {
-          console.log(
-            `🚫 Candidate ${event.candidateName} has been blocked - automatically unselecting and unranking their applications`
-          );
-
           const unselectedCount = event.unselectedApplicationsCount || 0;
           const unrankedCount = event.unrankedApplicationsCount || 0;
 
@@ -273,32 +194,18 @@ const LecturerDashboardInner: React.FC = () => {
 
           showToast(message, "info");
         } else {
-          console.log(`✅ Candidate ${event.candidateName} has been unblocked`);
           showToast(`${event.candidateName} unblocked`, "success");
         }
-      } else {
-        console.log(
-          `🚫 Not showing toast for ${event.candidateName} - lecturer not affected`
-        );
       }
 
-      console.log("🔄 Refreshing applications after blocking event...");
-
-      // Check if the currently selected application is affected by this blocking event
       const isCurrentlySelectedAffected =
         rawSelectedApplication &&
         rawSelectedApplication.candidateId === event.candidateId;
 
       if (isCurrentlySelectedAffected) {
-        console.log(
-          "⚠️ Currently selected application is affected by blocking event"
-        );
-        console.log("🔄 Clearing selected application state to force refresh");
-        // Clear the selected application to force a proper refresh
         setRawSelectedApplication(null);
 
         if (event.isBlocked && shouldReceiveNotification) {
-          // Show specific message when the currently selected candidate is blocked (only for affected lecturers)
           showToast(
             `Currently selected candidate ${event.candidateName} has been blocked and unselected`,
             "error"
@@ -306,27 +213,17 @@ const LecturerDashboardInner: React.FC = () => {
         }
       }
 
-      // Refresh applications to get updated data
       loadApplications()
         .then(() => {
-          console.log("✅ Applications refreshed after blocking event");
-
-          // If we cleared a selected application and it was unblocked, try to re-select it
           if (isCurrentlySelectedAffected && !event.isBlocked) {
-            console.log("🔄 Re-selecting application after unblock event");
             setTimeout(() => {
-              // Find the updated application by candidate ID
               const updatedApplication = rawApplications.find(
                 (app) => app.candidateId === event.candidateId
               );
               if (updatedApplication) {
-                console.log(
-                  "✅ Re-selecting unblocked application:",
-                  updatedApplication.id
-                );
                 rawHandleSelectApplication(updatedApplication);
               }
-            }, 100); // Small delay to ensure applications are loaded
+            }, 100);
           }
         })
         .catch((error) => {
@@ -350,106 +247,7 @@ const LecturerDashboardInner: React.FC = () => {
     onCandidateBlocked,
   });
 
-  const {
-    isConnected: subscriptionConnected,
-    loading: subscriptionLoading,
-    error: subscriptionError,
-    dataReceived,
-  } = subscriptionResult;
-
-  // Track if connection toast has been shown
-  const [connectionToastShown, setConnectionToastShown] = useState(false);
-
-  // Test subscription connection via Apollo Client (defined after subscription variables)
-  const testSubscriptionConnection = useCallback(() => {
-    console.log("🧪 Testing Apollo Client subscription connection");
-
-    if (subscriptionConnected) {
-      showToast("✅ Subscription is already connected!", "success");
-      console.log("✅ Subscription status: Connected and ready");
-    } else if (subscriptionLoading) {
-      showToast("🔄 Subscription is connecting...", "info");
-      console.log("🔄 Subscription status: Loading/Connecting");
-    } else if (subscriptionError) {
-      showToast(`❌ Subscription error: ${subscriptionError.message}`, "error");
-      console.log("❌ Subscription status: Error -", subscriptionError.message);
-    } else {
-      showToast("❓ Subscription status unknown", "info");
-      console.log("❓ Subscription status: Unknown state");
-    }
-
-    console.log("🔍 Full subscription state:", {
-      connected: subscriptionConnected,
-      loading: subscriptionLoading,
-      error: subscriptionError?.message,
-      dataReceived,
-    });
-  }, [
-    subscriptionConnected,
-    subscriptionLoading,
-    subscriptionError,
-    dataReceived,
-    showToast,
-  ]);
-
-  // Test subscription event trigger
-  const testSubscriptionEvent = useCallback(async () => {
-    console.log("🧪 Triggering test subscription event...");
-    showToast("🧪 Triggering test subscription event...", "info");
-
-    try {
-      const response = await fetch("http://localhost:4002/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `mutation { testSubscription }`,
-        }),
-      });
-
-      const result = await response.json();
-      console.log("🧪 Test subscription response:", result);
-
-      if (result.data?.testSubscription) {
-        showToast("✅ Test event triggered successfully!", "success");
-        console.log("✅ Test subscription event triggered successfully");
-      } else {
-        showToast("❌ Failed to trigger test event", "error");
-        console.error("❌ Test subscription failed:", result.errors);
-      }
-    } catch (error) {
-      console.error("❌ Error triggering test subscription:", error);
-      showToast("❌ Error triggering test event", "error");
-    }
-  }, [showToast]);
-
-  // Log subscription connection status for debugging
-  useEffect(() => {
-    console.log("🔗 Subscription status:", {
-      connected: subscriptionConnected,
-      loading: subscriptionLoading,
-      error: subscriptionError?.message,
-      dataReceived,
-    });
-  }, [
-    subscriptionConnected,
-    subscriptionLoading,
-    subscriptionError,
-    dataReceived,
-  ]);
-
-  // Add debug info for subscription - only show connection toast once
-  useEffect(() => {
-    if (subscriptionConnected && !connectionToastShown) {
-      console.log("✅ Real-time notifications are active");
-      showToast("Real-time notifications connected", "info");
-      setConnectionToastShown(true);
-    } else if (!subscriptionConnected) {
-      console.log("🔌 Real-time notifications disconnected");
-      setConnectionToastShown(false);
-    }
-  }, [subscriptionConnected, showToast, connectionToastShown]);
+  const { isConnected: subscriptionConnected } = subscriptionResult;
 
   // Convert to legacy format for existing components
   const applications = rawApplications.map(convertToLegacyApplication);
@@ -464,17 +262,6 @@ const LecturerDashboardInner: React.FC = () => {
   const rankedApplications = rawRankedApplications.map(
     convertToLegacyApplication
   );
-
-  // Debug log to track selectedApplication conversion
-  useEffect(() => {
-    if (selectedApplication) {
-      console.log("🔄 selectedApplication converted:", {
-        id: selectedApplication.id,
-        comment: selectedApplication.comment,
-        rawComment: rawSelectedApplication?.comment,
-      });
-    }
-  }, [selectedApplication, rawSelectedApplication]);
 
   // Additional UI state
   const [courses, setCourses] = useState<Array<{ code: string; name: string }>>(
@@ -501,9 +288,6 @@ const LecturerDashboardInner: React.FC = () => {
   // Load available courses and extract skills
   const loadCourses = useCallback(async () => {
     try {
-      console.log("🔄 Loading courses for lecturer...");
-
-      // Try to get real data from API first
       const response = await ApplicationService.getAssignedCoursesForLecturer();
       if (response.success && response.data && response.data.length > 0) {
         const courseList = response.data.map((course) => ({
@@ -511,11 +295,7 @@ const LecturerDashboardInner: React.FC = () => {
           name: course.courseName,
         }));
         setCourses(courseList);
-        console.log(
-          `✅ Updated with ${courseList.length} real assigned courses for lecturer`
-        );
       } else {
-        console.log("📝 No courses assigned to this lecturer yet");
         setCourses([]);
         if (response.message && !response.success) {
           showToast(
@@ -545,10 +325,9 @@ const LecturerDashboardInner: React.FC = () => {
     if (!isInitialized) return;
 
     const refreshInterval = setInterval(() => {
-      console.log("🔄 Periodic refresh of courses and applications...");
       loadCourses();
       loadApplications();
-    }, 60000); // Refresh every 60 seconds
+    }, 60000);
 
     return () => clearInterval(refreshInterval);
   }, [isInitialized, loadCourses, loadApplications]);
@@ -627,28 +406,11 @@ const LecturerDashboardInner: React.FC = () => {
 
   // Wrap the selection handler to convert back to ApplicationResponse
   const handleSelectApplication = (app: Application) => {
-    console.log("🎯 handleSelectApplication called:", {
-      appId: app.id,
-      appName: app.fullName,
-      rawApplicationsCount: rawApplications.length,
-    });
-
     const originalApp = rawApplications.find(
       (rawApp) => rawApp.id.toString() === app.id
     );
 
-    console.log("🔍 Looking for original app:", {
-      found: !!originalApp,
-      originalAppId: originalApp?.id,
-      searchingFor: app.id,
-      rawAppIds: rawApplications.map((raw) => ({
-        id: raw.id,
-        stringId: raw.id.toString(),
-      })),
-    });
-
     if (originalApp) {
-      console.log("✅ Found original app, calling rawHandleSelectApplication");
       rawHandleSelectApplication(originalApp);
     } else {
       console.error("❌ Could not find original app in rawApplications");
@@ -659,25 +421,15 @@ const LecturerDashboardInner: React.FC = () => {
   const handleSaveComment = async () => {
     if (!rawSelectedApplication) return;
 
-    console.log(
-      "💾 Saving comment:",
-      comment,
-      "for application:",
-      rawSelectedApplication.id
-    );
-
     try {
       const response = await ApplicationService.updateApplicationComment(
         rawSelectedApplication.id,
         comment
       );
 
-      console.log("💾 Save comment response:", response);
-
       if (response.success) {
         showToast("Comment saved successfully", "success");
-        await loadApplications(); // Reload to get updated data
-        console.log("💾 Applications reloaded after comment save");
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to save comment", "error");
       }
@@ -698,7 +450,7 @@ const LecturerDashboardInner: React.FC = () => {
       if (response.success) {
         setComment("");
         showToast("Comment deleted", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to delete comment", "error");
       }
@@ -708,45 +460,20 @@ const LecturerDashboardInner: React.FC = () => {
   };
 
   const handleSelectApplicantButton = async (selectedCourses: string[]) => {
-    console.log("🎯 handleSelectApplicantButton called:", {
-      rawSelectedApplication: !!rawSelectedApplication,
-      rawSelectedAppId: rawSelectedApplication?.id,
-      rawSelectedAppName:
-        rawSelectedApplication?.candidate?.firstName +
-        " " +
-        rawSelectedApplication?.candidate?.lastName,
-      selectedApplication: !!selectedApplication,
-      selectedAppId: selectedApplication?.id,
-      selectedCourses,
-      selectedCoursesType: typeof selectedCourses,
-      selectedCoursesLength: selectedCourses?.length,
-      selectedCoursesContent: selectedCourses,
-      comment: comment,
-    });
-
-    // Try to get the raw application from rawSelectedApplication first
     let targetApplication: ApplicationResponse | null = rawSelectedApplication;
 
-    // If rawSelectedApplication is null but we have selectedApplication, try to find it
     if (!targetApplication && selectedApplication) {
-      console.log(
-        "🔍 rawSelectedApplication is null, trying to find from selectedApplication"
-      );
       targetApplication =
         rawApplications.find(
           (rawApp) => rawApp.id.toString() === selectedApplication.id
         ) || null;
-      console.log("🔍 Found target application:", !!targetApplication);
 
-      // If we found it, set it as the selected application for future use
       if (targetApplication) {
-        console.log("✅ Setting rawSelectedApplication for future use");
         rawHandleSelectApplication(targetApplication);
       }
     }
 
     if (!targetApplication) {
-      console.error("❌ No application found - cannot select applicant");
       showToast(
         "No application found. Please try selecting the applicant from the list first.",
         "error"
@@ -755,7 +482,6 @@ const LecturerDashboardInner: React.FC = () => {
     }
 
     try {
-      console.log("🌐 Calling updateApplicationStatus API...");
       const response = await ApplicationService.updateApplicationStatus(
         targetApplication.id,
         "selected",
@@ -763,14 +489,10 @@ const LecturerDashboardInner: React.FC = () => {
         selectedCourses
       );
 
-      console.log("🌐 API response:", response);
-
       if (response.success) {
-        console.log("✅ Applicant selected successfully");
         showToast("Applicant selected successfully", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
-        console.error("❌ API returned error:", response.message);
         showToast(response.message || "Failed to select applicant", "error");
       }
     } catch (error) {
@@ -783,13 +505,7 @@ const LecturerDashboardInner: React.FC = () => {
     if (!rawSelectedApplication) return;
 
     try {
-      // First, remove from ranking if ranked
       if (selectedApplication?.rank && selectedApplication.rank > 0) {
-        console.log("🗑️ Removing from ranking before unselecting:", {
-          applicationId: selectedApplication.id,
-          currentRank: selectedApplication.rank,
-        });
-
         const removeRankingResponse =
           await ApplicationService.removeApplicationFromRanking(
             parseInt(selectedApplication.id)
@@ -803,7 +519,6 @@ const LecturerDashboardInner: React.FC = () => {
         }
       }
 
-      // Then unselect the application
       const response = await ApplicationService.updateApplicationStatus(
         rawSelectedApplication.id,
         "pending"
@@ -811,7 +526,7 @@ const LecturerDashboardInner: React.FC = () => {
 
       if (response.success) {
         showToast("Applicant unselected and removed from ranking", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to unselect applicant", "error");
       }
@@ -824,7 +539,6 @@ const LecturerDashboardInner: React.FC = () => {
   const handleAddToRanking = async () => {
     if (!selectedApplication) return;
 
-    // Validation checks
     if (!selectedApplication.selected) {
       showToast(
         "Please select the applicant before adding to ranking",
@@ -856,7 +570,6 @@ const LecturerDashboardInner: React.FC = () => {
       return;
     }
 
-    // Auto-select the course since there's only one course
     let courseForRanking = selectedRankingCourse;
     if (!courseForRanking && selectedApplication.courses.length > 0) {
       courseForRanking = selectedApplication.courses[0];
@@ -868,20 +581,12 @@ const LecturerDashboardInner: React.FC = () => {
     }
 
     try {
-      // Calculate next rank (add to end of list)
       const currentRankedForCourse = rankedApplications.filter(
         (app) =>
           app.selectedForCourses?.includes(courseForRanking) ||
           app.courses.includes(courseForRanking)
       );
       const nextRank = currentRankedForCourse.length + 1;
-
-      console.log("🎯 Adding to ranking:", {
-        applicationId: selectedApplication.id,
-        nextRank,
-        courseForRanking,
-        currentRankedCount: currentRankedForCourse.length,
-      });
 
       const response = await ApplicationService.addApplicationToRanking(
         parseInt(selectedApplication.id),
@@ -891,7 +596,7 @@ const LecturerDashboardInner: React.FC = () => {
 
       if (response.success) {
         showToast("Added to ranking successfully", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to add to ranking", "error");
       }
@@ -912,13 +617,12 @@ const LecturerDashboardInner: React.FC = () => {
     const currentIndex = filteredRanked.findIndex(
       (ranked) => ranked.id === app.id
     );
-    if (currentIndex <= 0) return; // Already at top or not found
+    if (currentIndex <= 0) return;
 
     const currentRank = currentIndex + 1;
     const newRank = currentRank - 1;
 
     try {
-      // Update the rank of the current application
       const response = await ApplicationService.updateApplicationRanking(
         parseInt(app.id),
         newRank,
@@ -926,7 +630,6 @@ const LecturerDashboardInner: React.FC = () => {
       );
 
       if (response.success) {
-        // Also update the application that was above (move it down)
         const appAbove = filteredRanked[currentIndex - 1];
         await ApplicationService.updateApplicationRanking(
           parseInt(appAbove.id),
@@ -935,7 +638,7 @@ const LecturerDashboardInner: React.FC = () => {
         );
 
         showToast("Ranking updated successfully", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to update ranking", "error");
       }
@@ -956,13 +659,12 @@ const LecturerDashboardInner: React.FC = () => {
     const currentIndex = filteredRanked.findIndex(
       (ranked) => ranked.id === app.id
     );
-    if (currentIndex >= filteredRanked.length - 1 || currentIndex < 0) return; // Already at bottom or not found
+    if (currentIndex >= filteredRanked.length - 1 || currentIndex < 0) return;
 
     const currentRank = currentIndex + 1;
     const newRank = currentRank + 1;
 
     try {
-      // Update the rank of the current application
       const response = await ApplicationService.updateApplicationRanking(
         parseInt(app.id),
         newRank,
@@ -970,7 +672,6 @@ const LecturerDashboardInner: React.FC = () => {
       );
 
       if (response.success) {
-        // Also update the application that was below (move it up)
         const appBelow = filteredRanked[currentIndex + 1];
         await ApplicationService.updateApplicationRanking(
           parseInt(appBelow.id),
@@ -979,7 +680,7 @@ const LecturerDashboardInner: React.FC = () => {
         );
 
         showToast("Ranking updated successfully", "success");
-        await loadApplications(); // Reload to get updated data
+        await loadApplications();
       } else {
         showToast(response.message || "Failed to update ranking", "error");
       }
@@ -990,33 +691,14 @@ const LecturerDashboardInner: React.FC = () => {
 
   const handleRemoveFromRanking = async (id: string) => {
     try {
-      console.log("🗑️ Removing from ranking:", {
-        applicationId: id,
-        beforeRemoval: {
-          rankedCount: rankedApplications.length,
-          rankedApps: rankedApplications.map((app) => ({
-            id: app.id,
-            rank: app.rank,
-          })),
-        },
-      });
-
       const response = await ApplicationService.removeApplicationFromRanking(
         parseInt(id)
       );
 
-      console.log("🗑️ Remove ranking response:", response);
-
       if (response.success) {
         showToast("Removed from ranking successfully", "success");
-        console.log("🔄 Reloading applications after remove...");
-        await loadApplications(); // Reload to get updated data
-        console.log(
-          "🔄 Applications reloaded, new ranked count:",
-          rankedApplications.length
-        );
+        await loadApplications();
       } else {
-        console.error("❌ Remove ranking failed:", response.message);
         showToast(response.message || "Failed to remove from ranking", "error");
       }
     } catch (error) {
@@ -1026,7 +708,6 @@ const LecturerDashboardInner: React.FC = () => {
   };
 
   useEffect(() => {
-    // Initialize ranking course selection when switching to rankings tab
     if (
       activeTab === "rankings" &&
       !selectedRankingCourse &&
@@ -1061,95 +742,6 @@ const LecturerDashboardInner: React.FC = () => {
             statistics={statistics}
             onRefresh={handleManualRefresh}
           />
-
-          {/* Debug button for testing toasts */}
-          <div
-            style={{
-              margin: "1rem 0",
-              padding: "1rem",
-              backgroundColor: "#f0f0f0",
-              borderRadius: "0.5rem",
-            }}
-          >
-            <button
-              onClick={testToast}
-              style={{
-                padding: "0.5rem 1rem",
-                backgroundColor: "#3b82f6",
-                color: "white",
-                border: "none",
-                borderRadius: "0.25rem",
-                cursor: "pointer",
-                marginRight: "1rem",
-              }}
-            >
-              🧪 Test Toast Notifications
-            </button>
-            <button
-              onClick={testBackendConnectivity}
-              style={{
-                padding: "0.5rem 1rem",
-                backgroundColor: "#16a34a",
-                color: "white",
-                border: "none",
-                borderRadius: "0.25rem",
-                cursor: "pointer",
-                marginRight: "1rem",
-              }}
-            >
-              🔗 Test Backend Connectivity
-            </button>
-            <button
-              onClick={testSubscriptionConnection}
-              style={{
-                padding: "0.5rem 1rem",
-                backgroundColor: "#059669",
-                color: "white",
-                border: "none",
-                borderRadius: "0.25rem",
-                cursor: "pointer",
-                marginRight: "1rem",
-              }}
-            >
-              📡 Test Subscription Status
-            </button>
-            <button
-              onClick={testSubscriptionEvent}
-              style={{
-                padding: "0.5rem 1rem",
-                backgroundColor: "#dc2626",
-                color: "white",
-                border: "none",
-                borderRadius: "0.25rem",
-                cursor: "pointer",
-                marginRight: "1rem",
-              }}
-            >
-              🔥 Trigger Test Event
-            </button>
-            <span style={{ fontSize: "0.875rem", color: "#666" }}>
-              Real-time Notifications:{" "}
-              {subscriptionLoading
-                ? "🎧 Listening for events..."
-                : subscriptionConnected
-                  ? "✅ Active"
-                  : subscriptionError
-                    ? "❌ Error"
-                    : "❌ Inactive"}
-              {subscriptionError && (
-                <span style={{ color: "red", fontSize: "0.75rem" }}>
-                  {" "}
-                  ({subscriptionError.message})
-                </span>
-              )}
-              <br />
-              <small style={{ fontSize: "0.75rem", opacity: 0.8 }}>
-                Events Received:{" "}
-                {dataReceived ? "✅ Yes" : "⏳ Waiting for admin events"} |
-                WebSocket Status: Connected ✅
-              </small>
-            </span>
-          </div>
 
           {/* Enhanced Application Filters */}
           <ApplicationFilters

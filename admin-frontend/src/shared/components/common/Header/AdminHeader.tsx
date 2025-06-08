@@ -8,7 +8,6 @@ import {
     HomeIcon,
     UsersIcon,
     AcademicCapIcon,
-    Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
     UserCircleIcon,
     SunIcon,
@@ -76,7 +75,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
             href: "/dashboard/reports",
             icon: DocumentChartBarIcon,
         },
-        { name: "Settings", href: "/dashboard/settings", icon: Cog6ToothIcon },
     ];
 
     const handleLogout = () => {
@@ -218,40 +216,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
                                     </div>
 
                                     <div className={styles.dropdownContent}>
-                                        <Link
-                                            href="/dashboard/profile"
-                                            className={styles.dropdownItem}
-                                            onClick={() =>
-                                                setIsUserDropdownOpen(false)
-                                            }
-                                        >
-                                            <UserCircleIcon
-                                                className={
-                                                    styles.dropdownItemIcon
-                                                }
-                                            />
-                                            <span>Profile Settings</span>
-                                        </Link>
-
-                                        <Link
-                                            href="/dashboard/settings"
-                                            className={styles.dropdownItem}
-                                            onClick={() =>
-                                                setIsUserDropdownOpen(false)
-                                            }
-                                        >
-                                            <Cog6ToothIcon
-                                                className={
-                                                    styles.dropdownItemIcon
-                                                }
-                                            />
-                                            <span>System Settings</span>
-                                        </Link>
-
-                                        <hr
-                                            className={styles.dropdownDivider}
-                                        />
-
                                         <button
                                             onClick={handleLogout}
                                             className={`${styles.dropdownItem} ${styles.logoutItem}`}
