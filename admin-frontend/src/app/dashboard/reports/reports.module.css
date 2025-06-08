@@ -615,6 +615,10 @@
     color: var(--color-text-secondary);
 }
 
+:global(.dark) .tabButton.active .tabName {
+    color: #ffffff;
+}
+
 /* Cards - Dark Mode */
 :global(.dark) .courseCard {
     background: var(--color-bg-secondary);
@@ -668,7 +672,7 @@
 
 :global(.dark) .applicationCount {
     background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    color: #ffffff;
     border-color: rgba(239, 68, 68, 0.3);
 }
 

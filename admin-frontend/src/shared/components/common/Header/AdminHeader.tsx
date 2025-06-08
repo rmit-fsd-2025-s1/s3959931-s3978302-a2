@@ -142,11 +142,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
 
                     {/* Header Actions */}
                     <div className={styles.headerActions}>
-                        {/* Theme Toggle with Frontend styling */}
-                        <div className={styles.darkModeWrapper}>
-                            <ThemeToggle />
-                        </div>
-
                         {/* User Dropdown */}
                         <div className={styles.userDropdown} ref={dropdownRef}>
                             <button
@@ -221,8 +216,16 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
                                         {/* Actions Row - Theme Toggle and Sign Out */}
                                         <div className={styles.actionsRow}>
                                             {/* Theme Toggle */}
-                                            <div className={styles.themeToggleContainer}>
-                                                <div className={styles.themeToggleLabel}>
+                                            <div
+                                                className={
+                                                    styles.themeToggleContainer
+                                                }
+                                            >
+                                                <div
+                                                    className={
+                                                        styles.themeToggleLabel
+                                                    }
+                                                >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         className={`${styles.themeIcon} ${styles.lightIcon}`}
@@ -254,11 +257,21 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
                                                 </div>
 
                                                 <div
-                                                    className={`${styles.themeToggle} ${isDarkMode ? styles.active : ""}`}
+                                                    className={`${
+                                                        styles.themeToggle
+                                                    } ${
+                                                        isDarkMode
+                                                            ? styles.active
+                                                            : ""
+                                                    }`}
                                                     onClick={toggleDarkMode}
                                                     aria-label="Toggle dark mode"
                                                 >
-                                                    <div className={styles.toggleHandle}></div>
+                                                    <div
+                                                        className={
+                                                            styles.toggleHandle
+                                                        }
+                                                    ></div>
                                                 </div>
                                             </div>
 
@@ -268,7 +281,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ user, onLogout }) => {
                                                 className={styles.signOutButton}
                                             >
                                                 <ArrowRightOnRectangleIcon
-                                                    className={styles.actionIcon}
+                                                    className={
+                                                        styles.actionIcon
+                                                    }
                                                 />
                                                 <span>Sign Out</span>
                                             </button>
