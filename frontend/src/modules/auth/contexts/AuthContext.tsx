@@ -43,21 +43,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const savedUser = AuthService.getUser();
 
         if (token && savedUser) {
+          // Set user immediately from localStorage for better UX
+          setUser(savedUser);
+
           // Verify token is still valid by making an API call
-          const response = await AuthService.getProfile();
-          if (response.success && response.data) {
-            setUser(response.data.user);
-            AuthService.saveUser(response.data.user);
-          } else {
-            // Token is invalid, clear local storage
-            AuthService.removeToken();
-            AuthService.removeUser();
+          try {
+            const response = await AuthService.getProfile();
+            if (response.success && response.data) {
+              // Update user data from server if different
+              if (
+                JSON.stringify(savedUser) !== JSON.stringify(response.data.user)
+              ) {
+                setUser(response.data.user);
+                AuthService.saveUser(response.data.user);
+              }
+            } else {
+              // Token is invalid, clear local storage and state
+              AuthService.removeToken();
+              AuthService.removeUser();
+              setUser(null);
+            }
+          } catch (profileError) {
+            console.warn(
+              "Profile verification failed, keeping local user data:",
+              profileError
+            );
+            // Keep the local user data if network error, don't logout user
           }
+        } else {
+          // No token or user data, ensure clean state
+          setUser(null);
         }
-      } catch {
-        // Error verifying token, clear local storage
+      } catch (initError) {
+        console.error("Auth initialization error:", initError);
+        // Error during initialization, clear local storage
         AuthService.removeToken();
         AuthService.removeUser();
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -85,8 +107,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       AuthService.removeUser();
       setUser(null);
       setIsLoggingOut(false);
-      // Use replace instead of push to avoid history stack issues
-      router.replace("/signin");
+
+      // Use window.location.href as a fallback for more reliable navigation
+      try {
+        await router.replace("/signin");
+      } catch (navigationError) {
+        console.warn(
+          "Router navigation failed, using window.location:",
+          navigationError
+        );
+        // Force navigation using window.location as fallback
+        window.location.href = "/signin";
+      }
     }
   };
 

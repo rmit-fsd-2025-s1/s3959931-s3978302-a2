@@ -11,7 +11,7 @@ import styles from "./header.module.css";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
-  const { user, isAuthenticated, logout, isLoggingOut } = useAuth();
+  const { user, isAuthenticated, logout, isLoggingOut, isLoading } = useAuth();
   const { isDarkMode, toggleDarkMode } = useTheme();
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -62,8 +62,14 @@ const Header: React.FC = () => {
     }
   };
 
-  const showTutorLink = !isAuthenticated || user?.userType === "candidate";
-  const showLecturerLink = !isAuthenticated || user?.userType === "lecturer";
+  // Navigation link visibility logic
+  // During loading: only show Home (no role-specific links)
+  // When not authenticated: show all links
+  // When authenticated: show role-appropriate links
+  const showTutorLink =
+    !isLoading && (!isAuthenticated || user?.userType === "candidate");
+  const showLecturerLink =
+    !isLoading && (!isAuthenticated || user?.userType === "lecturer");
 
   return (
     <header
@@ -91,34 +97,40 @@ const Header: React.FC = () => {
           </div>
 
           <nav className={styles["main-nav"]}>
-            <div className={styles["nav-links"]}>
-              <Link
-                href="/"
-                className={`${styles["nav-link"]} ${pathname === "/" ? styles.active : ""}`}
-              >
-                Home
-              </Link>
-              {showTutorLink && (
+            {isLoading ? (
+              <div className={styles.navLoadingPlaceholder}>
+                <div className={styles.navLoadingSpinner}></div>
+              </div>
+            ) : (
+              <div className={styles["nav-links"]}>
                 <Link
-                  href="/tutor"
-                  className={`${styles["nav-link"]} ${pathname === "/tutor" ? styles.active : ""}`}
+                  href="/"
+                  className={`${styles["nav-link"]} ${pathname === "/" ? styles.active : ""}`}
                 >
-                  Candidates
+                  Home
                 </Link>
-              )}
-              {showLecturerLink && (
-                <Link
-                  href="/lecturer"
-                  className={`${styles["nav-link"]} ${pathname === "/lecturer" ? styles.active : ""}`}
-                >
-                  Lecturers
-                </Link>
-              )}
-            </div>
+                {showTutorLink && (
+                  <Link
+                    href="/tutor"
+                    className={`${styles["nav-link"]} ${pathname === "/tutor" ? styles.active : ""}`}
+                  >
+                    Candidates
+                  </Link>
+                )}
+                {showLecturerLink && (
+                  <Link
+                    href="/lecturer"
+                    className={`${styles["nav-link"]} ${pathname === "/lecturer" ? styles.active : ""}`}
+                  >
+                    Lecturers
+                  </Link>
+                )}
+              </div>
+            )}
           </nav>
 
           <div className={styles["header-actions"]}>
-            {!isAuthenticated && (
+            {!isLoading && !isAuthenticated && (
               <button
                 onClick={toggleDarkMode}
                 className={`${styles["theme-toggle-btn"]} ${
@@ -156,20 +168,22 @@ const Header: React.FC = () => {
                 />
               </div>
             ) : (
-              <div className={styles.authButtons}>
-                <Link
-                  href="/signin"
-                  className={`${styles.authButton} ${styles.authButtonSecondary} ${pathname === "/signin" ? styles.active : ""}`}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className={`${styles.authButton} ${styles.authButtonPrimary} ${pathname === "/signup" ? styles.active : ""}`}
-                >
-                  Sign Up
-                </Link>
-              </div>
+              !isLoading && (
+                <div className={styles.authButtons}>
+                  <Link
+                    href="/signin"
+                    className={`${styles.authButton} ${styles.authButtonSecondary} ${pathname === "/signin" ? styles.active : ""}`}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className={`${styles.authButton} ${styles.authButtonPrimary} ${pathname === "/signup" ? styles.active : ""}`}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )
             )}
           </div>
         </div>

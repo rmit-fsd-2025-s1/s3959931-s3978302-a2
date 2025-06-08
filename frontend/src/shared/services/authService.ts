@@ -114,41 +114,62 @@ export class AuthService {
   }
 
   static getToken(): string | null {
-    const token = StorageManager.getItem("token");
-    const expiry = StorageManager.getItem("tokenExpiry");
+    try {
+      const token = StorageManager.getItem("token");
+      const expiry = StorageManager.getItem("tokenExpiry");
 
-    if (token && expiry) {
-      const now = Math.floor(Date.now() / 1000);
-      const expiryTime = parseInt(expiry);
-
-      if (expiryTime > now) {
-        return token;
-      } else {
-        console.log("Token expired, cleaning up");
-        this.removeToken();
-        this.removeUser();
-        return null;
-      }
-    }
-
-    if (token) {
-      // Token exists but no expiry info - validate anyway
-      const payload = this.parseJWT(token);
-      if (payload && payload.exp) {
+      if (token && expiry) {
         const now = Math.floor(Date.now() / 1000);
-        if (payload.exp > now) {
-          // Update expiry info
-          StorageManager.setItem("tokenExpiry", payload.exp.toString());
+        const expiryTime = parseInt(expiry);
+
+        // Validate expiry time is a valid number
+        if (isNaN(expiryTime)) {
+          console.warn("Invalid token expiry format, clearing token");
+          this.removeToken();
+          this.removeUser();
+          return null;
+        }
+
+        if (expiryTime > now) {
           return token;
         } else {
+          console.log("Token expired, cleaning up");
           this.removeToken();
           this.removeUser();
           return null;
         }
       }
-    }
 
-    return token;
+      if (token) {
+        // Token exists but no expiry info - validate anyway
+        const payload = this.parseJWT(token);
+        if (payload && payload.exp) {
+          const now = Math.floor(Date.now() / 1000);
+          if (payload.exp > now) {
+            // Update expiry info
+            StorageManager.setItem("tokenExpiry", payload.exp.toString());
+            return token;
+          } else {
+            console.log("Token expired during validation, cleaning up");
+            this.removeToken();
+            this.removeUser();
+            return null;
+          }
+        } else {
+          console.warn("Invalid token format, cannot parse JWT");
+          this.removeToken();
+          this.removeUser();
+          return null;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error getting token:", error);
+      this.removeToken();
+      this.removeUser();
+      return null;
+    }
   }
 
   static saveUser(user: User): void {
@@ -169,16 +190,29 @@ export class AuthService {
       // Try versioned storage first
       const versionedUser = StorageManager.getVersionedItem<User>("user");
       if (versionedUser) {
-        return versionedUser;
+        // Validate user object has required fields
+        if (this.isValidUser(versionedUser)) {
+          return versionedUser;
+        } else {
+          console.warn("Invalid user data found, clearing storage");
+          this.removeUser();
+          return null;
+        }
       }
 
       // Fallback to regular storage
       const userStr = StorageManager.getItem("user");
       if (userStr) {
         const user = JSON.parse(userStr);
-        // Migrate to versioned storage
-        this.saveUser(user);
-        return user;
+        if (this.isValidUser(user)) {
+          // Migrate to versioned storage
+          this.saveUser(user);
+          return user;
+        } else {
+          console.warn("Invalid user data in regular storage, clearing");
+          this.removeUser();
+          return null;
+        }
       }
 
       return null;
@@ -187,6 +221,20 @@ export class AuthService {
       StorageManager.removeItem("user");
       return null;
     }
+  }
+
+  // Helper method to validate user object
+  private static isValidUser(user: any): user is User {
+    return (
+      user &&
+      typeof user === "object" &&
+      user.id &&
+      user.email &&
+      user.firstName &&
+      user.lastName &&
+      user.userType &&
+      ["candidate", "lecturer", "admin"].includes(user.userType)
+    );
   }
 
   static isAuthenticated(): boolean {
