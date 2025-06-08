@@ -42,10 +42,12 @@
 }
 
 .subtitle {
-    font-size: 1.125rem;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
 }
 
 /* Stats Grid */
@@ -267,26 +269,31 @@
 }
 
 /* Balanced column widths */
-.tableHeaderCell:nth-child(1) { /* User column */
+.tableHeaderCell:nth-child(1) {
+    /* User column */
     width: 35%;
 }
 
-.tableHeaderCell:nth-child(2) { /* Type column */
+.tableHeaderCell:nth-child(2) {
+    /* Type column */
     width: 15%;
     text-align: center;
 }
 
-.tableHeaderCell:nth-child(3) { /* Status column */
+.tableHeaderCell:nth-child(3) {
+    /* Status column */
     width: 18%;
     text-align: center;
 }
 
-.tableHeaderCell:nth-child(4) { /* Created column */
+.tableHeaderCell:nth-child(4) {
+    /* Created column */
     width: 17%;
     text-align: center;
 }
 
-.tableHeaderCell:nth-child(5) { /* Actions column */
+.tableHeaderCell:nth-child(5) {
+    /* Actions column */
     width: 15%;
     text-align: left;
     padding-left: 2rem;
@@ -310,28 +317,33 @@
 }
 
 /* Align table cells to match headers */
-.tableCell:nth-child(1) { /* User cell */
+.tableCell:nth-child(1) {
+    /* User cell */
     width: 35%;
 }
 
-.tableCell:nth-child(2) { /* Type cell */
+.tableCell:nth-child(2) {
+    /* Type cell */
     width: 15%;
     text-align: center;
 }
 
-.tableCell:nth-child(3) { /* Status cell */
+.tableCell:nth-child(3) {
+    /* Status cell */
     width: 18%;
     text-align: center;
 }
 
-.tableCell:nth-child(4) { /* Created cell */
+.tableCell:nth-child(4) {
+    /* Created cell */
     width: 17%;
     text-align: center;
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
 }
 
-.tableCell:nth-child(5) { /* Actions cell */
+.tableCell:nth-child(5) {
+    /* Actions cell */
     width: 15%;
     text-align: left;
 }
@@ -813,7 +825,8 @@
     }
 
     .subtitle {
-        font-size: 1rem;
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
     }
 
     .modal {

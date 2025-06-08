@@ -6,6 +6,31 @@ const nextConfig = {
 
   // Moved from experimental.serverComponentsExternalPackages to serverExternalPackages
   serverExternalPackages: ["typeorm"],
+
+  // Development-specific configuration to reduce HMR issues
+  ...(process.env.NODE_ENV === "development" && {
+    webpack: (config, { dev, isServer }) => {
+      if (dev && !isServer) {
+        // Improve HMR reliability
+        config.watchOptions = {
+          poll: 1000,
+          aggregateTimeout: 300,
+        };
+
+        // Reduce HMR chunk errors
+        config.optimization = {
+          ...config.optimization,
+          runtimeChunk: "single",
+        };
+      }
+      return config;
+    },
+
+    // Reduce fast refresh sensitivity
+    experimental: {
+      esmExternals: "loose",
+    },
+  }),
 };
 
 module.exports = nextConfig;

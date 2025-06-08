@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:debug": "DEBUG_HMR=true next dev",
     "dev:full": "concurrently \"npm run dev\" \"npm run dev --prefix ../backend\"",
     "build": "next build",
     "build:full": "npm run build && npm run build --prefix ../backend",
