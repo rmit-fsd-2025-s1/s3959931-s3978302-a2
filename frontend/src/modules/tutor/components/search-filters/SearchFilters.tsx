@@ -6,8 +6,10 @@ import styles from "./SearchFilters.module.css";
 interface SearchFiltersProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  activeFilter: "all" | "applied" | "available";
-  onFilterChange: (filter: "all" | "applied" | "available") => void;
+  activeFilter: "all" | "applied" | "available" | "unavailable";
+  onFilterChange: (
+    filter: "all" | "applied" | "available" | "unavailable"
+  ) => void;
 }
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
@@ -28,7 +30,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         <SearchInput
           value={searchQuery}
           onChange={onSearchChange}
-          placeholder="Search courses, skills, or roles..."
+          placeholder="Smart search: 'data tutor', 'web lab', 'programming'..."
           showLabel={false}
           variant="rounded"
         />
@@ -58,6 +60,14 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             onClick={() => onFilterChange("applied")}
           >
             Applied
+          </button>
+          <button
+            className={`${styles.filterPill} ${
+              activeFilter === "unavailable" ? styles.filterPillActive : ""
+            }`}
+            onClick={() => onFilterChange("unavailable")}
+          >
+            Unavailable
           </button>
         </div>
       </div>

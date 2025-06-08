@@ -175,16 +175,22 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
           <h4 className={styles.roleSectionTitle}>Available Positions</h4>
 
           {(() => {
-            const availableRoles = roles.filter((role) => {
+            // Filter roles to show individually based on their specific availability
+            const availableRoles: Role[] = [];
+            const unavailableRoles: Role[] = [];
+
+            roles.forEach((role) => {
               // Check if user has already applied for this role
               const applicationStatus = getApplicationStatus(role.id);
 
               // If user has applied, always show the role (they should see their status)
               if (applicationStatus) {
-                return true;
+                availableRoles.push(role);
+
+                return;
               }
 
-              // If user hasn't applied, only show if positions are available
+              // If user hasn't applied, check if positions are available for this specific role
               const availablePositions =
                 role.roleName === "tutor"
                   ? (course as Course).availableTutors !== undefined
@@ -193,18 +199,33 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
                   : (course as Course).availableLabAssistants !== undefined
                     ? (course as Course).availableLabAssistants
                     : (course as Course).maxLabAssistants;
-              return availablePositions! > 0;
+
+              if (availablePositions! > 0) {
+                availableRoles.push(role);
+              } else {
+                unavailableRoles.push(role);
+              }
             });
 
-            if (availableRoles.length === 0) {
+            // Always show roles that are available or user has applied to
+            const rolesToShow = availableRoles;
+
+            // If no roles are available for application and user hasn't applied to any, show disabled state
+            if (rolesToShow.length === 0 && unavailableRoles.length > 0) {
               return (
-                <div className={styles.noPositionsMessage}>
-                  <p>No positions are currently available for this course.</p>
+                <div className={styles.noPositionsContainer}>
+                  <div className={styles.noPositionsText}></div>
+                  <motion.button
+                    className={styles.applyButtonDisabled}
+                    disabled
+                  >
+                    No Positions Available
+                  </motion.button>
                 </div>
               );
             }
 
-            return availableRoles.map((role) => {
+            return rolesToShow.map((role) => {
               const applicationStatus = getApplicationStatus(role.id);
               // Always show total positions for display
               const maxPositions =
@@ -212,7 +233,15 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
                   ? (course as Course).maxTutors
                   : (course as Course).maxLabAssistants;
 
-              // But check available positions for hiding "No positions" case (this filtering is already done above)
+              // Check available positions for apply button state
+              const availablePositions =
+                role.roleName === "tutor"
+                  ? (course as Course).availableTutors !== undefined
+                    ? (course as Course).availableTutors
+                    : (course as Course).maxTutors
+                  : (course as Course).availableLabAssistants !== undefined
+                    ? (course as Course).availableLabAssistants
+                    : (course as Course).maxLabAssistants;
 
               return (
                 <div key={role.id} className={styles.roleOption}>
@@ -313,7 +342,7 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
                               applicationStatus.slice(1)}
                           </span>
                         </div>
-                      ) : (
+                      ) : availablePositions! > 0 ? (
                         <motion.button
                           className={styles.applyButton}
                           onClick={() =>
@@ -324,6 +353,10 @@ const CourseCard: React.FC<CombinedCourseCardProps> = (props) => {
                         >
                           Apply
                         </motion.button>
+                      ) : (
+                        <button className={styles.applyButtonDisabled} disabled>
+                          Filled
+                        </button>
                       )}
                     </div>
                   </div>
