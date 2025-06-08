@@ -250,33 +250,6 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
               </div>
             </div>
 
-            {/* Blocked candidate warning */}
-            {application.isBlocked && (
-              <div className={styles.blockedWarning}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.warningIcon}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.35 16.5c-.77.833.192 2.5 1.732 2.5z"
-                  />
-                </svg>
-                <div>
-                  <strong>Candidate Unavailable</strong>
-                  <p>
-                    This candidate has been blocked by an administrator and
-                    cannot be selected.
-                  </p>
-                </div>
-              </div>
-            )}
-
             <div className={styles.buttonGroup}>
               {application.selected ? (
                 <>
@@ -328,7 +301,7 @@ const ApplicantDetails: React.FC<ApplicantDetailsProps> = ({
                   disabled={application.isBlocked}
                 >
                   {application.isBlocked
-                    ? "Candidate Unavailable"
+                    ? "Candidate Blocked"
                     : "Select Applicant"}
                 </button>
               )}

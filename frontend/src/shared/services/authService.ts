@@ -224,16 +224,25 @@ export class AuthService {
   }
 
   // Helper method to validate user object
-  private static isValidUser(user: any): user is User {
+  private static isValidUser(user: unknown): user is User {
+    if (!user || typeof user !== "object" || user === null) {
+      return false;
+    }
+
+    const userObj = user as Record<string, unknown>;
+
     return (
-      user &&
-      typeof user === "object" &&
-      user.id &&
-      user.email &&
-      user.firstName &&
-      user.lastName &&
-      user.userType &&
-      ["candidate", "lecturer", "admin"].includes(user.userType)
+      "id" in user &&
+      "email" in user &&
+      "firstName" in user &&
+      "lastName" in user &&
+      "userType" in user &&
+      typeof userObj.id === "number" &&
+      typeof userObj.email === "string" &&
+      typeof userObj.firstName === "string" &&
+      typeof userObj.lastName === "string" &&
+      typeof userObj.userType === "string" &&
+      ["candidate", "lecturer", "admin"].includes(userObj.userType)
     );
   }
 
