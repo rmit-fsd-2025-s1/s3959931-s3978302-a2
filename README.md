@@ -118,7 +118,13 @@ The application follows a modern microservices architecture with four main compo
 
 3. **Environment Setup**
 
-    The project includes a `.env` file with database and port configuration.
+    Copy the safe template and fill in your own local values:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    The real `.env` file is intentionally ignored by Git. Do not commit database credentials, JWT secrets, or `.pem` certificate files. See [Environment and Secret Handling](docs/ENVIRONMENT.md).
 
 ### Development
 
@@ -262,6 +268,23 @@ WebSocket-based real-time communication for:
 -   **Subscriptions**: Real-time notifications and updates
 
 ## Deployment
+
+For the current free demo deployment path, use [Free Demo Deployment Guide](docs/DEPLOYMENT.md).
+
+Recommended demo hosting:
+
+-   Aiven MySQL for the shared database
+-   Render Web Services for `backend` and `admin-backend`
+-   Vercel projects for `frontend` and `admin-frontend`
+
+Important deployment details:
+
+-   Start/deploy `backend` before `admin-backend` on a fresh database. The normal backend creates tables; the admin backend expects them to exist.
+-   Aiven MySQL uses TLS. For local development, use `DB_CA_CERT_PATH` pointing at a local `aiven-ca.pem`. For Render, upload `aiven-ca.pem` as a secret file and set `DB_CA_CERT_PATH=/etc/secrets/aiven-ca.pem`.
+-   Do not set `PORT` manually on Render. Render supplies it.
+-   For the demo admin login to be `admin / admin`, set `ADMIN_EMAIL=admin` and `ADMIN_PASSWORD=admin` before `admin-backend` creates the admin user.
+-   After both Vercel frontends are deployed, set `FRONTEND_URL` and `ADMIN_FRONTEND_URL` on the Render `admin-backend` service and redeploy it so CORS allows the hosted frontends.
+-   Before a demo, open both Render health URLs first to wake the free services.
 
 ### Build Commands
 
