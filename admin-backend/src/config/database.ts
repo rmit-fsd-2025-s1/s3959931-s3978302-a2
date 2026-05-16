@@ -12,6 +12,13 @@ import path from "path";
 // Load environment variables from root .env file
 config({ path: path.resolve(__dirname, "../../../.env") });
 
+const sslConfig =
+    process.env.DB_SSL === "true"
+        ? process.env.DB_CA_CERT
+            ? { ca: process.env.DB_CA_CERT.replace(/\\n/g, "\n") }
+            : {}
+        : undefined;
+
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST || "localhost",
@@ -33,6 +40,7 @@ export const AppDataSource = new DataSource({
     extra: {
         charset: "utf8mb4_unicode_ci",
     },
+    ssl: sslConfig,
     connectTimeout: 60000,
     acquireTimeout: 60000,
 });
@@ -51,18 +59,20 @@ export const initializeDatabase = async () => {
 const seedAdminUser = async () => {
     try {
         const userRepository = AppDataSource.getRepository(User);
+        const adminEmail = process.env.ADMIN_EMAIL || "admin";
+        const adminPassword = process.env.ADMIN_PASSWORD || "admin";
 
         // Check if admin user already exists
         const existingAdmin = await userRepository.findOne({
-            where: { email: "admin" },
+            where: { email: adminEmail },
         });
 
         if (!existingAdmin) {
             const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash("admin", saltRounds);
+            const hashedPassword = await bcrypt.hash(adminPassword, saltRounds);
 
             const adminUser = userRepository.create({
-                email: "admin",
+                email: adminEmail,
                 password: hashedPassword,
                 firstName: "System",
                 lastName: "Administrator",
